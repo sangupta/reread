@@ -6,6 +6,9 @@ export default class Header extends React.Component {
         return <header className="p-1 mb-auto border-bottom">
             <div className="container-fluid">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <button type="button" className="btn btn-outline">
+                        <i className="fas fa-bars"></i>
+                    </button>
                     <a href="/" className="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
                         <i className="fas fa-rss-square"></i>
                     </a>
@@ -14,15 +17,20 @@ export default class Header extends React.Component {
                         <li><a href="#" className="nav-link px-2 text-primary">ReRead</a></li>
                     </ul>
 
-                    <button type="button" className="btn btn-outline">
+                    <button type="button" className="btn btn-outline px-3">
                         <i className="fas fa-sync-alt"></i> Refresh
                     </button>
+
                     <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                         <input type="search" className="form-control form-control-dark" placeholder="Search..." aria-label="Search" />
                     </form>
 
                     <div className="text-end">
                         <button type="button" className="btn btn-primary me-2">+ Add</button>
+
+                        <button type="button" className="btn btn-secondary me-2">
+                            <i className="fas fa-cogs"></i>
+                        </button>
                     </div>
                 </div>
             </div>
