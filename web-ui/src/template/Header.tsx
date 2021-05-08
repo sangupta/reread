@@ -3,8 +3,15 @@ import { collect, store } from 'react-recollect';
 
 import Link from './../components/Link';
 
+/**
+ * Render the header bar.
+ */
 class Header extends React.Component {
 
+    /**
+     * Handler called when the toggle feed list button
+     * is clicked in top-left of the header.
+     */
     toggleFeedList = () => {
         store.showFeedList = !store.showFeedList;
     }

@@ -1,11 +1,21 @@
 import React from 'react';
-import { collect } from 'react-recollect';
+import { collect, WithStoreProp } from 'react-recollect';
 
 import FeedList from '../containers/FeedList';
 import ContentPane from '../containers/ContentPane';
 
-class HomeView extends React.Component {
+interface HomeViewProps extends WithStoreProp {
+}
 
+/**
+ * View rendered when the home page is opened
+ */
+class HomeView extends React.Component<HomeViewProps> {
+
+    /**
+     * Render the left hand side feed list if the toggle
+     * is on
+     */
     showFeedList = () => {
         const { store } = this.props;
         if (store.showFeedList) {
