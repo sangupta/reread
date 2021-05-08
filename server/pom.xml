@@ -2,9 +2,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    
-    <parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.4.5</version>
@@ -16,13 +16,13 @@
 	<packaging>jar</packaging>
 
 	<name>reread</name>
-    <description>Self-hosted RSS feed reader</description>
-    <url>https://github.com/reread</url>
+	<description>Self-hosted RSS feed reader</description>
+	<url>https://github.com/reread</url>
 	<inceptionYear>2021</inceptionYear>
 
-    <prerequisites>
-        <maven>3.0.0</maven>
-    </prerequisites>
+	<prerequisites>
+		<maven>3.0.0</maven>
+	</prerequisites>
 
 	<licenses>
 		<license>
@@ -54,7 +54,7 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot</artifactId>
@@ -70,38 +70,45 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
-		
+
 		<!-- basic utility classes -->
 		<dependency>
 			<groupId>com.sangupta</groupId>
 			<artifactId>jerry-core</artifactId>
 			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
-		
+
 		<!-- Redis driver/connection manager -->
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 		</dependency>
-		
+
 		<!-- Connect to redis using RedisTemplate -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-redis</artifactId>
 		</dependency>
-		
+
 		<!-- RedisJSON driver -->
 		<dependency>
 			<groupId>com.redislabs</groupId>
 			<artifactId>jrejson</artifactId>
 			<version>1.3.0</version>
 		</dependency>
-		
+
 		<!-- for working with HTTP layer -->
 		<dependency>
 			<groupId>com.sangupta</groupId>
 			<artifactId>jerry-http</artifactId>
 			<version>2.0.0</version>
+		</dependency>
+
+		<!-- for HTML parsing -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.13.1</version>
 		</dependency>
 	</dependencies>
 
@@ -116,7 +123,7 @@
 					<target>11</target>
 				</configuration>
 			</plugin>
-        </plugins>
+		</plugins>
 	</build>
 
 </project>
