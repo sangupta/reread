@@ -170,5 +170,7 @@ public interface DataStoreService<T> {
      * 
      */
     public void deleteAll();
+    
+    public boolean updateField(T entity, String field, Object value);
 
 }

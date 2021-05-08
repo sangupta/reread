@@ -10,11 +10,11 @@ public class FeedCrawlDetails {
 	
 	public String etag;
 
-	public long crawled;
+	public long numCrawled;
 	
-	public long updates;
+	public long numUpdated;
 	
-	public long posts;
+	public long numPosts;
 	
 	public String latestPostID;
 	

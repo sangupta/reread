@@ -8,8 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.redislabs.modules.rejson.JReJSON;
-import com.sangupta.reread.service.UserSettingsService;
-import com.sangupta.reread.service.impl.RedisUserSettingsServiceImpl;
+import com.sangupta.jerry.http.service.HttpService;
+import com.sangupta.jerry.http.service.impl.DefaultHttpServiceImpl;
 
 @Configuration
 public class SpringBeans {
@@ -39,10 +39,10 @@ public class SpringBeans {
 	public JReJSON jreJSON() {
 		return new JReJSON(REDIS_HOST, REDIS_PORT);
 	}
-
-	@Bean
-	public UserSettingsService userSettingsService() {
-		return new RedisUserSettingsServiceImpl();
-	}
 	
+	@Bean
+	public HttpService httpService() {
+		return new DefaultHttpServiceImpl();
+	}
+
 }
