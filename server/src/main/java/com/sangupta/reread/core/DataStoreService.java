@@ -12,7 +12,7 @@ import java.util.List;
  * 
  * @param <X> The type of primary key for this entity object
  */
-public interface DataStoreService<T, X> {
+public interface DataStoreService<T> {
     
     /**
      * Gets the entity class that this data store handles.
@@ -20,7 +20,7 @@ public interface DataStoreService<T, X> {
      * @return The entity class handled by this store.
      */
     public Class<T> getEntityClass();
-
+    
     /**
      * Given an entity return the primary ID associated with it.
      * 
@@ -28,7 +28,7 @@ public interface DataStoreService<T, X> {
      * 
      * @return the primary key
      */
-    public X getPrimaryID(T entity);
+    public String getPrimaryID(T entity);
 
     /**
      * Retrieve the entity object with the given primary key.
@@ -37,7 +37,7 @@ public interface DataStoreService<T, X> {
      * 
      * @return the object that is stored for the given primary key
      */
-    public T get(X primaryID);
+    public T get(String primaryID);
 
     /**
      * Retrieves a list of all entities in the datastore that match the list of
@@ -53,7 +53,7 @@ public interface DataStoreService<T, X> {
      * @return {@link List} of entity objects as fetched for the given identifiers.
      * 
      */
-    public List<T> getMultiple(Collection<X> ids);
+    public List<T> getMultiple(Collection<String> ids);
 
     /**
      * Retrieves a list of all entities in the datastore that match the list of
@@ -68,7 +68,7 @@ public interface DataStoreService<T, X> {
      * 
      * @return {@link List} of entity objects as fetched for the given identifiers.
      */
-    public List<T> getMultiple(X[] ids);
+    public List<T> getMultiple(String[] ids);
 
     /**
      * Retrieves a list of all entities in the datastore.
@@ -86,17 +86,6 @@ public interface DataStoreService<T, X> {
     public List<T> getAll();
 
     /**
-     * Retrieves a list of all entities in the data store that are owned by the
-     * user. If the persisting entity is not a type of {@link UserOwnedEntity} then
-     * this method throws {@link UnsupportedOperationException}.
-     * 
-     * @param userID the user for whom the entities are desired
-     * 
-     * @return a {@link List} of all entities in the store.
-     */
-    public List<T> getAllForUser(String userID);
-
-    /**
      * Retrieves a list of entities for the given page number with the give page
      * size. The page numbering starts from 1.
      * 
@@ -108,6 +97,17 @@ public interface DataStoreService<T, X> {
      * 
      */
     public List<T> getAll(int page, int pageSize);
+    
+    /**
+     * Retrieves a list of all entities in the data store that are owned by the
+     * user. If the persisting entity is not a type of {@link UserOwnedEntity} then
+     * this method throws {@link UnsupportedOperationException}.
+     * 
+     * @param userID the user for whom the entities are desired
+     * 
+     * @return a {@link List} of all entities in the store.
+     */
+    public List<T> getAllForUser(String userID);
 
     /**
      * Insert a new entity object into the data store
@@ -151,11 +151,11 @@ public interface DataStoreService<T, X> {
      *         otherwise
      * 
      */
-    public T delete(X primaryID);
+    public T delete(String primaryID);
 
-    public List<T> deleteMultiple(Collection<X> ids);
+    public List<T> deleteMultiple(Collection<String> ids);
 
-    public List<T> deleteMultiple(X[] ids);
+    public List<T> deleteMultiple(String[] ids);
 
     /**
      * Return the count of total objects in the data store

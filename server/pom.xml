@@ -65,15 +65,36 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- for JSON parsing -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
 		
+		<!-- basic utility classes -->
 		<dependency>
 			<groupId>com.sangupta</groupId>
 			<artifactId>jerry-core</artifactId>
 			<version>4.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- Redis driver/connection manager -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		
+		<!-- Connect to redis using RedisTemplate -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+		</dependency>
+		
+		<!-- RedisJSON driver -->
+		<dependency>
+			<groupId>com.redislabs</groupId>
+			<artifactId>jrejson</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 	</dependencies>
 

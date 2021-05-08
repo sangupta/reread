@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,15 +21,13 @@ import com.sangupta.jerry.exceptions.HttpException;
 import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.jerry.util.AssertUtils;
 
-public abstract class AbstractEntityController<T, X> {
+public abstract class AbstractEntityController<T> {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEntityController.class);
 
-    protected abstract DataStoreService<T, X> getDataStoreService();
+    protected abstract DataStoreService<T> getDataStoreService();
 
     protected final Class<T> entityClass;
-
-    protected final Class<X> primaryIDClass;
 
     protected final boolean isUserOwnedEntity;
 
@@ -42,7 +41,6 @@ public abstract class AbstractEntityController<T, X> {
 
         Type[] actualTypeArguments = ((ParameterizedType) t).getActualTypeArguments();
         this.entityClass = (Class<T>) actualTypeArguments[0];
-        this.primaryIDClass = (Class<X>) actualTypeArguments[1];
 
         this.isUserOwnedEntity = UserOwnedEntity.class.isAssignableFrom(this.entityClass);
     }
@@ -67,7 +65,7 @@ public abstract class AbstractEntityController<T, X> {
     }
 
     @GetMapping("/{entityID}")
-    public T getEntity(@PathVariable X entityID) {
+    public T getEntity(@PathVariable String entityID) {
         if (AssertUtils.isEmpty(entityID)) {
             throw new HttpException(HttpStatusCode.BAD_REQUEST, "Entity ID is required");
         }
@@ -90,7 +88,7 @@ public abstract class AbstractEntityController<T, X> {
             throw new HttpException(HttpStatusCode.BAD_REQUEST, "Entity is required");
         }
 
-        X primaryID = this.getDataStoreService().getPrimaryID(entity);
+        String primaryID = this.getDataStoreService().getPrimaryID(entity);
         if (AssertUtils.isNotEmpty(primaryID)) {
             throw new HttpException(HttpStatusCode.BAD_REQUEST, "Entity cannot have an ID, use update instead");
         }
@@ -105,7 +103,7 @@ public abstract class AbstractEntityController<T, X> {
     }
 
     @PostMapping("/{entityID}")
-    public T updateEntity(@PathVariable X entityID, @RequestBody T entity) {
+    public T updateEntity(@PathVariable String entityID, @RequestBody T entity) {
         if (entity == null) {
             throw new HttpException(HttpStatusCode.BAD_REQUEST, "Entity is required");
         }
@@ -114,7 +112,7 @@ public abstract class AbstractEntityController<T, X> {
             throw new HttpException(HttpStatusCode.BAD_REQUEST, "EntityID is required");
         }
         
-        final X primaryID = this.getDataStoreService().getPrimaryID(entity);
+        final String primaryID = this.getDataStoreService().getPrimaryID(entity);
         if (AssertUtils.isEmpty(primaryID)) {
             throw new HttpException(HttpStatusCode.BAD_REQUEST, "Entity needs an ID to be updated");
         }
@@ -142,7 +140,7 @@ public abstract class AbstractEntityController<T, X> {
     }
 
     @DeleteMapping("/{entityID}")
-    public T deleteEntity(@PathVariable X entityID) {
+    public T deleteEntity(@PathVariable String entityID) {
         if (AssertUtils.isEmpty(entityID)) {
             throw new HttpException(HttpStatusCode.BAD_REQUEST, "Entity ID is required");
         }
