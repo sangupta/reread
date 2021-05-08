@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "jsx": "react",
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
