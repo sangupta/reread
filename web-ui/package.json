@@ -3,9 +3,9 @@
     "version": "0.0.1",
     "description": "Self-hosted RSS feed reader.",
     "scripts": {
-        "watch": "parcel serve index.html",
-        "start": "parcel index.html",
-        "build": "parcel build index.html",
+        "watch": "parcel serve public/index.html",
+        "start": "parcel public/index.html",
+        "build": "parcel build public/index.html",
         "tsc": "tsc --noEmit"
     },
     "dependencies": {

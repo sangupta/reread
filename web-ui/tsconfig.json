@@ -3,6 +3,15 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "jsx": "react",
+        "target": "esnext",
+        "strict": true,
+        "rootDir": "./src",
+        "incremental": true,
+        "lib": [
+            "dom",
+            "es2015"
+        ],
+        "allowSyntheticDefaultImports": true
     },
     "exclude": [
         "node_modules"
