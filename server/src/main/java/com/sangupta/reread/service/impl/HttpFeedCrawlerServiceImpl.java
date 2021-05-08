@@ -3,6 +3,7 @@ package com.sangupta.reread.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.FeedCrawlDetails;
@@ -17,6 +18,7 @@ import com.sangupta.reread.service.MasterFeedService;
 import com.sangupta.reread.service.PostService;
 import com.sangupta.reread.service.PostSnippetService;
 
+@Service
 public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 	
 	@Autowired

@@ -31,25 +31,17 @@ public class FeedListController {
 
 	@GetMapping("/me")
 	public FeedList getFeedList() {
-		FeedList list = this.feedListService.get(SecurityContext.getUserID());
-		if(list == null) {
-			list = new FeedList();
-			list.userID = SecurityContext.getUserID();
-		}
-		
-		return list;
+		return this.feedListService.getOrCreate(SecurityContext.getUserID());
 	}
 	
 	@PostMapping("/subscribe")
 	public FeedList subscribe(@RequestBody FeedControllerPayload payload) {
-		boolean susbcribed = this.feedSubscriptionService.subscribe(payload.url);
-		return this.getFeedList();
+		return this.feedSubscriptionService.subscribe(payload.url);
 	}
 	
 	@PostMapping("/unsubscribe")
 	public FeedList unsubscribe(@RequestBody FeedControllerPayload payload) {
-		boolean unsusbcribed = this.feedSubscriptionService.unsubscribe(payload.feedID);
-		return this.getFeedList();
+		return this.feedSubscriptionService.unsubscribe(payload.feedID);
 	}
 	
 	@PostMapping("/discover")
@@ -60,5 +52,29 @@ public class FeedListController {
 	private static class FeedControllerPayload {
 		String url;
 		String feedID;
+		/**
+		 * @return the url
+		 */
+		public String getUrl() {
+			return url;
+		}
+		/**
+		 * @param url the url to set
+		 */
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		/**
+		 * @return the feedID
+		 */
+		public String getFeedID() {
+			return feedID;
+		}
+		/**
+		 * @param feedID the feedID to set
+		 */
+		public void setFeedID(String feedID) {
+			this.feedID = feedID;
+		}
 	}
 }

@@ -10,4 +10,9 @@ public class UserFeed {
 	
 	public long unreadCount;
 	
+	public UserFeed(MasterFeed feed) {
+		this.masterFeedID = feed.feedID;
+		this.title = feed.title;
+	}
+
 }

@@ -5,4 +5,6 @@ import com.sangupta.reread.entity.FeedList;
 
 public interface FeedListService extends DataStoreService<FeedList> {
 
+	public FeedList getOrCreate(String userID);
+
 }

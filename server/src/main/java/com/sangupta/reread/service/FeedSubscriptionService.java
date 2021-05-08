@@ -1,9 +1,11 @@
 package com.sangupta.reread.service;
 
+import com.sangupta.reread.entity.FeedList;
+
 public interface FeedSubscriptionService {
 
-	public boolean subscribe(String url);
+	public FeedList subscribe(String url);
 
-	public boolean unsubscribe(String feedID);
+	public FeedList unsubscribe(String feedID);
 
 }
