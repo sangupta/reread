@@ -317,4 +317,9 @@ public class RedisDataStoreServiceImpl<T> implements DataStoreService<T> {
         }
     }
 
+	@Override
+	public boolean updateField(T entity, String field, Object value) {
+		throw new NotImplementedException();
+	}
+
 }
