@@ -1,0 +1,47 @@
+# OS noise
+.DS_Store
+*.pbxuser
+profile
+desktop.ini
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.gz
+*.tar
+*.7z
+
+# Eclipse/Flash Builder noise
+.actionScriptProperties
+.flexProperties
+.project
+.classpath
+bin/*
+bin-debug/*
+report/*
+bin-test/*
+docs/*
+.flexLibProperties
+
+# Eclipse noise
+*/.settings/*
+*/target/*
+*/.gitignore
+.settings/*
+/target
+/target/
+
+# Java noise
+*.class
+
+# Node noise
+node_modules/
+package-lock.json
+yarn.lock
+yarn-error.log
+.cache
+
+# Project specific
+dist/
