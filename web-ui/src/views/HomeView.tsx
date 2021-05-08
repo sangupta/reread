@@ -1,14 +1,26 @@
 import React from 'react';
+import { collect } from 'react-recollect';
 
 import FeedList from '../containers/FeedList';
 import ContentPane from '../containers/ContentPane';
 
-export default class HomeView extends React.Component {
+class HomeView extends React.Component {
+
+    showFeedList = () => {
+        const { store } = this.props;
+        if (store.showFeedList) {
+            return <FeedList />;
+        }
+
+        return null;
+    }
 
     render() {
         return <div className='d-flex flex-row'>
-            <FeedList />
+            {this.showFeedList()}
             <ContentPane />
         </div>
     }
 }
+
+export default collect(HomeView);
