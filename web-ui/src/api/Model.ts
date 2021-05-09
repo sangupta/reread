@@ -15,3 +15,15 @@ export interface Folder {
     title: string;
     childFeeds: Array<Feed>;
 }
+
+export interface Post {
+    baseUrl: string;
+    content: string;
+    feedPostID: string;
+    link: string;
+    masterFeedID: string;
+    snippet: string;
+    title: string;
+    uniqueID: string;
+    updated: number;
+}

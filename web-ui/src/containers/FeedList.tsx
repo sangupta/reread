@@ -29,7 +29,7 @@ class FeedList extends React.Component<FeedListProps> {
         }
 
         return <>
-            {store.feeds.map(feed => <FeedItem feed={feed} />)}
+            {store.feeds.map(feed => <FeedItem key={feed.masterFeedID} feed={feed} />)}
         </>
     }
 

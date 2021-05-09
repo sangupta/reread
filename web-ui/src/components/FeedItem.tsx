@@ -8,7 +8,7 @@ interface FeedItemProps {
     history: any;
 }
 
-class FeedItem extends React.Component<FeedItemProps> {
+class FeedItem extends React.Component<FeedItemProps, any> {
 
     showFeed = () => {
         const { feed, history } = this.props;

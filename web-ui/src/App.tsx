@@ -4,9 +4,13 @@ import { collect, WithStoreProp } from 'react-recollect';
 
 import Header from './template/Header';
 import Footer from './template/Footer';
+
 import AddFeedView from './views/AddFeedView';
 import HomeView from './views/HomeView';
 import SettingsView from './views/SettingsView';
+import FeedLoader from './views/FeedLoader';
+import FeedFolderView from './views/FeedFolderView';
+
 import FeedApi from './api/FeedApi';
 
 interface AppProps extends WithStoreProp {
@@ -14,7 +18,7 @@ interface AppProps extends WithStoreProp {
 }
 
 interface AppState {
-
+    loading: boolean;
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -46,6 +50,13 @@ class App extends React.Component<AppProps, AppState> {
                     <Switch>
                         <Route exact path='/addFeed' component={AddFeedView} />
                         <Route exact path='/settings' component={SettingsView} />
+                        <Route exact path='/feed/:feedID'>
+                            <HomeView><FeedLoader mode='feed' /></HomeView>
+                        </Route>
+                        <Route exact path='/folder/:folderID'>
+                            <HomeView><FeedLoader mode='folder' /></HomeView>
+                        </Route>
+
                         <Route component={HomeView} />
                     </Switch>
                 </main>
