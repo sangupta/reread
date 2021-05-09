@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 import FolderItems from './../components/FolderItems';
 import FeedItem from '../components/FeedItem';
@@ -6,12 +7,16 @@ import { Feed, Folder } from '../api/Model';
 import Loading from '../components/Loading';
 import FeedApi from '../api/FeedApi';
 
+interface FeedListProps {
+    history: any;
+}
+
 interface FeedListState {
     feeds: Array<Feed>;
     folders: Array<Folder>;
 }
 
-export default class FeedList extends React.Component<{}, FeedListState> {
+class FeedList extends React.Component<FeedListProps, FeedListState> {
 
     state = {
         feeds: [],
@@ -49,6 +54,10 @@ export default class FeedList extends React.Component<{}, FeedListState> {
         </>
     }
 
+    showAllFeeds = () => {
+        this.props.history.push('/feeds/all')
+    }
+
     render() {
         const { loading } = this.state;
         if (loading) {
@@ -58,6 +67,10 @@ export default class FeedList extends React.Component<{}, FeedListState> {
         return <>
             <div className="p-3 bg-white" style={{ width: '280px' }}>
                 <ul className="list-unstyled ps-0">
+                    <li className="mb-1">
+                        <a href='#' onClick={this.showAllFeeds}>All</a>
+                    </li>
+
                     {this.showFolders()}
 
                     {this.showFeeds()}
@@ -67,3 +80,5 @@ export default class FeedList extends React.Component<{}, FeedListState> {
     }
 
 }
+
+export default withRouter(FeedList);

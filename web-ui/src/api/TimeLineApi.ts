@@ -3,7 +3,8 @@ import Axios from 'axios';
 export default class TimeLineApi {
 
     static async getTimeLine() {
-        return null;
+        const response = await Axios.get('/posts/all');
+        return response.data;
     }
 
     static async getFeedTimeLine(feedID: string) {
@@ -12,7 +13,8 @@ export default class TimeLineApi {
     }
 
     static async getFolderTimeLine(folderID: string) {
-        return null;
+        const response = await Axios.get('/posts/folder/' + folderID);
+        return response.data;
     }
 
 }

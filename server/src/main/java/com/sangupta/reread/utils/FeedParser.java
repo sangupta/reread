@@ -16,6 +16,7 @@ import com.sangupta.jerry.util.DateUtils;
 import com.sangupta.jerry.util.UriUtils;
 import com.sangupta.reread.entity.ParsedFeed;
 import com.sangupta.reread.entity.Post;
+import com.sangupta.reread.entity.PostAuthor;
 import com.sun.syndication.feed.module.DCModuleImpl;
 import com.sun.syndication.feed.synd.SyndContentImpl;
 import com.sun.syndication.feed.synd.SyndEnclosure;
@@ -181,8 +182,11 @@ public class FeedParser {
 		// get the author
 		if (AssertUtils.isNotEmpty(entry.getAuthors())) {
 			SyndPersonImpl personImpl = (SyndPersonImpl) entry.getAuthors().get(0);
-			post.author.name = personImpl.getName();
-			post.author.uri = personImpl.getUri();
+			if(personImpl != null) {
+				post.author = new PostAuthor();
+				post.author.name = personImpl.getName();
+				post.author.uri = personImpl.getUri();
+			}
 		}
 
 		// extract the content

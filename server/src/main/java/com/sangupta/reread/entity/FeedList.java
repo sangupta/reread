@@ -50,5 +50,19 @@ public class FeedList {
 		
 		return this.feeds.removeIf(feed -> (feedID.equalsIgnoreCase(feed.masterFeedID)));
 	}
+
+	public UserFeedFolder getFolder(String folderID) {
+		if(folderID == null) {
+			return null;
+		}
+		
+		for(UserFeedFolder folder : this.folders) {
+			if(folder.folderID.equals(folderID)) {
+				return folder;
+			}
+		}
+		
+		return null;
+	}
 	
 }

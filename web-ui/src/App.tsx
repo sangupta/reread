@@ -35,6 +35,9 @@ export default class App extends React.Component<{}, AppState> {
                     <Switch>
                         <Route exact path='/addFeed' component={AddFeedView} />
                         <Route exact path='/settings' component={SettingsView} />
+                        <Route exact path='/feeds/all'>
+                            <HomeView><FeedLoader mode='all' /></HomeView>
+                        </Route>
                         <Route exact path='/feed/:feedID'>
                             <HomeView><FeedLoader mode='feed' /></HomeView>
                         </Route>
@@ -42,7 +45,9 @@ export default class App extends React.Component<{}, AppState> {
                             <HomeView><FeedLoader mode='folder' /></HomeView>
                         </Route>
 
-                        <Route component={HomeView} />
+                        <Route>
+                            <HomeView><FeedLoader mode='all' /></HomeView>
+                        </Route>
                     </Switch>
                 </main>
             </BrowserRouter>
@@ -50,4 +55,3 @@ export default class App extends React.Component<{}, AppState> {
     }
 
 }
-
