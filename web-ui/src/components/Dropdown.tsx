@@ -18,7 +18,7 @@ class DropdownItem extends React.Component<DropdownItemProps> {
 
     render() {
         const { option } = this.props;
-        return <li>
+        return <li key={option.value}>
             <a className="dropdown-item" href="#" onClick={this.clickHandler}>{option.label}</a>
         </li>
     }
@@ -62,7 +62,7 @@ export default class Dropdown extends React.Component<DropdownProps, DropdownSta
         return <div className="dropdown">
             <button className={'btn btn-outline-' + variant + ' dropdown-toggle'} type="button" aria-expanded="false" onClick={this.toggleDropdown}>{dropdownLabel}</button>
             <ul className={'dropdown-menu ' + (open ? 'show' : '')}>
-                {options.map(option => <DropdownItem option={option} onClick={this.itemClicked} />)}
+                {options.map(option => <DropdownItem key={option.value} option={option} onClick={this.itemClicked} />)}
             </ul>
         </div >
     }
