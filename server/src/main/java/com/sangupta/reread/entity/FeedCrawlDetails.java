@@ -1,12 +1,17 @@
 package com.sangupta.reread.entity;
 
+import org.springframework.data.annotation.Id;
+
 public class FeedCrawlDetails {
 
+	@Id
 	public String feedID;
 	
 	public long lastCrawled;
 	
-	public long lastModifiedHeader;
+	public String lastModifiedHeader;
+	
+	public long lastModifiedTime;
 	
 	public String etag;
 

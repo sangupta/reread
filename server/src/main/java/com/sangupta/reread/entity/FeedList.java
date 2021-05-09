@@ -3,8 +3,11 @@ package com.sangupta.reread.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+
 public class FeedList {
 	
+	@Id
 	public String userID;
 
 	public final List<UserFeedFolder> folders = new ArrayList<>();

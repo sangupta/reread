@@ -1,6 +1,6 @@
 package com.sangupta.reread.entity;
 
-public class Feed {
+public class DiscoveredFeed {
 	
 	public String url;
 	
@@ -12,7 +12,7 @@ public class Feed {
 	
 	public String type;
 
-	public Feed(String url, String title, String type) {
+	public DiscoveredFeed(String url, String title, String type) {
 		this.url = url;
 		this.title = title;
 		this.type = type;

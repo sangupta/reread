@@ -13,7 +13,7 @@ import com.sangupta.jerry.http.WebResponse;
 import com.sangupta.jerry.http.service.HttpService;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.UriUtils;
-import com.sangupta.reread.entity.Feed;
+import com.sangupta.reread.entity.DiscoveredFeed;
 import com.sangupta.reread.service.FeedDiscoveryService;
 
 @Service
@@ -25,7 +25,7 @@ public class DefaultFeedDiscoveryServiceImpl implements FeedDiscoveryService {
 	protected HttpService httpService;
 
 	@Override
-	public Set<Feed> discoverFeeds(String url) {
+	public Set<DiscoveredFeed> discoverFeeds(String url) {
 		final String host = UriUtils.extractHost(url);
 
 		WebResponse response = this.httpService.getResponse(url);
@@ -44,19 +44,19 @@ public class DefaultFeedDiscoveryServiceImpl implements FeedDiscoveryService {
 		}
 
 		if (contentType.contains(HttpMimeType.RSS)) {
-			return Set.of(new Feed(url, host, "rss"));
+			return Set.of(new DiscoveredFeed(url, host, "rss"));
 		}
 
 		if (contentType.contains(HttpMimeType.RDF)) {
-			return Set.of(new Feed(url, host, "rdf"));
+			return Set.of(new DiscoveredFeed(url, host, "rdf"));
 		}
 
 		if (contentType.contains(HttpMimeType.ATOM)) {
-			return Set.of(new Feed(url, host, "atom"));
+			return Set.of(new DiscoveredFeed(url, host, "atom"));
 		}
 
 		if (contentType.contains(HttpMimeType.XML)) {
-			return Set.of(new Feed(url, host, "xml"));
+			return Set.of(new DiscoveredFeed(url, host, "xml"));
 		}
 
 		if (contentType.contains(HttpMimeType.HTML)) {
@@ -64,14 +64,14 @@ public class DefaultFeedDiscoveryServiceImpl implements FeedDiscoveryService {
 			int index = content.indexOf("<?xml version=\"");
 			if (index >= 0) {
 				if (index < 4) {
-					return Set.of(new Feed(url, host, "xml"));
+					return Set.of(new DiscoveredFeed(url, host, "xml"));
 				}
 
 				// check if this content is XML
 				// check if we have rss content
 				index = content.indexOf("<rss version=\"2.0\">");
 				if (index < 40) {
-					return Set.of(new Feed(url, host, "xml"));
+					return Set.of(new DiscoveredFeed(url, host, "xml"));
 				}
 			}
 		}

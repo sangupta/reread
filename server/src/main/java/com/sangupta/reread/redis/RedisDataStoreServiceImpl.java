@@ -319,7 +319,13 @@ public class RedisDataStoreServiceImpl<T> implements DataStoreService<T> {
 
 	@Override
 	public boolean updateField(T entity, String field, Object value) {
-		throw new NotImplementedException();
+		String primaryID = this.getPrimaryID(entity);
+		if(primaryID == null) {
+			return false;
+		}
+		
+		this.jsonClient.set(this.getKeyPrefix() + primaryID, value, new Path("." + field));
+		return true;
 	}
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sangupta.jerry.security.SecurityContext;
-import com.sangupta.reread.entity.Feed;
+import com.sangupta.reread.entity.DiscoveredFeed;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.service.FeedDiscoveryService;
 import com.sangupta.reread.service.FeedListService;
@@ -45,7 +45,7 @@ public class FeedListController {
 	}
 	
 	@PostMapping("/discover")
-	public Set<Feed> discoverFeed(@RequestBody FeedControllerPayload payload) {
+	public Set<DiscoveredFeed> discoverFeed(@RequestBody FeedControllerPayload payload) {
 		return this.feedDiscoveryService.discoverFeeds(payload.url);
 	}
 

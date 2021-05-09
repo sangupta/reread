@@ -2,10 +2,10 @@ package com.sangupta.reread.service;
 
 import java.util.Set;
 
-import com.sangupta.reread.entity.Feed;
+import com.sangupta.reread.entity.DiscoveredFeed;
 
 public interface FeedDiscoveryService {
 	
-	public Set<Feed> discoverFeeds(String url);
+	public Set<DiscoveredFeed> discoverFeeds(String url);
 
 }

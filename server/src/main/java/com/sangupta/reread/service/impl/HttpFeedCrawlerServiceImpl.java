@@ -28,7 +28,7 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 	protected FeedCrawlDetailsService feedCrawlDetailsService;
 	
 	@Autowired
-	protected FeedParsingService feedReaderService;
+	protected FeedParsingService feedParsingService;
 	
 	@Autowired
 	protected PostSnippetService postSnippetService;
@@ -51,11 +51,11 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		if(details == null) {
 			details = new FeedCrawlDetails();
 			details.feedID = masterFeedID;
-			this.feedCrawlDetailsService.insert(details);
+			this.feedCrawlDetailsService.upsert(details);
 		}
 		
 		// read feed
-		ParsedFeed parsedFeed = this.feedReaderService.parseFeedFromUrl(masterFeed.url);
+		ParsedFeed parsedFeed = this.feedParsingService.parseFeedFromUrl(masterFeed.feedID, masterFeed.url);
 		
 		// update last crawl time
 		this.feedCrawlDetailsService.updateField(details, "lastCrawled", System.currentTimeMillis());
@@ -97,6 +97,7 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 
 		details.lastCrawled = parsedFeed.crawlTime;
 		details.lastModifiedHeader = parsedFeed.lastModifiedHeader;
+		details.lastModifiedTime = parsedFeed.lastModifiedTimestamp;
 		details.numCrawled++;
 		details.etag = parsedFeed.eTagHeader;
 

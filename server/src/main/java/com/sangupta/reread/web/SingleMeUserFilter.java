@@ -7,28 +7,31 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
+import com.sangupta.jerry.security.SecurityContext;
+import com.sangupta.reread.entity.User;
+
 @Component
-public class CorsFilter implements Filter, Ordered {
+public class SingleMeUserFilter implements Filter, Ordered {
+	
+	private static final User USER = new User("me", "Friend");
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-		HttpServletResponse hsr = (HttpServletResponse) response;
-
-		hsr.setHeader("Access-Control-Allow-Origin", "*");
-		hsr.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
-		hsr.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, HEAD, DELETE");
-		hsr.setHeader("Access-Control-Max-Age", "86400");
-		filterChain.doFilter(request, response);
+		SecurityContext.setPrincipal(USER);
+		try {
+			filterChain.doFilter(request, response);
+		} finally {
+			SecurityContext.clear();
+		}
 	}
 
 	@Override
 	public int getOrder() {
-		return 10;
+		return 0;
 	}
 	
 }

@@ -12,10 +12,11 @@ public class RedisFeedListServiceImpl extends RedisDataStoreServiceImpl<FeedList
 	@Override
 	public FeedList getOrCreate(String userID) {
 		FeedList feedList = this.get(userID);
+		
 		if(feedList == null) {
 			feedList = new FeedList();
 			feedList.userID = userID;
-			this.insert(feedList);
+			this.update(feedList);
 		}
 		
 		return feedList;
