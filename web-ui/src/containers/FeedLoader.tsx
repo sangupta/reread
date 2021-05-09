@@ -7,6 +7,7 @@ import TimeLineApi from '../api/TimeLineApi';
 import ContentPane from './ContentPane';
 import { Post } from '../api/Model';
 import PostApi from '../api/PostApi';
+import Toolbar from './Toolbar';
 
 interface FeedLoaderProps {
     mode: 'feed' | 'folder' | 'all' | 'search';
@@ -121,7 +122,12 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             return <Alert>Feed has no posts.</Alert>
         }
 
-        return <ContentPane posts={posts} />
+        return <>
+            <div className='d-flex flex-column'>
+                <Toolbar />
+                <ContentPane posts={posts} />
+            </div>
+        </>
     }
 
 }
