@@ -1,15 +1,21 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
+
 import { DiscoveredFeed } from '../api/Model';
 import FeedApi from '../api/FeedApi';
 
 interface DiscoveredFeedProps {
     feed: DiscoveredFeed;
+    history: any;
 }
 
-export default class DiscoveredFeedItem extends React.Component<DiscoveredFeedProps> {
+class DiscoveredFeedItem extends React.Component<DiscoveredFeedProps, {}> {
 
     addFeed = async () => {
         const data = await FeedApi.subscribeFeed(this.props.feed);
+        if (data && data.feedID) {
+            this.props.history.push('/feed/' + data.feedID);
+        }
     }
 
     render() {
@@ -24,3 +30,5 @@ export default class DiscoveredFeedItem extends React.Component<DiscoveredFeedPr
         </div>
     }
 }
+
+export default withRouter(DiscoveredFeedItem);

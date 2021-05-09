@@ -19,5 +19,6 @@ export default class FeedApi {
         const response = await Axios.post('/feeds/subscribe', {
             url: feed.url
         });
+        return response.data;
     }
 }

@@ -1,39 +1,24 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { collect, WithStoreProp } from 'react-recollect';
 
 import Header from './template/Header';
-import Footer from './template/Footer';
 
 import AddFeedView from './views/AddFeedView';
 import HomeView from './views/HomeView';
 import SettingsView from './views/SettingsView';
-import FeedLoader from './views/FeedLoader';
-import FeedFolderView from './views/FeedFolderView';
-
-import FeedApi from './api/FeedApi';
-
-interface AppProps extends WithStoreProp {
-
-}
+import FeedLoader from './containers/FeedLoader';
 
 interface AppState {
     loading: boolean;
 }
 
-class App extends React.Component<AppProps, AppState> {
+export default class App extends React.Component<{}, AppState> {
 
     state = {
         loading: true
     }
 
     componentDidMount = async () => {
-        const data = await FeedApi.getFeedList();
-
-        const { store } = this.props;
-        store.folders = data.folders;
-        store.feeds = data.feeds;
-
         this.setState({ loading: false });
     }
 
@@ -60,11 +45,9 @@ class App extends React.Component<AppProps, AppState> {
                         <Route component={HomeView} />
                     </Switch>
                 </main>
-                <Footer />
             </BrowserRouter>
         </>
     }
 
 }
 
-export default collect(App);

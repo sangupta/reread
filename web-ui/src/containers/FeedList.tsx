@@ -1,39 +1,60 @@
 import React from 'react';
-import { collect, WithStoreProp } from 'react-recollect';
 
 import FolderItems from './../components/FolderItems';
 import FeedItem from '../components/FeedItem';
+import { Feed, Folder } from '../api/Model';
+import Loading from '../components/Loading';
+import FeedApi from '../api/FeedApi';
 
-interface FeedListProps extends WithStoreProp {
-
+interface FeedListState {
+    feeds: Array<Feed>;
+    folders: Array<Folder>;
 }
 
-class FeedList extends React.Component<FeedListProps> {
+export default class FeedList extends React.Component<{}, FeedListState> {
+
+    state = {
+        feeds: [],
+        folders: [],
+        loading: true
+    }
+
+    componentDidMount = async () => {
+        const feedList: any = await FeedApi.getFeedList();
+        if (feedList) {
+            this.setState({ feeds: feedList.feeds, folders: feedList.folders, loading: false });
+        }
+    }
 
     showFolders = () => {
-        const { store } = this.props;
-        if (!store.folders || store.folders.length === 0) {
+        const { folders } = this.state;
+        if (!folders || folders.length === 0) {
             return null;
         }
 
         return <>
-            {store.folders.map(folder => <FolderItems folder={folder} />)}
+            {folders.map(folder => <FolderItems folder={folder} />)}
             <li className="border-top my-3"></li>
         </>
     }
 
     showFeeds = () => {
-        const { store } = this.props;
-        if (!store.feeds || store.feeds.length === 0) {
+        const { feeds } = this.state;
+        if (!feeds || feeds.length === 0) {
             return null;
         }
 
         return <>
-            {store.feeds.map(feed => <FeedItem key={feed.masterFeedID} feed={feed} />)}
+            {feeds.map(feed => <FeedItem key={feed.masterFeedID} feed={feed} />)}
         </>
     }
 
     render() {
+        const { loading } = this.state;
+        if (loading) {
+            return <Loading />
+        }
+
         return <>
             <div className="p-3 bg-white" style={{ width: '280px' }}>
                 <ul className="list-unstyled ps-0">
@@ -46,5 +67,3 @@ class FeedList extends React.Component<FeedListProps> {
     }
 
 }
-
-export default collect(FeedList);

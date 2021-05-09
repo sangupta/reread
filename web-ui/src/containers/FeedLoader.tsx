@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Alert from '../components/Alert';
 import TimeLineApi from '../api/TimeLineApi';
-import ContentPane from '../containers/ContentPane';
+import ContentPane from './ContentPane';
 import { Post } from '../api/Model';
 
 interface FeedLoaderProps {
@@ -26,15 +26,45 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         posts: []
     }
 
-    componentDidMount = async () => {
+    componentDidMount() {
         const { mode, match } = this.props;
+        const { feedID, folderID } = match?.params;
+
+        this.fetchData(mode, feedID, folderID);
+    }
+
+    componentDidUpdate(prevProps: any) {
+        const { mode, match } = this.props;
+        const { feedID, folderID } = match?.params;
+
+        const { mode: oldMode, match: oldMatch } = prevProps;
+        const { feedID: oldFeedID, folderID: oldFolderID } = oldMatch?.params;
+
+        let refetch = false;
+        if (mode !== oldMode) {
+            refetch = true;
+        }
+
+        if (mode === 'feed' && feedID !== oldFeedID) {
+            refetch = true;
+        }
+
+        if (mode === 'folder' && folderID !== oldFolderID) {
+            refetch = true;
+        }
+
+        if (refetch) {
+            this.fetchData(mode, feedID, folderID);
+        }
+    }
+
+    fetchData = async (mode: string, feedID: string, folderID: string) => {
         let data;
 
         if (mode === 'all') {
             data = await TimeLineApi.getTimeLine();
         }
         if (mode === 'feed') {
-            const feedID = match.params.feedID;
             if (!feedID) {
                 this.setState({ loading: false, errorMsg: 'No such feed found' });
                 return;
@@ -43,7 +73,6 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             data = await TimeLineApi.getFeedTimeLine(feedID);
         }
         if (mode === 'folder') {
-            const folderID = match.params.folderID;
             if (!folderID) {
                 this.setState({ loading: false, errorMsg: 'No such folder found' });
                 return;
