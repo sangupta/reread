@@ -21,6 +21,10 @@ public class Post implements Comparable<Post> {
 	
 	public PostImage image;
 	
+	public PostImage thumbnail;
+	
+	public String mainElement;
+	
 	public String link;
 	
 	public long updated;

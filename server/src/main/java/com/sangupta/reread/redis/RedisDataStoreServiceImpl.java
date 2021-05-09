@@ -111,8 +111,13 @@ public class RedisDataStoreServiceImpl<T> implements DataStoreService<T> {
 
 	@Override
 	public T get(String primaryID) {
+		String prefix = this.getKeyPrefix();
+		if(!primaryID.startsWith(prefix)) {
+			primaryID = prefix + primaryID;
+		}
+		
 		try {
-			return this.jsonClient.get(this.getKeyPrefix() + primaryID, this.getEntityClass(), new Path("."));
+			return this.jsonClient.get(primaryID, this.getEntityClass(), new Path("."));
 		} catch (NullPointerException e) {
 			return null;
 		}

@@ -26,7 +26,7 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 	protected FeedCrawlerService feedCrawlerService;
 
 	@Override
-	public FeedList subscribe(String url) {
+	public MasterFeed subscribe(String url) {
 		// find master feed for one
 		MasterFeed feed = this.masterFeedService.getOrCreateFeedForUrl(url);
 		
@@ -47,7 +47,7 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 		this.feedListService.update(feedList);
 		
 		// all done
-		return feedList;
+		return feed;
 	}
 
 	@Override

@@ -88,7 +88,7 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		this.postService.savePosts(posts);
 		
 		// update the timeline
-		this.feedTimelineService.updateTimeline(posts);
+		this.feedTimelineService.updateTimeline(masterFeedID, posts);
 	}
 
 	protected void updateEntities(MasterFeed feed, FeedCrawlDetails details, ParsedFeed parsedFeed) {

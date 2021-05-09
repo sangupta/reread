@@ -29,6 +29,7 @@ public class RedisMasterFeedServiceImpl extends RedisDataStoreServiceImpl<Master
 		
 		MasterFeed feed = new MasterFeed();
 		feed.url = url;
+		feed.title = url;
 		this.insert(feed);
 		return feed;
 	}
