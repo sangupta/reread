@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { collect, WithStoreProp } from 'react-recollect';
 
 import Header from './template/Header';
 
@@ -8,11 +9,15 @@ import HomeView from './views/HomeView';
 import SettingsView from './views/SettingsView';
 import FeedLoader from './containers/FeedLoader';
 
+interface AppProps extends WithStoreProp {
+
+}
+
 interface AppState {
     loading: boolean;
 }
 
-export default class App extends React.Component<{}, AppState> {
+class App extends React.Component<AppProps, AppState> {
 
     state = {
         loading: true
@@ -23,6 +28,7 @@ export default class App extends React.Component<{}, AppState> {
     }
 
     render() {
+        const text = this.props.store.searchText;
         const { loading } = this.state;
         if (loading) {
             return "Loading...";
@@ -35,18 +41,25 @@ export default class App extends React.Component<{}, AppState> {
                     <Switch>
                         <Route exact path='/addFeed' component={AddFeedView} />
                         <Route exact path='/settings' component={SettingsView} />
+
                         <Route exact path='/feeds/all'>
-                            <HomeView><FeedLoader mode='all' /></HomeView>
+                            <HomeView><FeedLoader key='feedLoader' mode='all' /></HomeView>
                         </Route>
+
+                        <Route exact path='/search'>
+                            <HomeView><FeedLoader key='feedLoader' mode='search' query={text} /></HomeView>
+                        </Route>
+
                         <Route exact path='/feed/:feedID'>
-                            <HomeView><FeedLoader mode='feed' /></HomeView>
+                            <HomeView><FeedLoader key='feedLoader' mode='feed' /></HomeView>
                         </Route>
+
                         <Route exact path='/folder/:folderID'>
-                            <HomeView><FeedLoader mode='folder' /></HomeView>
+                            <HomeView><FeedLoader key='feedLoader' mode='folder' /></HomeView>
                         </Route>
 
                         <Route>
-                            <HomeView><FeedLoader mode='all' /></HomeView>
+                            <HomeView><FeedLoader key='feedLoader' mode='all' /></HomeView>
                         </Route>
                     </Switch>
                 </main>
@@ -55,3 +68,5 @@ export default class App extends React.Component<{}, AppState> {
     }
 
 }
+
+export default collect(App);

@@ -10,17 +10,15 @@ const SERVER_URL = 'http://localhost:1309';
 
 declare module 'react-recollect' {
     interface Store {
-        feeds: Array<Feed>;
-        folders: Array<Folder>;
         showFeedList: boolean;
         layout: 'cards' | 'list';
+        searchText: string;
     }
 }
 
-store.folders = [];
-store.feeds = [];
 store.showFeedList = true;
 store.layout = 'cards';
+store.searchText = '';
 
 Axios.interceptors.request.use(request => {
     if (request.url?.startsWith('/')) {

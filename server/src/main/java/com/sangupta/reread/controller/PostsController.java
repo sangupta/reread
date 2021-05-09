@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sangupta.jerry.security.SecurityContext;
@@ -18,6 +19,7 @@ import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedTimelineService;
+import com.sangupta.reread.service.PostSearchService;
 import com.sangupta.reread.service.PostService;
 
 @RestController
@@ -32,6 +34,9 @@ public class PostsController {
 
 	@Autowired
 	protected FeedListService feedListService;
+	
+	@Autowired
+	protected PostSearchService postSearchService;
 
 	@GetMapping("/all")
 	public List<Post> getAllPosts() {
@@ -69,6 +74,11 @@ public class PostsController {
 		Collections.sort(posts);
 		
 		return posts;
+	}
+	
+	@GetMapping("/search")
+	public List<Post> search(@RequestParam String query) {
+		return this.postSearchService.search(query);
 	}
 	
 	protected void addPostsForTimeline(List<Post> posts, String timelineID) {

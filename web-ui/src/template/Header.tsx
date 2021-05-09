@@ -2,6 +2,7 @@ import React from 'react';
 import { collect, store } from 'react-recollect';
 
 import Link from './../components/Link';
+import SearchBox from './../components/SearchBox';
 
 /**
  * Render the header bar.
@@ -36,9 +37,7 @@ class Header extends React.Component {
                         <i className="fas fa-sync-alt"></i> Refresh
                     </button>
 
-                    <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                        <input type="search" className="form-control form-control-dark" placeholder="Search..." aria-label="Search" />
-                    </form>
+                    <SearchBox />
 
                     <div className="text-end">
                         <Link className="btn btn-primary me-2" route='/addFeed'>+ Add</Link>

@@ -6,10 +6,12 @@ import Alert from '../components/Alert';
 import TimeLineApi from '../api/TimeLineApi';
 import ContentPane from './ContentPane';
 import { Post } from '../api/Model';
+import PostApi from '../api/PostApi';
 
 interface FeedLoaderProps {
-    mode: 'feed' | 'folder' | 'all';
+    mode: 'feed' | 'folder' | 'all' | 'search';
     match: any;
+    query?: string;
 }
 
 interface FeedLoaderState {
@@ -34,10 +36,10 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
     }
 
     componentDidUpdate(prevProps: any) {
-        const { mode, match } = this.props;
+        const { mode, match, query } = this.props;
         const { feedID, folderID } = match?.params;
 
-        const { mode: oldMode, match: oldMatch } = prevProps;
+        const { mode: oldMode, match: oldMatch, query: oldQuery } = prevProps;
         const { feedID: oldFeedID, folderID: oldFolderID } = oldMatch?.params;
 
         let refetch = false;
@@ -53,6 +55,10 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             refetch = true;
         }
 
+        if (mode === 'search' && query !== oldQuery) {
+            refetch = true;
+        }
+
         if (refetch) {
             this.fetchData(mode, feedID, folderID);
         }
@@ -61,9 +67,20 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
     fetchData = async (mode: string, feedID: string, folderID: string) => {
         let data;
 
+        if (mode === 'search') {
+            const text = this.props.query;
+            if (!text) {
+                this.setState({ loading: false, errorMsg: 'Query text to search not found' });
+                return;
+            }
+
+            data = await PostApi.search(text);
+        }
+
         if (mode === 'all') {
             data = await TimeLineApi.getTimeLine();
         }
+
         if (mode === 'feed') {
             if (!feedID) {
                 this.setState({ loading: false, errorMsg: 'No such feed found' });
@@ -81,11 +98,13 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             data = await TimeLineApi.getFolderTimeLine(folderID);
         }
 
-        this.setState({ posts: data, loading: false });
+        this.setState({ posts: data, loading: false, errorMsg: '' });
     }
 
     render() {
+        const { query, mode } = this.props;
         const { loading, errorMsg, posts } = this.state;
+
         if (loading) {
             return <Loading />
         }
@@ -95,6 +114,10 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         }
 
         if (posts.length === 0) {
+            if (mode === 'search') {
+                return <Alert>No results found for the query: {query}</Alert>
+            }
+
             return <Alert>Feed has no posts.</Alert>
         }
 

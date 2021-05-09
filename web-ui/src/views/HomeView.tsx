@@ -26,9 +26,11 @@ class HomeView extends React.Component<HomeViewProps> {
     }
 
     render() {
-        return <div className='d-flex flex-row'>
+        return <div className='d-flex flex-row mt-3'>
             {this.showFeedList()}
-            {this.props.children}
+            <div className='w-100 h-100'>
+                {this.props.children}
+            </div>
         </div>
     }
 }

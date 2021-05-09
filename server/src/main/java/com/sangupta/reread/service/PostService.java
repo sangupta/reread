@@ -11,5 +11,5 @@ public interface PostService extends DataStoreService<Post>{
 	public void filterAlreadyExistingPosts(ParsedFeed parsedFeed);
 
 	public void savePosts(List<Post> posts);
-
+	
 }

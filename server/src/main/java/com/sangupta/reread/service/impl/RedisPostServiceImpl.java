@@ -2,6 +2,7 @@ package com.sangupta.reread.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sangupta.jerry.util.AssertUtils;
@@ -9,11 +10,15 @@ import com.sangupta.jerry.util.HashUtils;
 import com.sangupta.reread.entity.ParsedFeed;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
+import com.sangupta.reread.service.PostSearchService;
 import com.sangupta.reread.service.PostService;
 
 @Service
 public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implements PostService {
-
+	
+	@Autowired
+	protected PostSearchService postSearchService;
+	
 	@Override
 	public void filterAlreadyExistingPosts(ParsedFeed parsedFeed) {
 		if(parsedFeed == null) {
@@ -38,6 +43,9 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 		
 		for(Post post : posts) {
 			this.insert(post);
+			
+			// also index this post for search
+			this.postSearchService.indexPost(post);
 		}
 	}
 
