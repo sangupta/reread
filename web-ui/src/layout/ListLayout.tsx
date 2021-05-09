@@ -1,6 +1,8 @@
 import React from 'react';
 import { Post } from '../api/Model';
+
 import TimeAgo from '../components/TimeAgo';
+import PostView from '../containers/PostView';
 
 interface ListLayoutItemProps {
     post: Post;
@@ -28,8 +30,7 @@ class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItem
             return null;
         }
 
-        return <div className='post-container' dangerouslySetInnerHTML={{ __html: post.content }}>
-        </div>
+        return <PostView post={post} />
     }
 
     render() {

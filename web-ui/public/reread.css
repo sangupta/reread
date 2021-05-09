@@ -2,9 +2,28 @@ html {
     width: 100%;
     height: 100%;
 }
+
 h1 {
     font-size: 26px;
 }
+
 h2 {
     font-size: 22px;
+}
+
+.modal-underlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.5;
+    z-index: 1040;
+    overflow-y: hidden;
+}
+
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
 }
