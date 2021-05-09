@@ -23,19 +23,19 @@ class Header extends React.Component {
             <div className="container-fluid">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <button type="button" className="btn btn-outline" onClick={this.toggleFeedList}>
-                        <i className="fas fa-bars" />
+                        <Icon name='layout-sidebar' />
                     </button>
 
                     <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                         <li>
                             <Link className="nav-link px-2 text-primary" route='/'>
-                                <i className="fas fa-rss-square" /> ReRead
+                                <Icon name='rss-fill' /> ReRead
                             </Link>
                         </li>
                     </ul>
 
                     <button type="button" className="btn btn-outline px-3">
-                        <i className="fas fa-sync-alt"></i> Refresh
+                        <Icon name='arrow-clockwise' /> Refresh
                     </button>
 
                     <SearchBox />
