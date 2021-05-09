@@ -1,15 +1,44 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { collect, WithStoreProp } from 'react-recollect';
 
 import Header from './template/Header';
 import Footer from './template/Footer';
 import AddFeedView from './views/AddFeedView';
 import HomeView from './views/HomeView';
 import SettingsView from './views/SettingsView';
+import FeedApi from './api/FeedApi';
 
-export default class App extends React.Component {
+interface AppProps extends WithStoreProp {
+
+}
+
+interface AppState {
+
+}
+
+class App extends React.Component<AppProps, AppState> {
+
+    state = {
+        loading: true
+    }
+
+    componentDidMount = async () => {
+        const data = await FeedApi.getFeedList();
+
+        const { store } = this.props;
+        store.folders = data.folders;
+        store.feeds = data.feeds;
+
+        this.setState({ loading: false });
+    }
 
     render() {
+        const { loading } = this.state;
+        if (loading) {
+            return "Loading...";
+        }
+
         return <>
             <BrowserRouter>
                 <Header />
@@ -26,3 +55,5 @@ export default class App extends React.Component {
     }
 
 }
+
+export default collect(App);

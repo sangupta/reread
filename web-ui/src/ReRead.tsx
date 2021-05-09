@@ -5,15 +5,17 @@ import Axios from 'axios';
 
 import App from './App';
 
-const SERVER_URL = 'http://localhost:8080';
+const SERVER_URL = 'http://localhost:1309';
 
 declare module 'react-recollect' {
     interface Store {
         feeds: Array<any>;
+        folders: Array<any>;
         showFeedList: boolean;
     }
 }
 
+store.folders = [];
 store.feeds = [];
 store.showFeedList = true;
 

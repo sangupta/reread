@@ -1,12 +1,13 @@
 import React from 'react';
 
-import DiscoveredFeed from './../components/DiscoveredFeed';
+import DiscoveredFeedItem from './../components/DiscoveredFeedItem';
 import FeedApi from '../api/FeedApi';
-import { Feed } from '../api/Model';
+import { DiscoveredFeed } from '../api/Model';
 
 interface AddFeedViewState {
     url: string;
-    feeds: Array<Feed> | null;
+    feeds: Array<DiscoveredFeed>;
+    discovered: boolean;
 }
 
 /**
@@ -18,8 +19,9 @@ export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
      * Default state
      */
     state = {
-        url: '',
-        feeds: null
+        url: 'https://news.ycombinator.com/rss',
+        feeds: [],
+        discovered: false
     };
 
     /**
@@ -40,7 +42,7 @@ export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
         const { url } = this.state;
         if (url) {
             const feeds = await FeedApi.discoverFeed(url);
-            this.setState({ feeds: feeds });
+            this.setState({ feeds: feeds, discovered: true });
         }
     }
 
@@ -49,8 +51,8 @@ export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
     }
 
     showDiscoveredFeeds = () => {
-        const { feeds } = this.state;
-        if (!feeds) {
+        const { discovered, feeds } = this.state;
+        if (!discovered) {
             return null;
         }
 
@@ -60,7 +62,7 @@ export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
 
         return <div className='mt-3'>
             <h2>Discovered Feeds</h2>
-            {feeds.map(feed => <DiscoveredFeed feed={feed} /> )}
+            {feeds.map(feed => <DiscoveredFeedItem feed={feed} />)}
         </div>
 
     }
@@ -73,7 +75,7 @@ export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
                 <form autoComplete='off' className='mt-3'>
                     <div className="form-group">
                         <label htmlFor="siteAddress">Site Address</label>
-                        <input id='siteAddress' type="url" className="form-control md-6" aria-describedby="siteAddressHelp" placeholder="https://site-to-follow.com" onChange={this.setUrl} />
+                        <input id='siteAddress' type="url" className="form-control md-6" aria-describedby="siteAddressHelp" placeholder="https://site-to-follow.com" value={this.state.url} onChange={this.setUrl} />
                         <small id="siteAddressHelp" className="form-text text-muted">We will try and find RSS and social media you can follow from the site.</small>
                     </div>
                     <button type='button' className='btn btn-primary mt-3' onClick={this.discoverFeed}>Discover</button>

@@ -1,14 +1,15 @@
 import React from 'react';
-import { Feed } from '../api/Model';
+import { DiscoveredFeed } from '../api/Model';
+import FeedApi from '../api/FeedApi';
 
 interface DiscoveredFeedProps {
-    feed: Feed;
+    feed: DiscoveredFeed;
 }
 
-export default class DiscoveredFeed extends React.Component<DiscoveredFeedProps> {
+export default class DiscoveredFeedItem extends React.Component<DiscoveredFeedProps> {
 
-    addFeed = () => {
-        
+    addFeed = async () => {
+        const data = await FeedApi.subscribeFeed(this.props.feed);
     }
 
     render() {
