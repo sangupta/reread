@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Dropdown, { DropDownOption } from '../components/Dropdown';
+import Icon from '../components/Icon';
 
 const sortOptions: Array<DropDownOption> = [
     { label: 'Newest first', value: 'newest' },
@@ -27,7 +29,7 @@ export default class Toolbar extends React.Component<{}, ToolbarState> {
     state = {
         sortOption: 'newest',
         display: 'all',
-        layout:'list'
+        layout: 'list'
     }
 
     sortSelected = (value: string) => {
@@ -49,8 +51,12 @@ export default class Toolbar extends React.Component<{}, ToolbarState> {
             <Dropdown variant='secondary' options={displayItems} onSelect={this.displaySelected} value={this.state.display} />
             <div className='px-2' />
             <div className='btn-group'>
-                <button className='btn btn-outline-secondary'>Prev</button>
-                <button className='btn btn-outline-secondary'>Next</button>
+                <button className='btn btn-outline-secondary'>
+                    <Icon name='arrow-left-circle' /> Prev
+                </button>
+                <button className='btn btn-outline-secondary'>
+                    <Icon name='arrow-right-circle' /> Next
+                </button>
             </div>
             <div className='px-2' />
             <Dropdown variant='secondary' options={sortOptions} onSelect={this.sortSelected} value={this.state.sortOption} />

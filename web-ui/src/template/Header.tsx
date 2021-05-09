@@ -3,6 +3,7 @@ import { collect, store } from 'react-recollect';
 
 import Link from './../components/Link';
 import SearchBox from './../components/SearchBox';
+import Icon from '../components/Icon';
 
 /**
  * Render the header bar.
@@ -42,7 +43,7 @@ class Header extends React.Component {
                     <div className="text-end">
                         <Link className="btn btn-primary me-2" route='/addFeed'>+ Add</Link>
                         <Link className="btn btn-secondary me-2" route='/settings'>
-                            <i className="fas fa-cogs"></i>
+                            <Icon name='gear' />
                         </Link>
                     </div>
                 </div>
