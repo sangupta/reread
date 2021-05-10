@@ -64,7 +64,7 @@ export default class PostView extends React.Component<PostViewProps> {
                             </div>
                             <button type="button" className="btn-close" aria-label="Close" onClick={this.hidePost} />
                         </div>
-                        <div className='modal-content h-100'>
+                        <div className='modal-body h-100'>
                             <div className='post-details' dangerouslySetInnerHTML={{ __html: post.content }} />
                         </div>
                     </div>
