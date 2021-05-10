@@ -11,6 +11,7 @@ interface PostViewProps {
     onPreviousPost: React.MouseEventHandler;
     onNextPost: React.MouseEventHandler;
     onStarPost: (e: React.MouseEvent) => void;
+    onBookmarkPost: (e: React.MouseEvent) => void;
 }
 
 export default class PostView extends React.Component<PostViewProps> {
@@ -72,7 +73,7 @@ export default class PostView extends React.Component<PostViewProps> {
                             <a href='#' onClick={this.props.onStarPost}>
                                 <Icon name='star' className='pe-2' />
                             </a>
-                            <a href='#'>
+                            <a href='#' onClick={this.props.onBookmarkPost}>
                                 <Icon name='bookmark' className='pe-2' />
                             </a>
                             <a href='#'>

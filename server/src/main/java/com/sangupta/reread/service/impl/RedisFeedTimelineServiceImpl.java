@@ -3,6 +3,7 @@ package com.sangupta.reread.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
@@ -71,15 +72,18 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 		this.redisTemplate.rename(tempKey, KEY + ALL_TIMELINE_ID);
 		this.redisTemplate.delete(tempKey);
 	}
+	
+	@Override
+	public Set<String> getSpecialTimeline(String timelineID) {
+		return this.redisTemplate.opsForSet().members(SORTED_TIMELINE + timelineID);
+	}
 
 	public void addToSpecialTimeline(String timelineID, String postID, long time) {
-		final ZSetOperations<String, String> setOperations = this.redisTemplate.opsForZSet();
-		setOperations.add(SORTED_TIMELINE + timelineID, postID, time);
+		this.redisTemplate.opsForSet().add(SORTED_TIMELINE + timelineID, postID);
 	}
 	
 	public void removeFromSpecialTimeline(String timelineID, String postID) {
-		final ZSetOperations<String, String> setOperations = this.redisTemplate.opsForZSet();
-		setOperations.remove(SORTED_TIMELINE + timelineID, postID);
+		this.redisTemplate.opsForSet().remove(SORTED_TIMELINE + timelineID, postID);
 	}
 	
 }

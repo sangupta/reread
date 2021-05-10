@@ -67,6 +67,26 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 		return this.unmarkPost(postID, "readOn", FeedTimelineService.READ_TIMELINE_ID);
 	}
 
+	@Override
+	public Post starPost(String postID) {
+		return this.markPost(postID, "starredOn", FeedTimelineService.STARRED_TIMELINE_ID);
+	}
+
+	@Override
+	public Post unstarPost(String postID) {
+		return this.unmarkPost(postID, "starredOn", FeedTimelineService.STARRED_TIMELINE_ID);
+	}
+
+	@Override
+	public Post bookmarkPost(String postID) {
+		return this.markPost(postID, "bookmarkedOn", FeedTimelineService.BOOKMARK_TIMELINE_ID);
+	}
+
+	@Override
+	public Post unbookmarkPost(String postID) {
+		return this.unmarkPost(postID, "bookmarkedOn", FeedTimelineService.BOOKMARK_TIMELINE_ID);
+	}
+
 	private Post markPost(String postID, String fieldName, String timelineID) {
 		Post post = this.get(postID);
 		if (post != null) {
@@ -91,4 +111,5 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 		
 		return post;
 	}
+
 }

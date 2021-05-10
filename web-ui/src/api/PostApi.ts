@@ -28,4 +28,8 @@ export default class PostApi {
         return response.data;
     }
 
+    static async bookmarkPost(id: string): Promise<Post> {
+        const response = await Axios.get('/posts/bookmark/' + id);
+        return response.data;
+    }
 }

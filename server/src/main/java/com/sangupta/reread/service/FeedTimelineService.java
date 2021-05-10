@@ -1,6 +1,7 @@
 package com.sangupta.reread.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.sangupta.reread.entity.Post;
 
@@ -8,7 +9,7 @@ public interface FeedTimelineService {
 	
 	public static final String KEY = "timeline:";
 	
-	public static final String SORTED_TIMELINE = "sortedTimeline:";
+	public static final String SORTED_TIMELINE = "setTimeline:";
 
 	public static final String ALL_TIMELINE_ID = "$all";
 	
@@ -23,6 +24,8 @@ public interface FeedTimelineService {
 	public void updateAllTimeline(List<Post> posts);
 
 	public void updateTimeline(String feedID, List<Post> posts);
+	
+	public Set<String> getSpecialTimeline(String timelineID);
 	
 	public void addToSpecialTimeline(String timelineID, String postID, long time);
 	

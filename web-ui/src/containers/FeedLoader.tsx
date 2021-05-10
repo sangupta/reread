@@ -46,7 +46,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         const { mode, match, query } = this.props;
         const { feedID, folderID } = match?.params;
 
-        const { mode: oldMode, match: oldMatch, query: oldQuery, sortOption: oldSortOption, displayItem: oldDisplayItem } = prevProps;
+        const { mode: oldMode, match: oldMatch, query: oldQuery } = prevProps;
         const { feedID: oldFeedID, folderID: oldFolderID } = oldMatch?.params;
 
         let refetch = false;

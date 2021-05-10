@@ -1,8 +1,10 @@
 package com.sangupta.reread.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,14 +54,16 @@ public class PostsController {
 	@GetMapping("/stars")
 	public List<Post> getStarredPosts() {
 		List<Post> posts = new ArrayList<>();
-		this.addPostsForTimeline(posts, FeedTimelineService.STARRED_TIMELINE_ID);
+		Set<String> ids = this.feedTimelineService.getSpecialTimeline(FeedTimelineService.STARRED_TIMELINE_ID);
+		this.addPostsForIDs(posts, ids);
 		return posts;
 	}
 	
 	@GetMapping("/bookmarks")
 	public List<Post> getBookmarkedPosts() {
 		List<Post> posts = new ArrayList<>();
-		this.addPostsForTimeline(posts, FeedTimelineService.BOOKMARK_TIMELINE_ID);
+		Set<String> ids = this.feedTimelineService.getSpecialTimeline(FeedTimelineService.BOOKMARK_TIMELINE_ID);
+		this.addPostsForIDs(posts, ids);
 		return posts;
 	}
 
@@ -80,6 +84,26 @@ public class PostsController {
 	@GetMapping("/unread/{postID}")
 	public Post markPostUnread(@PathVariable String postID) {
 		return this.postService.markUnread(postID);
+	}
+	
+	@GetMapping("/star/{postID}")
+	public Post starPost(@PathVariable String postID) {
+		return this.postService.starPost(postID);
+	}
+
+	@GetMapping("/unstar/{postID}")
+	public Post unstarPost(@PathVariable String postID) {
+		return this.postService.unstarPost(postID);
+	}
+	
+	@GetMapping("/bookmark/{postID}")
+	public Post bookmark(@PathVariable String postID) {
+		return this.postService.bookmarkPost(postID);
+	}
+
+	@GetMapping("/unbookmark/{postID}")
+	public Post unbookmarkPost(@PathVariable String postID) {
+		return this.postService.unbookmarkPost(postID);
 	}
 
 	@GetMapping("/folder/{folderID}")
@@ -144,6 +168,10 @@ public class PostsController {
 	
 	protected void addPostsForTimeline(List<Post> posts, String timelineID) {
 		List<String> timeline = this.feedTimelineService.getTimeLine(timelineID);
+		this.addPostsForIDs(posts, timeline);
+	}
+	
+	protected void addPostsForIDs(List<Post> posts, Collection<String> timeline) {
 		if (AssertUtils.isEmpty(timeline)) {
 			return;
 		}

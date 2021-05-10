@@ -36,7 +36,7 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         this.setState({ post: null });
     }
 
-    onStarPost = async (e: React.MouseEvent) => {
+    startPost = async (e: React.MouseEvent) => {
         e.preventDefault();
 
         const { post } = this.state;
@@ -45,6 +45,17 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         const { posts } = this.props;
         let index = posts.indexOf(post);
         posts[index].starredOn = updatedPost.starredOn;
+    }
+
+    bookmarkPost = async (e:React.MouseEvent) => {
+        e.preventDefault();
+
+        const { post } = this.state;
+        const updatedPost: Post = await PostApi.bookmarkPost(post.feedPostID);
+
+        const { posts } = this.props;
+        let index = posts.indexOf(post);
+        posts[index].bookmarkedOn = updatedPost.bookmarkedOn;
     }
 
     nextPost = (e: React.MouseEvent) => {
@@ -78,10 +89,13 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
     renderPost = () => {
         const { post } = this.state;
         if (post) {
-            return <PostView key={post.feedPostID} post={post}
-                onPostHide={this.hidePost}
-                onPreviousPost={this.prevPost}
-                onNextPost={this.nextPost} />
+            return <PostView key={post.feedPostID} 
+                             post={post}
+                             onPostHide={this.hidePost}
+                             onPreviousPost={this.prevPost}
+                             onStarPost={this.startPost}
+                             onBookmarkPost={this.bookmarkPost}
+                             onNextPost={this.nextPost} />
         }
     }
 
