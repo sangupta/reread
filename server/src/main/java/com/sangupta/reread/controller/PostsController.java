@@ -44,6 +44,20 @@ public class PostsController {
 		this.addPostsForTimeline(posts, FeedTimelineService.ALL_TIMELINE_ID);
 		return posts;
 	}
+	
+	@GetMapping("/stars")
+	public List<Post> getStarredPosts() {
+		List<Post> posts = new ArrayList<>();
+		this.addPostsForTimeline(posts, FeedTimelineService.STARRED_TIMELINE_ID);
+		return posts;
+	}
+	
+	@GetMapping("/bookmarks")
+	public List<Post> getBookmarkedPosts() {
+		List<Post> posts = new ArrayList<>();
+		this.addPostsForTimeline(posts, FeedTimelineService.BOOKMARK_TIMELINE_ID);
+		return posts;
+	}
 
 	@GetMapping("/feed/{feedID}")
 	public List<Post> getFeedPosts(@PathVariable String feedID) {
@@ -52,6 +66,18 @@ public class PostsController {
 		this.addPostsForTimeline(posts, feedID);
 
 		return posts;
+	}
+	
+	@GetMapping("/read/{postID}")
+	public String markPostRead(@PathVariable String postID) {
+		this.postService.markRead(postID);
+		return postID;
+	}
+	
+	@GetMapping("/unread/{postID}")
+	public String markPostUnread(@PathVariable String postID) {
+		this.postService.markUnread(postID);
+		return postID;
 	}
 
 	@GetMapping("/folder/{folderID}")

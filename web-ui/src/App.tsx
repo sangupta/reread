@@ -42,24 +42,15 @@ class App extends React.Component<AppProps, AppState> {
                         <Route exact path='/addFeed' component={AddFeedView} />
                         <Route exact path='/settings' component={SettingsView} />
 
-                        <Route exact path='/feeds/all'>
-                            <HomeView><FeedLoader key='feedLoader' mode='all' /></HomeView>
-                        </Route>
-
-                        <Route exact path='/search'>
-                            <HomeView><FeedLoader key='feedLoader' mode='search' query={text} /></HomeView>
-                        </Route>
-
-                        <Route exact path='/feed/:feedID'>
-                            <HomeView><FeedLoader key='feedLoader' mode='feed' /></HomeView>
-                        </Route>
-
-                        <Route exact path='/folder/:folderID'>
-                            <HomeView><FeedLoader key='feedLoader' mode='folder' /></HomeView>
-                        </Route>
+                        <Route exact path='/feeds/all'><HomeView mode='all' /></Route>
+                        <Route exact path='/feeds/stars'><HomeView mode='stars' /></Route>
+                        <Route exact path='/feeds/bookmarks'><HomeView mode='bookmarks' /></Route>
+                        <Route exact path='/search'><HomeView mode='search' query={text} /></Route>
+                        <Route exact path='/feed/:feedID'><HomeView mode='feed' /></Route>
+                        <Route exact path='/folder/:folderID'><HomeView mode='folder' /></Route>
 
                         <Route>
-                            <HomeView><FeedLoader key='feedLoader' mode='all' /></HomeView>
+                            <HomeView mode='all' />
                         </Route>
                     </Switch>
                 </main>

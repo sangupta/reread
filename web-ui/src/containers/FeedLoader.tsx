@@ -10,7 +10,7 @@ import PostApi from '../api/PostApi';
 import Toolbar from './Toolbar';
 
 interface FeedLoaderProps {
-    mode: 'feed' | 'folder' | 'all' | 'search';
+    mode: 'feed' | 'folder' | 'all' | 'search' | 'stars' | 'bookmarks';
     match: any;
     query?: string;
 }
@@ -82,6 +82,14 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             data = await TimeLineApi.getTimeLine();
         }
 
+        if (mode === 'stars') {
+            data = await TimeLineApi.getStarsTimeLine();
+        }
+
+        if(mode === 'bookmarks') {
+            data = await TimeLineApi.getBookmarksTimeLine();
+        }
+
         if (mode === 'feed') {
             if (!feedID) {
                 this.setState({ loading: false, errorMsg: 'No such feed found' });
@@ -114,7 +122,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             return <Alert level='error'>{errorMsg}</Alert>
         }
 
-        if (posts.length === 0) {
+        if (!posts || posts.length === 0) {
             if (mode === 'search') {
                 return <Alert>No results found for the query: {query}</Alert>
             }

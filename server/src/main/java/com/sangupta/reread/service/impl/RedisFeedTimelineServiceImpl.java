@@ -18,7 +18,7 @@ import com.sangupta.reread.service.FeedTimelineService;
 
 @Service
 public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
-
+	
 	@Autowired
 	protected RedisTemplate<String, String> redisTemplate;
 
@@ -50,13 +50,13 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 
 		// add to sorted set
 		for (Post post : posts) {
-			setOperations.add("sortedTimeline:" + ALL_TIMELINE_ID, post.feedPostID, post.updated);
+			setOperations.add(SORTED_TIMELINE + ALL_TIMELINE_ID, post.feedPostID, post.updated);
 		}
 
 		// now get all these ids and add them to a normal timeline
-		long cardinality = setOperations.zCard("sortedTimeline:" + ALL_TIMELINE_ID);
+		long cardinality = setOperations.zCard(SORTED_TIMELINE + ALL_TIMELINE_ID);
 		ScanOptions scanOptions = ScanOptions.scanOptions().count(cardinality).build();
-		Cursor<TypedTuple<String>> cursor = setOperations.scan("sortedTimeline:" + ALL_TIMELINE_ID, scanOptions);
+		Cursor<TypedTuple<String>> cursor = setOperations.scan(SORTED_TIMELINE + ALL_TIMELINE_ID, scanOptions);
 		List<String> ids = new ArrayList<>();
 		while (cursor.hasNext()) {
 			String id = cursor.next().getValue();
@@ -69,4 +69,14 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 		this.redisTemplate.delete(tempKey);
 	}
 
+	public void addToSpecialTimeline(String timelineID, String postID, long time) {
+		final ZSetOperations<String, String> setOperations = this.redisTemplate.opsForZSet();
+		setOperations.add(SORTED_TIMELINE + timelineID, postID, time);
+	}
+	
+	public void removeFromSpecialTimeline(String timelineID, String postID) {
+		final ZSetOperations<String, String> setOperations = this.redisTemplate.opsForZSet();
+		setOperations.remove(SORTED_TIMELINE + timelineID, postID);
+	}
+	
 }

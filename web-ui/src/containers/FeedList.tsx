@@ -14,6 +14,7 @@ interface FeedListProps {
 interface FeedListState {
     feeds: Array<Feed>;
     folders: Array<Folder>;
+    loading: boolean;
 }
 
 class FeedList extends React.Component<FeedListProps, FeedListState> {
@@ -58,6 +59,14 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         this.props.history.push('/feeds/all')
     }
 
+    showStars = () => {
+        this.props.history.push('/feeds/stars')
+    }
+
+    showBookmarks = () => {
+        this.props.history.push('/feeds/bookmarks')
+    }
+
     render() {
         const { loading } = this.state;
         if (loading) {
@@ -70,6 +79,14 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
                     <li className="mb-1">
                         <a href='#' onClick={this.showAllFeeds}>All</a>
                     </li>
+                    <li className="mb-1">
+                        <a href='#' onClick={this.showStars}>Stars</a>
+                    </li>
+                    <li className="mb-1">
+                        <a href='#' onClick={this.showBookmarks}>Bookmarks</a>
+                    </li>
+
+                    <li className="border-top my-3"></li>
 
                     {this.showFolders()}
 

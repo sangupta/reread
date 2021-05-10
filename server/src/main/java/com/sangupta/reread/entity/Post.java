@@ -27,6 +27,12 @@ public class Post implements Comparable<Post> {
 	
 	public String link;
 	
+	public long readOn;
+	
+	public long starredOn;
+	
+	public long bookmarkedOn;
+	
 	public long updated;
 	
 	public String hash;
