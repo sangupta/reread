@@ -23,13 +23,15 @@ export default class PostApi {
         return response.data;
     }
 
-    static async starPost(id: string): Promise<Post> {
-        const response = await Axios.get('/posts/star/' + id);
+    static async toggleStarPost(id: string, isCurrentlyStarred: boolean): Promise<Post> {
+        const path = isCurrentlyStarred ? '/posts/unstar/' : '/posts/star/';
+        const response = await Axios.get(path + id);
         return response.data;
     }
 
-    static async bookmarkPost(id: string): Promise<Post> {
-        const response = await Axios.get('/posts/bookmark/' + id);
+    static async toggleBookmarkPost(id: string, isCurrentlyBookmarked: boolean): Promise<Post> {
+        const path = isCurrentlyBookmarked ? '/posts/unbookmark/' : '/posts/bookmark/';
+        const response = await Axios.get(path + id);
         return response.data;
     }
 }

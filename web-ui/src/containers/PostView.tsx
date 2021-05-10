@@ -10,8 +10,8 @@ interface PostViewProps {
     onPostHide: () => void;
     onPreviousPost: React.MouseEventHandler;
     onNextPost: React.MouseEventHandler;
-    onStarPost: (e: React.MouseEvent) => void;
-    onBookmarkPost: (e: React.MouseEvent) => void;
+    onToggleStar: (e: React.MouseEvent) => void;
+    onToggleBookmark: (e: React.MouseEvent) => void;
 }
 
 export default class PostView extends React.Component<PostViewProps> {
@@ -53,6 +53,9 @@ export default class PostView extends React.Component<PostViewProps> {
             return null;
         }
 
+        const starIcon = post.starredOn > 0 ? 'star-fill' : 'star';
+        const bookmarkIcon = post.bookmarkedOn > 0 ? 'bookmark-check-fill' : 'bookmark';
+
         return <div className='modal-layer'>
             <div className='modal-underlay' />
             <div className='modal d-block' tabIndex={-1} role='dialog'>
@@ -70,11 +73,11 @@ export default class PostView extends React.Component<PostViewProps> {
                             <button type="button" className="btn-close" aria-label="Close" onClick={this.hidePost} />
                         </div>
                         <div className='modal-toolbar'>
-                            <a href='#' onClick={this.props.onStarPost}>
-                                <Icon name='star' className='pe-2' />
+                            <a href='#' onClick={this.props.onToggleStar}>
+                                <Icon name={starIcon} className='pe-2' />
                             </a>
-                            <a href='#' onClick={this.props.onBookmarkPost}>
-                                <Icon name='bookmark' className='pe-2' />
+                            <a href='#' onClick={this.props.onToggleBookmark}>
+                                <Icon name={bookmarkIcon} className='pe-2' />
                             </a>
                             <a href='#'>
                                 <Icon name='check-circle-fill' />

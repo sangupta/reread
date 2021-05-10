@@ -5,7 +5,7 @@ import { Post } from '../api/Model';
 import PostView from './PostView';
 import PostApi from '../api/PostApi';
 
-interface ContentPaneProps extends WithStoreProp {
+interface ContentPaneProps {
     posts: Array<Post>;
     sort: string;
     include: string;
@@ -13,7 +13,7 @@ interface ContentPaneProps extends WithStoreProp {
 }
 
 interface ContentPaneState {
-    post: Post | null;
+    post: Post;
 }
 
 class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
@@ -24,7 +24,7 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         super(props);
 
         this.state = {
-            post: null
+            post: undefined
         }
     }
 
@@ -33,29 +33,33 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
     }
 
     hidePost = () => {
-        this.setState({ post: null });
+        this.setState({ post: undefined });
     }
 
-    startPost = async (e: React.MouseEvent) => {
+    starPost = async (e: React.MouseEvent) => {
         e.preventDefault();
 
         const { post } = this.state;
-        const updatedPost: Post = await PostApi.starPost(post.feedPostID);
+        const updatedPost: Post = await PostApi.toggleStarPost(post.feedPostID, post.starredOn > 0);
 
         const { posts } = this.props;
         let index = posts.indexOf(post);
-        posts[index].starredOn = updatedPost.starredOn;
+        posts[index] = updatedPost;
+
+        this.setState({ post: updatedPost });
     }
 
-    bookmarkPost = async (e:React.MouseEvent) => {
+    bookmarkPost = async (e: React.MouseEvent) => {
         e.preventDefault();
 
         const { post } = this.state;
-        const updatedPost: Post = await PostApi.bookmarkPost(post.feedPostID);
+        const updatedPost: Post = await PostApi.toggleBookmarkPost(post.feedPostID, post.bookmarkedOn > 0);
 
         const { posts } = this.props;
         let index = posts.indexOf(post);
-        posts[index].bookmarkedOn = updatedPost.bookmarkedOn;
+        posts[index] = updatedPost;
+
+        this.setState({ post: updatedPost });
     }
 
     nextPost = (e: React.MouseEvent) => {
@@ -89,13 +93,13 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
     renderPost = () => {
         const { post } = this.state;
         if (post) {
-            return <PostView key={post.feedPostID} 
-                             post={post}
-                             onPostHide={this.hidePost}
-                             onPreviousPost={this.prevPost}
-                             onStarPost={this.startPost}
-                             onBookmarkPost={this.bookmarkPost}
-                             onNextPost={this.nextPost} />
+            return <PostView key={post.feedPostID}
+                post={post}
+                onPostHide={this.hidePost}
+                onPreviousPost={this.prevPost}
+                onToggleStar={this.starPost}
+                onToggleBookmark={this.bookmarkPost}
+                onNextPost={this.nextPost} />
         }
     }
 
