@@ -124,7 +124,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         }
     }
 
-    render() {
+    renderContent() {
         const { query, mode } = this.props;
         const { loading, errorMsg, posts } = this.state;
 
@@ -144,9 +144,13 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             return <Alert>Feed has no posts.</Alert>
         }
 
+        return <ContentPane posts={posts} />
+    }
+
+    render() {
         return <div className='d-flex flex-column'>
             <Toolbar onMarkAllAs={this.markAllAsHandler} />
-            <ContentPane posts={posts} />
+            {this.renderContent()}
         </div>
     }
 
