@@ -4,6 +4,7 @@ import PostApi from '../api/PostApi';
 
 interface PostViewProps {
     post: Post;
+    onPostHide: Function;
 }
 
 export default class PostView extends React.Component<PostViewProps> {
@@ -19,6 +20,10 @@ export default class PostView extends React.Component<PostViewProps> {
         document.body.classList.remove('modal-open');
     }
 
+    hidePost = () => {
+        this.props.onPostHide();
+    }
+
     render() {
         const { post } = this.props;
         if (!post) {
@@ -32,7 +37,7 @@ export default class PostView extends React.Component<PostViewProps> {
                     <div className="modal-content post-view-content">
                         <div className="modal-header">
                             <h5 className="modal-title">{post.title}</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close" aria-label="Close" onClick={this.hidePost} />
                         </div>
                         <div className='modal-content h-100'>
                             <div className='post-details' dangerouslySetInnerHTML={{ __html: post.content }} />

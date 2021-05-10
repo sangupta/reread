@@ -6,36 +6,32 @@ import PostView from '../containers/PostView';
 
 interface ListLayoutItemProps {
     post: Post;
+    onShowPost: Function;
 }
 
 interface ListLayoutItemState {
-    open: boolean;
+    postRead: boolean;
 }
 
 class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItemState> {
 
-    state = {
-        open: false
+    constructor(props: ListLayoutItemProps) {
+        super(props);
+        this.state = {
+            postRead: props.post ? props.post.readOn > 0 : false
+        }
     }
 
     toggleContent = (e: React.MouseEvent) => {
         e.preventDefault();
-        this.setState({ open: !this.state.open });
-    }
-
-    showContents = () => {
-        const { open } = this.state;
-        const { post } = this.props;
-        if (!open) {
-            return null;
-        }
-
-        return <PostView post={post} />
+        this.setState({ postRead: true });
+        this.props.onShowPost(this.props.post);
     }
 
     render() {
         const { post } = this.props;
-        const css:string = post.readOn > 0 ? ' list-group-item-secondary' : '';
+        const { postRead } = this.state;
+        const css: string = postRead ? ' list-group-item-secondary' : '';
 
         return <a key={post.feedPostID} href='#' className={'list-group-item list-group-item-action py-3 lh-tight ' + css} onClick={this.toggleContent}>
             <div className='d-flex w-100 align-items-center justify-content-between'>
@@ -47,13 +43,13 @@ class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItem
             <div className='col-10 mb-1 small'>
                 {post.snippet}
             </div>
-            {this.showContents()}
         </a>
     }
 }
 
 interface ListLayoutProps {
     posts: Array<Post>;
+    onShowPost: Function;
 }
 
 export default class ListLayout extends React.Component<ListLayoutProps, any> {
@@ -64,7 +60,11 @@ export default class ListLayout extends React.Component<ListLayoutProps, any> {
         return <div className='row'>
             <div className='col'>
                 <div className='list-group list-group-flush border-bottom scrollarea'>
-                    {posts.map(item => <ListLayoutItem key={item.feedPostID} post={item} />)}
+                    {posts.map(item => 
+                        <ListLayoutItem key={item.feedPostID} 
+                            post={item} 
+                            onShowPost={this.props.onShowPost} />
+                    )}
                 </div>
             </div>
         </div>
