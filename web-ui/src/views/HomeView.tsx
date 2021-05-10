@@ -29,12 +29,10 @@ class HomeView extends React.Component<HomeViewProps> {
 
     render() {
         const { mode, query } = this.props;
-        const { sortOption, displayItem } = this.props.store;
-
         return <div className='d-flex flex-row mt-3'>
             {this.showFeedList()}
             <div className='w-100 h-100'>
-                <FeedLoader key='feedLoader' mode={mode} query={query} sortOption={sortOption} displayItem={displayItem} />
+                <FeedLoader key='feedLoader' mode={mode} query={query} />
             </div>
         </div>
     }

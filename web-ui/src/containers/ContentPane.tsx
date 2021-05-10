@@ -1,11 +1,15 @@
 import React from 'react';
-import { collect, WithStoreProp } from 'react-recollect';
+
 import ListLayout from '../layout/ListLayout';
 import { Post } from '../api/Model';
 import PostView from './PostView';
+import PostApi from '../api/PostApi';
 
 interface ContentPaneProps extends WithStoreProp {
     posts: Array<Post>;
+    sort: string;
+    include: string;
+    layout: string;
 }
 
 interface ContentPaneState {
@@ -14,15 +18,17 @@ interface ContentPaneState {
 
 class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
 
-    state = {
-        post: null
+    filtered: Array<Post> = [];
+
+    constructor(props: ContentPaneProps) {
+        super(props);
+
+        this.state = {
+            post: null
+        }
     }
 
     showPost = (post: Post) => {
-        if (!post) {
-            return;
-        }
-
         this.setState({ post: post });
     }
 
@@ -30,49 +36,84 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         this.setState({ post: null });
     }
 
-    nextPost = (e:React.MouseEvent) => {
+    onStarPost = async (e: React.MouseEvent) => {
         e.preventDefault();
 
+        const { post } = this.state;
+        const updatedPost: Post = await PostApi.starPost(post.feedPostID);
+
         const { posts } = this.props;
+        let index = posts.indexOf(post);
+        posts[index].starredOn = updatedPost.starredOn;
+    }
+
+    nextPost = (e: React.MouseEvent) => {
+        e.preventDefault();
+
         const { post } = this.state;
 
-        let index = posts.indexOf(post);
+        let index = this.filtered.indexOf(post);
         index = index + 1;
-        if(index >= posts.length) {
+        if (index >= this.filtered.length) {
             return;
         }
 
-        this.setState({ post: posts[index] });
+        this.setState({ post: this.filtered[index] });
     }
 
-    prevPost = (e:React.MouseEvent) => {
+    prevPost = (e: React.MouseEvent) => {
         e.preventDefault();
-        
-        const { posts } = this.props;
+
         const { post } = this.state;
 
-        let index = posts.indexOf(post);
+        let index = this.filtered.indexOf(post);
         index = index - 1;
         if (index < 0) {
             return;
         }
 
-        this.setState({ post: posts[index] });
+        this.setState({ post: this.filtered[index] });
     }
 
     renderPost = () => {
         const { post } = this.state;
         if (post) {
-            return <PostView key={post.feedPostID} post={post} 
-                             onPostHide={this.hidePost} 
-                             onPreviousPost={this.prevPost}
-                             onNextPost={this.nextPost} />
+            return <PostView key={post.feedPostID} post={post}
+                onPostHide={this.hidePost}
+                onPreviousPost={this.prevPost}
+                onNextPost={this.nextPost} />
         }
     }
 
     render() {
-        const { posts, store } = this.props;
-        const layout = store.layout;
+        const { posts, layout, sort, include } = this.props;
+
+        let filtered = [...posts];
+        if (sort === 'newest') {
+            filtered.sort((a: Post, b: Post) => {
+                if (a.updated > b.updated) {
+                    return -1;
+                }
+
+                return 1;
+            });
+        } else {
+            filtered.sort((a: Post, b: Post) => {
+                if (a.updated > b.updated) {
+                    return 1;
+                }
+
+                return -1;
+            });
+        }
+
+        if (include === 'read') {
+            filtered = filtered.filter(post => post.readOn > 0);
+        } else if (include === 'unread') {
+            filtered = filtered.filter(post => post.readOn === 0);
+        }
+
+        this.filtered = filtered;
 
         let Element;
         switch (layout) {
@@ -82,11 +123,11 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         }
 
         return <div className='content-pane'>
-            <Element posts={posts} onShowPost={this.showPost} onPostHide={this.hidePost} />
+            <Element posts={filtered} onShowPost={this.showPost} onPostHide={this.hidePost} />
             {this.renderPost()}
         </div>
     }
 
 }
 
-export default collect(ContentPane);
+export default ContentPane;

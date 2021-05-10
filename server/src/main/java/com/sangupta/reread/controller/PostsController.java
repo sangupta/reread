@@ -19,8 +19,6 @@ import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.entity.Post;
-import com.sangupta.reread.entity.PostIncludeOption;
-import com.sangupta.reread.entity.TimelineSortOption;
 import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedListService;
@@ -45,31 +43,31 @@ public class PostsController {
 	protected PostSearchService postSearchService;
 
 	@GetMapping("/all")
-	public List<Post> getAllPosts(@RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String lastPostID) {
+	public List<Post> getAllPosts() {
 		List<Post> posts = new ArrayList<>();
-		this.addPostsForTimeline(posts, FeedTimelineService.ALL_TIMELINE_ID, sort, include, lastPostID);
+		this.addPostsForTimeline(posts, FeedTimelineService.ALL_TIMELINE_ID);
 		return posts;
 	}
 	
 	@GetMapping("/stars")
-	public List<Post> getStarredPosts(@RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String lastPostID) {
+	public List<Post> getStarredPosts() {
 		List<Post> posts = new ArrayList<>();
-		this.addPostsForTimeline(posts, FeedTimelineService.STARRED_TIMELINE_ID, sort, include, lastPostID);
+		this.addPostsForTimeline(posts, FeedTimelineService.STARRED_TIMELINE_ID);
 		return posts;
 	}
 	
 	@GetMapping("/bookmarks")
-	public List<Post> getBookmarkedPosts(@RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String lastPostID) {
+	public List<Post> getBookmarkedPosts() {
 		List<Post> posts = new ArrayList<>();
-		this.addPostsForTimeline(posts, FeedTimelineService.BOOKMARK_TIMELINE_ID, sort, include, lastPostID);
+		this.addPostsForTimeline(posts, FeedTimelineService.BOOKMARK_TIMELINE_ID);
 		return posts;
 	}
 
 	@GetMapping("/feed/{feedID}")
-	public List<Post> getFeedPosts(@PathVariable String feedID, @RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String lastPostID) {
+	public List<Post> getFeedPosts(@PathVariable String feedID) {
 		List<Post> posts = new ArrayList<>();
 
-		this.addPostsForTimeline(posts, feedID, sort, include, lastPostID);
+		this.addPostsForTimeline(posts, feedID);
 
 		return posts;
 	}
@@ -85,7 +83,7 @@ public class PostsController {
 	}
 
 	@GetMapping("/folder/{folderID}")
-	public List<Post> getFolderPosts(@PathVariable String folderID, @RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String lastPostID) {
+	public List<Post> getFolderPosts(@PathVariable String folderID) {
 		FeedList feedList = this.feedListService.get(SecurityContext.getUserID());
 		if (feedList == null) {
 			return null;
@@ -98,11 +96,10 @@ public class PostsController {
 
 		List<Post> posts = new ArrayList<>();
 		for (UserFeed feed : folder.childFeeds) {
-			this.addPostsForTimeline(posts, feed.masterFeedID, sort, include, lastPostID);
+			this.addPostsForTimeline(posts, feed.masterFeedID);
 		}
 		
 		Collections.sort(posts);
-		
 		return posts;
 	}
 	
@@ -145,12 +142,8 @@ public class PostsController {
 		return this.postSearchService.search(query);
 	}
 	
-	protected void addPostsForTimeline(List<Post> posts, String timelineID, TimelineSortOption sort, PostIncludeOption include, String lastPostID) {
-		if(include == null) {
-			include = PostIncludeOption.ALL;
-		}
-		
-		List<String> timeline = this.feedTimelineService.getTimeLine(timelineID, sort, lastPostID);
+	protected void addPostsForTimeline(List<Post> posts, String timelineID) {
+		List<String> timeline = this.feedTimelineService.getTimeLine(timelineID);
 		if (AssertUtils.isEmpty(timeline)) {
 			return;
 		}
@@ -158,14 +151,8 @@ public class PostsController {
 		for (String postID : timeline) {
 			Post post = this.postService.get(postID);
 			if(post != null) {
-				if(include == PostIncludeOption.ALL || (include == PostIncludeOption.UNREAD && post.readOn == 0) || (include == PostIncludeOption.READ && post.readOn > 0)) {
-					posts.add(post);
-				}
+				posts.add(post);
 			}
-		}
-		
-		if(TimelineSortOption.OLDEST == sort) {
-			Collections.sort(posts, Collections.reverseOrder());
 		}
 	}
 

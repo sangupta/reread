@@ -13,14 +13,15 @@ interface FeedLoaderProps {
     mode: 'feed' | 'folder' | 'all' | 'search' | 'stars' | 'bookmarks';
     match: any;
     query?: string;
-    displayItem?: string;
-    sortOption?: string;
 }
 
 interface FeedLoaderState {
     loading: boolean;
     errorMsg: string;
     posts: Array<Post>;
+    sortOption: string;
+    includeItems: string;
+    layout: string;
 }
 
 class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
@@ -28,7 +29,10 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
     state = {
         loading: true,
         errorMsg: '',
-        posts: []
+        posts: [],
+        sortOption: 'newest',
+        includeItems: 'all',
+        layout: 'list'
     }
 
     componentDidMount() {
@@ -39,7 +43,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
     }
 
     componentDidUpdate(prevProps: any) {
-        const { mode, match, query, sortOption, displayItem } = this.props;
+        const { mode, match, query } = this.props;
         const { feedID, folderID } = match?.params;
 
         const { mode: oldMode, match: oldMatch, query: oldQuery, sortOption: oldSortOption, displayItem: oldDisplayItem } = prevProps;
@@ -47,18 +51,16 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
 
         let refetch = false;
         refetch = (mode !== oldMode);
-        refetch = refetch || (sortOption != oldSortOption);
-        refetch = refetch || (displayItem != oldDisplayItem);
         refetch = refetch || (mode === 'feed' && feedID !== oldFeedID);
         refetch = refetch || (mode === 'folder' && folderID !== oldFolderID)
         refetch = refetch || (mode === 'search' && query !== oldQuery)
 
         if (refetch) {
-            this.fetchData(mode, feedID, folderID, sortOption, displayItem);
+            this.fetchData(mode, feedID, folderID);
         }
     }
 
-    fetchData = async (mode: string, feedID: string, folderID: string, sort: string = '', include: string = '') => {
+    fetchData = async (mode: string, feedID: string, folderID: string) => {
         let data;
 
         if (mode === 'search') {
@@ -72,15 +74,15 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         }
 
         if (mode === 'all') {
-            data = await TimeLineApi.getTimeLine(sort, include);
+            data = await TimeLineApi.getTimeLine();
         }
 
         if (mode === 'stars') {
-            data = await TimeLineApi.getStarsTimeLine(sort, include);
+            data = await TimeLineApi.getStarsTimeLine();
         }
 
         if (mode === 'bookmarks') {
-            data = await TimeLineApi.getBookmarksTimeLine(sort, include);
+            data = await TimeLineApi.getBookmarksTimeLine();
         }
 
         if (mode === 'feed') {
@@ -89,7 +91,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
                 return;
             }
 
-            data = await TimeLineApi.getFeedTimeLine(feedID, sort, include);
+            data = await TimeLineApi.getFeedTimeLine(feedID);
         }
         if (mode === 'folder') {
             if (!folderID) {
@@ -97,7 +99,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
                 return;
             }
 
-            data = await TimeLineApi.getFolderTimeLine(folderID, sort, include);
+            data = await TimeLineApi.getFolderTimeLine(folderID);
         }
 
         this.setState({ posts: data, loading: false, errorMsg: '' });
@@ -124,9 +126,36 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         }
     }
 
+    sortChange = (v: string): void => {
+        this.setState({ sortOption: v });
+    }
+
+    includeChange = (v: string): void => {
+        this.setState({ includeItems: v });
+    }
+
+    layoutChange = (v: string): void => {
+        this.setState({ layout: v });
+    }
+
+    render() {
+        const { sortOption, includeItems, layout } = this.state;
+
+        return <div className='d-flex flex-column'>
+            <Toolbar onMarkAllAs={this.markAllAsHandler}
+                sortOption={sortOption}
+                includeItems={includeItems}
+                layout={layout}
+                onSortChange={this.sortChange}
+                onIncludeChange={this.includeChange}
+                onLayoutChange={this.layoutChange} />
+            {this.renderContent()}
+        </div>
+    }
+
     renderContent() {
         const { query, mode } = this.props;
-        const { loading, errorMsg, posts } = this.state;
+        const { loading, errorMsg, posts, sortOption, includeItems, layout } = this.state;
 
         if (loading) {
             return <Loading />
@@ -144,14 +173,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             return <Alert>Feed has no posts.</Alert>
         }
 
-        return <ContentPane posts={posts} />
-    }
-
-    render() {
-        return <div className='d-flex flex-column'>
-            <Toolbar onMarkAllAs={this.markAllAsHandler} />
-            {this.renderContent()}
-        </div>
+        return <ContentPane posts={posts} sort={sortOption} include={includeItems} layout={layout} />
     }
 
 }

@@ -10,6 +10,7 @@ interface PostViewProps {
     onPostHide: () => void;
     onPreviousPost: React.MouseEventHandler;
     onNextPost: React.MouseEventHandler;
+    onStarPost: (e: React.MouseEvent) => void;
 }
 
 export default class PostView extends React.Component<PostViewProps> {
@@ -68,7 +69,7 @@ export default class PostView extends React.Component<PostViewProps> {
                             <button type="button" className="btn-close" aria-label="Close" onClick={this.hidePost} />
                         </div>
                         <div className='modal-toolbar'>
-                            <a href='#'>
+                            <a href='#' onClick={this.props.onStarPost}>
                                 <Icon name='star' className='pe-2' />
                             </a>
                             <a href='#'>

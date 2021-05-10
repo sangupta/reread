@@ -1,5 +1,4 @@
 import React from 'react';
-import { collect, WithStoreProp } from 'react-recollect';
 
 import Dropdown, { DropDownOption } from '../components/Dropdown';
 
@@ -24,45 +23,37 @@ const layoutOptions: Array<DropDownOption> = [
     { label: 'List View', value: 'list' }
 ];
 
-interface ToolbarProps extends WithStoreProp {
+interface ToolbarProps {
+    sortOption: string;
+    includeItems: string;
+    layout: string;
     onMarkAllAs: Function;
+    onSortChange: (v: string) => void;
+    onIncludeChange: (v: string) => void;
+    onLayoutChange: (v: string) => void;
 }
 
-class Toolbar extends React.Component<ToolbarProps, {}> {
-
-    sortSelected = (value: string) => {
-        this.props.store.sortOption = value as string;
-    }
-
-    displaySelected = (value: string) => {
-        this.props.store.displayItem = value as string;
-    }
-
-    layoutSelected = (value: string) => {
-        this.props.store.layout = value as string;
-    }
+export default class Toolbar extends React.Component<ToolbarProps, {}> {
 
     markChanged = (value: string) => {
         this.props.onMarkAllAs(value);
     }
 
     render() {
-        const { sortOption, displayItem, layout } = this.props.store;
+        const { sortOption, includeItems, layout } = this.props;
 
         return <div className='d-flex flex-row mb-2'>
             <Dropdown variant='secondary' options={markOptions} onSelect={this.markChanged} label='Mark read/unread' />
 
             <div className='px-2' />
-            <Dropdown variant='secondary' options={displayItems} onSelect={this.displaySelected} value={displayItem} />
+            <Dropdown variant='secondary' options={displayItems} onSelect={this.props.onIncludeChange} value={includeItems} />
 
             <div className='px-2' />
-            <Dropdown variant='secondary' options={sortOptions} onSelect={this.sortSelected} value={sortOption} />
+            <Dropdown variant='secondary' options={sortOptions} onSelect={this.props.onSortChange} value={sortOption} />
 
             <div className='px-2' />
-            <Dropdown variant='secondary' options={layoutOptions} onSelect={this.layoutSelected} value={layout} />
+            <Dropdown variant='secondary' options={layoutOptions} onSelect={this.props.onLayoutChange} value={layout} />
         </div>
     }
 
 }
-
-export default collect(Toolbar);
