@@ -42,7 +42,7 @@ export default class Toolbar extends React.Component<ToolbarProps, {}> {
     render() {
         const { sortOption, includeItems, layout } = this.props;
 
-        return <div className='d-flex flex-row mb-2'>
+        return <div className='d-flex flex-row mb-2 post-toolbar'>
             <Dropdown variant='secondary' options={markOptions} onSelect={this.markChanged} label='Mark read/unread' />
 
             <div className='px-2' />

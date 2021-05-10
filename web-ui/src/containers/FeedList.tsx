@@ -40,7 +40,7 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         }
 
         return <>
-            {folders.map(folder => <FolderItems folder={folder} />)}
+            {folders.map(folder => <FolderItems key={folder.folderID} folder={folder} />)}
             <li className="border-top my-3"></li>
         </>
     }

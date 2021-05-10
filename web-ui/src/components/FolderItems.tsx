@@ -37,7 +37,7 @@ export default class FolderItems extends React.Component<FolderItemsProps, Folde
                 masterFeedID: folder.folderID,
                 title: 'All'
             };
-            items.push(<FeedItem key={folder.folderID} feed={folderAsFeed} mode='folder' />);
+            items.push(<FeedItem key={'all-' + folder.folderID} feed={folderAsFeed} mode='folder' />);
         }
 
         folder.childFeeds.forEach(item => {

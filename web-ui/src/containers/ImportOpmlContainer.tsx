@@ -46,16 +46,18 @@ export default class ImportOpmlContainer extends React.Component<{}, ImportOpmlC
             return null;
         }
 
-        return <div className='mt-3'>
-            <h2>Discovered Feeds</h2>
+        return <div className='h-100'>
+            <div className='opml-feed-list mt-3'>
+                <h2>Discovered Feeds</h2>
 
-            <div className='opml-feeds-container'>
-                <ul>
-                    {opmlFeeds.map(item => <li>
-                        <a key={item.xmlUrl} href={item.xmlUrl}>{item.title}</a> (<a href={item.htmlUrl}>site</a>)
+                <div className='opml-feeds-container'>
+                    <ul>
+                        {opmlFeeds.map(item => <li>
+                            <a key={item.xmlUrl} href={item.xmlUrl}>{item.title}</a> (<a href={item.htmlUrl}>site</a>)
                     {this.showChildFeeds(item)}
-                    </li>)}
-                </ul>
+                        </li>)}
+                    </ul>
+                </div>
             </div>
         </div>
     }
@@ -89,8 +91,9 @@ export default class ImportOpmlContainer extends React.Component<{}, ImportOpmlC
 
                 {hasFeeds && <button type='button' className='btn btn-primary mt-3 mx-3' onClick={this.confirmImport}>Import All</button>}
 
-                {this.showDiscoveredFeeds()}
             </form>
+
+            {this.showDiscoveredFeeds()}
         </>
     }
 

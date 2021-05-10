@@ -141,7 +141,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
     render() {
         const { sortOption, includeItems, layout } = this.state;
 
-        return <div className='d-flex flex-column post-toolbar'>
+        return <div className='d-flex flex-column'>
             <Toolbar onMarkAllAs={this.markAllAsHandler}
                 sortOption={sortOption}
                 includeItems={includeItems}
@@ -162,15 +162,15 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         }
 
         if (errorMsg) {
-            return <Alert level='error'>{errorMsg}</Alert>
+            return <Alert className='mx-3' level='error'>{errorMsg}</Alert>
         }
 
         if (!posts || posts.length === 0) {
             if (mode === 'search') {
-                return <Alert>No results found for the query: {query}</Alert>
+                return <Alert className='mx-3'>No results found for the query: {query}</Alert>
             }
 
-            return <Alert>Feed has no posts.</Alert>
+            return <Alert className='mx-3'>Feed has no posts.</Alert>
         }
 
         return <ContentPane posts={posts} sort={sortOption} include={includeItems} layout={layout} />

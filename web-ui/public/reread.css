@@ -11,6 +11,10 @@ h2 {
     font-size: 22px;
 }
 
+main {
+    overflow: hidden;
+}
+
 .modal-underlay {
     position: fixed;
     top: 0;
@@ -119,6 +123,10 @@ body.modal-open {
     max-width: 280px;
     border-right: 1px solid #dee2e6;
     padding-top: 1rem;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: scroll;
+    padding-bottom: 50px;
 }
 
 .posts-container {
@@ -127,6 +135,7 @@ body.modal-open {
 
 .post-toolbar {
     padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .add-container {
