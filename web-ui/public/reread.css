@@ -27,3 +27,24 @@ body.modal-open {
     overflow: hidden;
     position: fixed;
 }
+
+.post-view-modal {
+    width: 80vw;
+    max-width: 80vw;
+    height: 100vh;
+}
+
+.post-view-content {
+    height: 90%;
+    max-height: 90%;
+}
+
+.modal-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: scroll;
+}
+
+.post-details {
+    padding: 20px;
+}
