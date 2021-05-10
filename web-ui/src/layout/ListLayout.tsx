@@ -2,7 +2,6 @@ import React from 'react';
 import { Post } from '../api/Model';
 
 import TimeAgo from '../components/TimeAgo';
-import PostView from '../containers/PostView';
 
 interface ListLayoutItemProps {
     post: Post;
@@ -19,6 +18,14 @@ class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItem
         super(props);
         this.state = {
             postRead: props.post ? props.post.readOn > 0 : false
+        }
+    }
+
+    componentDidUpdate(prevProps: any) {
+        const { postRead } = this.state;
+        const readOn = this.props.post.readOn > 0;
+        if (postRead !== readOn) {
+            this.setState({ postRead: readOn });
         }
     }
 
@@ -60,9 +67,9 @@ export default class ListLayout extends React.Component<ListLayoutProps, any> {
         return <div className='row'>
             <div className='col'>
                 <div className='list-group list-group-flush border-bottom scrollarea'>
-                    {posts.map(item => 
-                        <ListLayoutItem key={item.feedPostID} 
-                            post={item} 
+                    {posts.map(item =>
+                        <ListLayoutItem key={item.feedPostID}
+                            post={item}
                             onShowPost={this.props.onShowPost} />
                     )}
                 </div>

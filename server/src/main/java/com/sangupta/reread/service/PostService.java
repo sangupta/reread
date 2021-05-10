@@ -12,8 +12,8 @@ public interface PostService extends DataStoreService<Post>{
 
 	public void savePosts(List<Post> posts);
 
-	public void markRead(String postID);
+	public Post markRead(String postID);
 	
-	public void markUnread(String postID);
+	public Post markUnread(String postID);
 	
 }

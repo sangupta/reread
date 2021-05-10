@@ -28,7 +28,8 @@ interface DropdownProps {
     variant: string;
     options: Array<DropDownOption>;
     onSelect: Function;
-    value: string;
+    value?: string;
+    label?: string;
 }
 
 interface DropdownState {
@@ -53,11 +54,11 @@ export default class Dropdown extends React.Component<DropdownProps, DropdownSta
     }
 
     render() {
-        const { variant, options, value } = this.props;
+        const { variant, options, value, label } = this.props;
         const { open } = this.state;
 
         const selectedOption = options.find(item => item.value === value);
-        const dropdownLabel = selectedOption ? selectedOption.label : '';
+        const dropdownLabel = selectedOption ? selectedOption.label : label;
 
         return <div className="dropdown">
             <button className={'btn btn-outline-' + variant + ' dropdown-toggle'} type="button" aria-expanded="false" onClick={this.toggleDropdown}>{dropdownLabel}</button>

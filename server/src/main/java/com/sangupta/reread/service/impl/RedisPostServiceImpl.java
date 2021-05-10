@@ -58,29 +58,37 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 	}
 
 	@Override
-	public void markRead(String postID) {
-		this.markPost(postID, "readOn", FeedTimelineService.READ_TIMELINE_ID);
+	public Post markRead(String postID) {
+		return this.markPost(postID, "readOn", FeedTimelineService.READ_TIMELINE_ID);
 	}
 
 	@Override
-	public void markUnread(String postID) {
-		this.unmarkPost(postID, "readOn", FeedTimelineService.READ_TIMELINE_ID);
+	public Post markUnread(String postID) {
+		return this.unmarkPost(postID, "readOn", FeedTimelineService.READ_TIMELINE_ID);
 	}
 
-	private void markPost(String postID, String fieldName, String timelineID) {
+	private Post markPost(String postID, String fieldName, String timelineID) {
 		Post post = this.get(postID);
 		if (post != null) {
 			long time = System.currentTimeMillis();
 			this.updateField(post, fieldName, time);
 			this.feedTimelineService.addToSpecialTimeline(timelineID, postID, 0);
+			
+			post = this.get(postID);
 		}
+		
+		return post;
 	}
 
-	private void unmarkPost(String postID, String fieldName, String timelineID) {
+	private Post unmarkPost(String postID, String fieldName, String timelineID) {
 		Post post = this.get(postID);
 		if (post != null) {
 			this.updateField(post, fieldName, 0l);
 			this.feedTimelineService.removeFromSpecialTimeline(timelineID, postID);
+			
+			post = this.get(postID);
 		}
+		
+		return post;
 	}
 }

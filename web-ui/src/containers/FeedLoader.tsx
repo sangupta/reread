@@ -103,6 +103,27 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         this.setState({ posts: data, loading: false, errorMsg: '' });
     }
 
+    markAllAsHandler = async (value: string) => {
+        const { posts } = this.state;
+
+        const ids: Array<string> = [];
+        posts.forEach(post => {
+            ids.push((post as Post).feedPostID);
+        });
+
+        if ('markRead' === value) {
+            const posts = await PostApi.markAllRead(ids);
+            this.setState({ posts: posts });
+            return;
+        }
+
+        if ('markUnread' === value) {
+            const posts = await PostApi.markAllUnread(ids);
+            this.setState({ posts: posts });
+            return;
+        }
+    }
+
     render() {
         const { query, mode } = this.props;
         const { loading, errorMsg, posts } = this.state;
@@ -123,12 +144,10 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             return <Alert>Feed has no posts.</Alert>
         }
 
-        return <>
-            <div className='d-flex flex-column'>
-                <Toolbar />
-                <ContentPane posts={posts} />
-            </div>
-        </>
+        return <div className='d-flex flex-column'>
+            <Toolbar onMarkAllAs={this.markAllAsHandler} />
+            <ContentPane posts={posts} />
+        </div>
     }
 
 }

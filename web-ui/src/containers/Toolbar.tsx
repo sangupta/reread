@@ -2,7 +2,11 @@ import React from 'react';
 import { collect, WithStoreProp } from 'react-recollect';
 
 import Dropdown, { DropDownOption } from '../components/Dropdown';
-import Icon from '../components/Icon';
+
+const markOptions: Array<DropDownOption> = [
+    { label: 'Mark all as read', value: 'markRead' },
+    { label: 'Mark all as unread', value: 'markUnread' }
+];
 
 const sortOptions: Array<DropDownOption> = [
     { label: 'Newest first', value: 'newest' },
@@ -21,7 +25,7 @@ const layoutOptions: Array<DropDownOption> = [
 ];
 
 interface ToolbarProps extends WithStoreProp {
-
+    onMarkAllAs: Function;
 }
 
 class Toolbar extends React.Component<ToolbarProps, {}> {
@@ -38,24 +42,22 @@ class Toolbar extends React.Component<ToolbarProps, {}> {
         this.props.store.layout = value as string;
     }
 
+    markChanged = (value: string) => {
+        this.props.onMarkAllAs(value);
+    }
+
     render() {
         const { sortOption, displayItem, layout } = this.props.store;
 
         return <div className='d-flex flex-row mb-2'>
-            <button type='button' className='btn btn-outline-secondary'>Mark all as read</button>
+            <Dropdown variant='secondary' options={markOptions} onSelect={this.markChanged} label='Mark read/unread' />
+
             <div className='px-2' />
             <Dropdown variant='secondary' options={displayItems} onSelect={this.displaySelected} value={displayItem} />
-            <div className='px-2' />
-            <div className='btn-group'>
-                <button className='btn btn-outline-secondary'>
-                    <Icon name='arrow-left-circle' /> Prev
-                </button>
-                <button className='btn btn-outline-secondary'>
-                    <Icon name='arrow-right-circle' /> Next
-                </button>
-            </div>
+
             <div className='px-2' />
             <Dropdown variant='secondary' options={sortOptions} onSelect={this.sortSelected} value={sortOption} />
+
             <div className='px-2' />
             <Dropdown variant='secondary' options={layoutOptions} onSelect={this.layoutSelected} value={layout} />
         </div>

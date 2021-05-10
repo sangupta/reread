@@ -7,15 +7,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sangupta.jerry.constants.HttpStatusCode;
+import com.sangupta.jerry.exceptions.HttpException;
 import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.FeedList;
-import com.sangupta.reread.entity.PostIncludeOption;
 import com.sangupta.reread.entity.Post;
+import com.sangupta.reread.entity.PostIncludeOption;
 import com.sangupta.reread.entity.TimelineSortOption;
 import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
@@ -71,15 +75,13 @@ public class PostsController {
 	}
 	
 	@GetMapping("/read/{postID}")
-	public String markPostRead(@PathVariable String postID) {
-		this.postService.markRead(postID);
-		return postID;
+	public Post markPostRead(@PathVariable String postID) {
+		return this.postService.markRead(postID);
 	}
 	
 	@GetMapping("/unread/{postID}")
-	public String markPostUnread(@PathVariable String postID) {
-		this.postService.markUnread(postID);
-		return postID;
+	public Post markPostUnread(@PathVariable String postID) {
+		return this.postService.markUnread(postID);
 	}
 
 	@GetMapping("/folder/{folderID}")
@@ -100,6 +102,40 @@ public class PostsController {
 		}
 		
 		Collections.sort(posts);
+		
+		return posts;
+	}
+	
+	@PostMapping("/markAllRead")
+	public List<Post> markAllRead(@RequestBody List<String> ids) {
+		if(AssertUtils.isEmpty(ids)) {
+			throw new HttpException(HttpStatusCode.BAD_REQUEST);
+		}
+		
+		List<Post> posts = new ArrayList<>();
+		for(String id : ids) {
+			Post post = this.postService.markRead(id);
+			if(post != null) {
+				posts.add(post);
+			}
+		}
+		
+		return posts;
+	}
+	
+	@PostMapping("/markAllUnread")
+	public List<Post> markAllUnread(@RequestBody List<String> ids) {
+		if(AssertUtils.isEmpty(ids)) {
+			throw new HttpException(HttpStatusCode.BAD_REQUEST);
+		}
+		
+		List<Post> posts = new ArrayList<>();
+		for(String id : ids) {			
+			Post post = this.postService.markUnread(id);
+			if(post != null) {
+				posts.add(post);
+			}
+		}
 		
 		return posts;
 	}
