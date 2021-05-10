@@ -59,12 +59,12 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 
 	@Override
 	public void markRead(String postID) {
-		this.markPost(postID, "read", FeedTimelineService.READ_TIMELINE_ID);
+		this.markPost(postID, "readOn", FeedTimelineService.READ_TIMELINE_ID);
 	}
 
 	@Override
 	public void markUnread(String postID) {
-		this.unmarkPost(postID, "read", FeedTimelineService.READ_TIMELINE_ID);
+		this.unmarkPost(postID, "readOn", FeedTimelineService.READ_TIMELINE_ID);
 	}
 
 	private void markPost(String postID, String fieldName, String timelineID) {

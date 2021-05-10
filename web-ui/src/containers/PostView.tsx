@@ -1,5 +1,6 @@
 import React from 'react';
 import { Post } from './../api/Model';
+import PostApi from '../api/PostApi';
 
 interface PostViewProps {
     post: Post;
@@ -9,6 +10,9 @@ export default class PostView extends React.Component<PostViewProps> {
 
     componentDidMount() {
         document.body.classList.add('modal-open');
+
+        const { post } = this.props;
+        PostApi.markRead(post.feedPostID);
     }
 
     componentWillUnmount() {

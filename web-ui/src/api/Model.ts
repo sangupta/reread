@@ -26,4 +26,7 @@ export interface Post {
     title: string;
     uniqueID: string;
     updated: number;
+    readOn: number;
+    starredOn: number;
+    bookmarkedOn: number;
 }

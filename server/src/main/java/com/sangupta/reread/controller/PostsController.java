@@ -128,7 +128,7 @@ public class PostsController {
 			}
 		}
 		
-		if(sort != TimelineSortOption.NEWEST) {
+		if(TimelineSortOption.OLDEST == sort) {
 			Collections.sort(posts, Collections.reverseOrder());
 		}
 	}
