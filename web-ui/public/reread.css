@@ -128,3 +128,12 @@ body.modal-open {
 .post-toolbar {
     padding-left: 1rem;
 }
+
+.add-container {
+    margin-top: 40px;
+}
+
+hr {
+    color: #dee2e6;
+    opacity: 1;
+}

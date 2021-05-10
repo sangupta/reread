@@ -1,101 +1,58 @@
 import React from 'react';
 
-import DiscoveredFeedItem from './../components/DiscoveredFeedItem';
-import FeedApi from '../api/FeedApi';
-import { DiscoveredFeed } from '../api/Model';
-
-interface AddFeedViewState {
-    url: string;
-    feeds: Array<DiscoveredFeed>;
-    discovered: boolean;
-}
+import AddFeedContainer from '../containers/AddFeedContainer';
+import ImportOpmlContainer from '../containers/ImportOpmlContainer';
 
 /**
  * View used when add feed button is clicked in the top bar
  */
-export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
+export default class AddFeedView extends React.Component<{}, {}> {
 
-    /**
-     * Default state
-     */
     state = {
-        url: 'https://news.ycombinator.com/rss',
-        feeds: [],
-        discovered: false
-    };
-
-    /**
-     * Set the URL when text box is edited
-     */
-    setUrl = (e) => {
-        this.setState({ url: e.target.value });
+        container: 'feed'
     }
 
-    setOpmlFile = (e) => {
-
+    showAddFeed = () => {
+        this.setState({ container: 'feed' });
     }
 
-    /**
-     * Handler invoked when discover button is clicked
-     */
-    discoverFeed = async () => {
-        const { url } = this.state;
-        if (url) {
-            const feeds = await FeedApi.discoverFeed(url);
-            this.setState({ feeds: feeds, discovered: true });
-        }
+    showOpmlImport = () => {
+        this.setState({ container: 'opml' });
     }
 
-    importOpml = () => {
-
-    }
-
-    showDiscoveredFeeds = () => {
-        const { discovered, feeds } = this.state;
-        if (!discovered) {
-            return null;
+    showContainer = () => {
+        const { container } = this.state;
+        if ('feed' === container) {
+            return <AddFeedContainer />
         }
 
-        if (feeds.length === 0) {
-            return <div className='alert alert-info mt-3'>No feeds were discovered.</div>
+        if ('opml' === container) {
+            return <ImportOpmlContainer />
         }
 
-        return <div className='mt-3'>
-            <h2>Discovered Feeds</h2>
-            {feeds.map(feed => <DiscoveredFeedItem feed={feed} />)}
-        </div>
-
+        return null;
     }
 
     render() {
+        const { container } = this.state;
+
         return <div className='row mt-3'>
-            <div className='col-md-2' />
-            <div className='col-md-4'>
-                <h1>Add site/feed</h1>
+            <div className='col mx-4'>
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <a className={'nav-link ' + ('feed' === container ? 'active' : '')} href="#" onClick={this.showAddFeed}>Add Site</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className={'nav-link ' + ('opml' === container ? 'active' : '')} href="#" onClick={this.showOpmlImport}>Import OPML file</a>
+                    </li>
+                </ul>
 
-                <form autoComplete='off' className='mt-3'>
-                    <div className="form-group">
-                        <label htmlFor="siteAddress">Site Address</label>
-                        <input id='siteAddress' type="url" className="form-control md-6" aria-describedby="siteAddressHelp" placeholder="https://site-to-follow.com" value={this.state.url} onChange={this.setUrl} />
-                        <small id="siteAddressHelp" className="form-text text-muted">We will try and find RSS and social media you can follow from the site.</small>
+                <div className='row'>
+                    <div className='col add-container'>
+                        {this.showContainer()}
                     </div>
-                    <button type='button' className='btn btn-primary mt-3' onClick={this.discoverFeed}>Discover</button>
-                </form>
-                {this.showDiscoveredFeeds()}
+                </div>
             </div>
-
-            <div className='col-md-4'>
-                <h1 className='mt-3'>Import OPML file</h1>
-                <form autoComplete='off' className='mt-3'>
-                    <div className="form-group">
-                        <label htmlFor="opmlFile">OPML file</label>
-                        <input id='opmlFile' type="file" className="form-control md-6" aria-describedby="opmlFileHelp" onChange={this.setOpmlFile} />
-                        <small id="opmlFileHelp" className="form-text text-muted">Any existing feed present in OPML file will be ignored.</small>
-                    </div>
-                    <button type='button' className='btn btn-primary mt-3' onClick={this.importOpml}>Import</button>
-                </form>
-            </div>
-            <div className='col-md-2' />
         </div>
     }
 }
