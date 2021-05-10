@@ -30,10 +30,43 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         this.setState({ post: null });
     }
 
+    nextPost = (e:React.MouseEvent) => {
+        e.preventDefault();
+
+        const { posts } = this.props;
+        const { post } = this.state;
+
+        let index = posts.indexOf(post);
+        index = index + 1;
+        if(index >= posts.length) {
+            return;
+        }
+
+        this.setState({ post: posts[index] });
+    }
+
+    prevPost = (e:React.MouseEvent) => {
+        e.preventDefault();
+        
+        const { posts } = this.props;
+        const { post } = this.state;
+
+        let index = posts.indexOf(post);
+        index = index - 1;
+        if (index < 0) {
+            return;
+        }
+
+        this.setState({ post: posts[index] });
+    }
+
     renderPost = () => {
         const { post } = this.state;
         if (post) {
-            return <PostView post={post} onPostHide={this.hidePost} />
+            return <PostView key={post.feedPostID} post={post} 
+                             onPostHide={this.hidePost} 
+                             onPreviousPost={this.prevPost}
+                             onNextPost={this.nextPost} />
         }
     }
 

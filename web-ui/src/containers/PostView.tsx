@@ -3,10 +3,13 @@ import { Post } from './../api/Model';
 import PostApi from '../api/PostApi';
 import TimeAgo from '../components/TimeAgo';
 import FeedApi from '../api/FeedApi';
+import Icon from '../components/Icon';
 
 interface PostViewProps {
     post: Post;
     onPostHide: Function;
+    onPreviousPost: Function;
+    onNextPost: Function;
 }
 
 export default class PostView extends React.Component<PostViewProps> {
@@ -63,6 +66,28 @@ export default class PostView extends React.Component<PostViewProps> {
                                 </div>
                             </div>
                             <button type="button" className="btn-close" aria-label="Close" onClick={this.hidePost} />
+                        </div>
+                        <div className='modal-toolbar'>
+                            <a href='#'>
+                                <Icon name='star' className='pe-2' />
+                            </a>
+                            <a href='#'>
+                                <Icon name='bookmark' className='pe-2' />
+                            </a>
+                            <a href='#'>
+                                <Icon name='check-circle-fill' />
+                            </a>
+                            <div className='v-spacer' />
+                            <a href='#' onClick={this.props.onPreviousPost}>
+                                <Icon name='arrow-left-circle' className='pe-2' />
+                            </a>
+                            <a href='#' onClick={this.props.onNextPost}>
+                                <Icon name='arrow-right-circle' />
+                            </a>
+                            <div className='v-spacer' />
+                            <a href={post.link || '#'} target='_blank'>
+                                <Icon name='link-45deg' className='pe-2' />
+                            </a>
                         </div>
                         <div className='modal-body h-100'>
                             <div className='post-details' dangerouslySetInnerHTML={{ __html: post.content }} />
