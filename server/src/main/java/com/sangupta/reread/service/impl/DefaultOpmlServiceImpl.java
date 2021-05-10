@@ -56,7 +56,7 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 	}
 
 	private void importFeed(List<MasterFeed> imported, FeedList feedList, OpmlFeed feed) {
-		final boolean isFolder = AssertUtils.isEmpty(feed);
+		final boolean isFolder = AssertUtils.isNotEmpty(feed.children);
 
 		if (isFolder) {
 			UserFeedFolder folder = feedList.getOrCreateFolder(feed.title);

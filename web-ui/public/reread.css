@@ -137,3 +137,10 @@ hr {
     color: #dee2e6;
     opacity: 1;
 }
+
+a.folder-toggle {
+    display: inline-flex;
+    padding: 0 .5rem;
+    text-decoration: none;
+    font-size: 14px;
+}

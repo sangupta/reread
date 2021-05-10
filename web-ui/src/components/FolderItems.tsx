@@ -1,5 +1,7 @@
 import React from 'react';
-import { Folder } from '../api/Model';
+import { Folder, Feed } from '../api/Model';
+import Icon from './Icon';
+import FeedItem from './FeedItem';
 
 interface FolderItemsProps {
     folder: Folder;
@@ -15,8 +17,33 @@ export default class FolderItems extends React.Component<FolderItemsProps, Folde
         open: false
     }
 
-    toggleFolder = () => {
+    toggleFolder = (e: React.MouseEvent) => {
+        e.preventDefault();
         this.setState({ open: !this.state.open });
+    }
+
+    showChildren = () => {
+        const { folder } = this.props;
+        const hasChildren = folder.childFeeds && folder.childFeeds.length > 0;
+        if (!hasChildren) {
+            return null;
+        }
+
+
+        const items = [];
+
+        if(folder.childFeeds.length > 1) {
+            const folderAsFeed: Feed = {
+                masterFeedID: folder.folderID,
+                title: 'All'
+            };
+            items.push(<FeedItem key={folder.folderID} feed={folderAsFeed} mode='folder' />);
+        }
+
+        folder.childFeeds.forEach(item => {
+            items.push(<FeedItem key={item.masterFeedID} feed={item} />);
+        });
+        return items;
     }
 
     render() {
@@ -24,12 +51,13 @@ export default class FolderItems extends React.Component<FolderItemsProps, Folde
         const { open } = this.state;
 
         return <li className="mb-1">
-            <button className="btn btn-toggle align-items-center rounded" onClick={this.toggleFolder}>{folder.title}</button>
+
+            <a href="#" className="folder-toggle link-dark rounded" onClick={this.toggleFolder}>
+                <Icon name={open ? 'chevron-down' : 'chevron-right'} label={folder.title} />
+            </a>
             <div className={'collapse ' + (open ? 'show' : '')}>
                 <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" className="link-dark rounded">Overview</a></li>
-                    <li><a href="#" className="link-dark rounded">Updates</a></li>
-                    <li><a href="#" className="link-dark rounded">Reports</a></li>
+                    {this.showChildren()}
                 </ul>
             </div>
         </li>;

@@ -6,13 +6,15 @@ import { Feed } from '../api/Model';
 interface FeedItemProps {
     feed: Feed;
     history: any;
+    mode?: string;
 }
 
 class FeedItem extends React.Component<FeedItemProps, any> {
 
     showFeed = () => {
-        const { feed, history } = this.props;
-        history.push('/feed/' + feed.masterFeedID);
+        const { feed, history, mode } = this.props;
+        const path = 'folder' === mode ? '/folder/' : '/feed/';
+        history.push(path + feed.masterFeedID);
     }
 
     render() {
