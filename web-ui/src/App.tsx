@@ -7,7 +7,6 @@ import Header from './template/Header';
 import AddFeedView from './views/AddFeedView';
 import HomeView from './views/HomeView';
 import SettingsView from './views/SettingsView';
-import FeedLoader from './containers/FeedLoader';
 
 interface AppProps extends WithStoreProp {
 

@@ -3,6 +3,7 @@ package com.sangupta.reread.service;
 import java.util.List;
 
 import com.sangupta.reread.entity.Post;
+import com.sangupta.reread.entity.TimelineSortOption;
 
 public interface FeedTimelineService {
 	
@@ -18,7 +19,7 @@ public interface FeedTimelineService {
 	
 	public static final String BOOKMARK_TIMELINE_ID = "$bookmark";
 
-	public List<String> getTimeLine(String feedID);
+	public List<String> getTimeLine(String feedID, TimelineSortOption sortOption, String lastPostID);
 
 	public void updateAllTimeline(List<Post> posts);
 

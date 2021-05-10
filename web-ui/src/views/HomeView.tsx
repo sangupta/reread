@@ -2,7 +2,6 @@ import React from 'react';
 import { collect, WithStoreProp } from 'react-recollect';
 
 import FeedList from '../containers/FeedList';
-import ContentPane from '../containers/ContentPane';
 import FeedLoader from '../containers/FeedLoader';
 
 interface HomeViewProps extends WithStoreProp {
@@ -29,12 +28,13 @@ class HomeView extends React.Component<HomeViewProps> {
     }
 
     render() {
-        const {mode, query} = this.props;
+        const { mode, query } = this.props;
+        const { sortOption, displayItem } = this.props.store;
 
         return <div className='d-flex flex-row mt-3'>
             {this.showFeedList()}
             <div className='w-100 h-100'>
-                <FeedLoader key='feedLoader' mode={mode} query={query} />
+                <FeedLoader key='feedLoader' mode={mode} query={query} sortOption={sortOption} displayItem={displayItem} />
             </div>
         </div>
     }

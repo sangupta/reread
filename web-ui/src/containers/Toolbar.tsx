@@ -1,4 +1,5 @@
 import React from 'react';
+import { collect, WithStoreProp } from 'react-recollect';
 
 import Dropdown, { DropDownOption } from '../components/Dropdown';
 import Icon from '../components/Icon';
@@ -16,39 +17,33 @@ const displayItems: Array<DropDownOption> = [
 const layoutOptions: Array<DropDownOption> = [
     { label: 'Cards View', value: 'cards' },
     { label: 'List View', value: 'list' }
-]
+];
 
-interface ToolbarState {
-    sortOption: string;
-    display: string;
-    layout: string;
+interface ToolbarProps extends WithStoreProp {
+
 }
 
-export default class Toolbar extends React.Component<{}, ToolbarState> {
-
-    state = {
-        sortOption: 'newest',
-        display: 'all',
-        layout: 'list'
-    }
+class Toolbar extends React.Component<ToolbarProps, {}> {
 
     sortSelected = (value: string) => {
-        this.setState({ sortOption: value });
+        this.props.store.sortOption = value as string;
     }
 
     displaySelected = (value: string) => {
-        this.setState({ display: value });
+        this.props.store.displayItem = value as string;
     }
 
     layoutSelected = (value: string) => {
-        this.setState({ layout: value });
+        this.props.store.layout = value as string;
     }
 
     render() {
+        const { sortOption, displayItem, layout } = this.props.store;
+
         return <div className='d-flex flex-row mb-2'>
             <button type='button' className='btn btn-outline-secondary'>Mark all as read</button>
             <div className='px-2' />
-            <Dropdown variant='secondary' options={displayItems} onSelect={this.displaySelected} value={this.state.display} />
+            <Dropdown variant='secondary' options={displayItems} onSelect={this.displaySelected} value={displayItem} />
             <div className='px-2' />
             <div className='btn-group'>
                 <button className='btn btn-outline-secondary'>
@@ -59,10 +54,12 @@ export default class Toolbar extends React.Component<{}, ToolbarState> {
                 </button>
             </div>
             <div className='px-2' />
-            <Dropdown variant='secondary' options={sortOptions} onSelect={this.sortSelected} value={this.state.sortOption} />
+            <Dropdown variant='secondary' options={sortOptions} onSelect={this.sortSelected} value={sortOption} />
             <div className='px-2' />
-            <Dropdown variant='secondary' options={layoutOptions} onSelect={this.layoutSelected} value={this.state.layout} />
+            <Dropdown variant='secondary' options={layoutOptions} onSelect={this.layoutSelected} value={layout} />
         </div>
     }
 
 }
+
+export default collect(Toolbar);

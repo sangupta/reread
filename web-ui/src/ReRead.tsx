@@ -13,12 +13,16 @@ declare module 'react-recollect' {
         showFeedList: boolean;
         layout: 'cards' | 'list';
         searchText: string;
+        sortOption: string;
+        displayItem: string;
     }
 }
 
 store.showFeedList = true;
 store.layout = 'cards';
 store.searchText = '';
+store.displayItem = 'all';
+store.sortOption = 'newest';
 
 Axios.interceptors.request.use(request => {
     if (request.url?.startsWith('/')) {

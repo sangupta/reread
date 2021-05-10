@@ -14,10 +14,13 @@ import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Service;
 
 import com.sangupta.reread.entity.Post;
+import com.sangupta.reread.entity.TimelineSortOption;
 import com.sangupta.reread.service.FeedTimelineService;
 
 @Service
 public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
+	
+	public static final long PAGE_SIZE = 50;
 	
 	@Autowired
 	protected RedisTemplate<String, String> redisTemplate;
@@ -36,10 +39,40 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 	}
 
 	@Override
-	public List<String> getTimeLine(String feedID) {
+	public List<String> getTimeLine(String feedID, TimelineSortOption sortOption, String lastPostID) {
+		if(sortOption == null) {
+			sortOption = TimelineSortOption.NEWEST;
+		}
+		
 		final ListOperations<String, String> listOperation = this.redisTemplate.opsForList();
-		final List<String> list = listOperation.range(KEY + feedID, 0, 50);
-
+		final String key = KEY + feedID;
+		
+		long start = 0;
+		long end = start + PAGE_SIZE;
+		
+		if(sortOption == TimelineSortOption.NEWEST) {
+			if(lastPostID != null) {
+				Long index = listOperation.indexOf(key, lastPostID);
+				if(index != null && index > 0) {
+					start = 1 + index;
+					end = start + PAGE_SIZE;
+				}
+			}
+		}
+		if(sortOption == TimelineSortOption.OLDEST) {
+			if(lastPostID == null) {
+				start = 0 - PAGE_SIZE;
+				end = -1;
+			} else {
+				Long index = listOperation.indexOf(key, lastPostID);
+				if(index != null && index > 0) {
+					end = index;
+					start = end - PAGE_SIZE;
+				}
+			}
+		}
+		
+		final List<String> list = listOperation.range(key, start, end);
 		return list;
 	}
 
