@@ -26,6 +26,15 @@ public class UserFeedFolder {
 		
 		return false;
 	}
+	
+	public boolean addFeed(MasterFeed feed) {
+		if(this.containsFeed(feed.feedID)) {
+			return false;
+		}
+		
+		this.childFeeds.add(new UserFeed(feed));
+		return true;
+	}
 
 	public boolean removeFeed(String feedID) {
 		return this.childFeeds.removeIf(feed -> (feedID.equalsIgnoreCase(feed.masterFeedID)));

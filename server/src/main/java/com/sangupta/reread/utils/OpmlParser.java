@@ -12,7 +12,7 @@ import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.OpmlFeed;
 
 public class OpmlParser {
-
+	
 	public static List<OpmlFeed> parse(String opml) {
 		if (AssertUtils.isEmpty(opml)) {
 			return null;
@@ -23,7 +23,7 @@ public class OpmlParser {
 	}
 
 	/**
-	 * Parse the Jericho HTML source for feeds
+	 * Parse the Jsoup HTML source for feeds
 	 * 
 	 * @param source
 	 * @return

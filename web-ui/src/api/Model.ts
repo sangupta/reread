@@ -42,3 +42,11 @@ export interface Post {
     bookmarkedOn: number;
     author: Author;
 }
+
+export interface OpmlFeed {
+    title: string;
+    type: string;
+    xmlUrl: string;
+    htmlUrl: string;
+    children:Array<OpmlFeed>
+}

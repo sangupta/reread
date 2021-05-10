@@ -15,6 +15,11 @@ public class RedisMasterFeedServiceImpl extends RedisDataStoreServiceImpl<Master
 
 	@Override
 	public MasterFeed getOrCreateFeedForUrl(String url) {
+		return this.getOrCreateFeedForUrl(url, url);
+	}
+
+	@Override
+	public MasterFeed getOrCreateFeedForUrl(String title, String url) {
 		url = UrlCanonicalizer.canonicalize(url);
 
 		List<MasterFeed> all = this.getAll();
@@ -29,7 +34,7 @@ public class RedisMasterFeedServiceImpl extends RedisDataStoreServiceImpl<Master
 		
 		MasterFeed feed = new MasterFeed();
 		feed.url = url;
-		feed.title = url;
+		feed.title = title;
 		this.insert(feed);
 		return feed;
 	}

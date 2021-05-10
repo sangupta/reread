@@ -2,8 +2,11 @@ package com.sangupta.reread.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
+
+import com.sangupta.jerry.util.AssertUtils;
 
 public class FeedList {
 	
@@ -63,6 +66,26 @@ public class FeedList {
 		}
 		
 		return null;
+	}
+
+	public UserFeedFolder getOrCreateFolder(String title) {
+		if(AssertUtils.isEmpty(title)) {
+			return null;
+		}
+		
+		for(UserFeedFolder folder : this.folders) {
+			if(folder.title.equals(title)) {
+				return folder;
+			}
+		}
+		
+		UserFeedFolder folder = new UserFeedFolder();
+		
+		folder.folderID = UUID.randomUUID().toString();
+		folder.title = title;
+		
+		this.folders.add(folder);
+		return folder;
 	}
 	
 }
