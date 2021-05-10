@@ -1,11 +1,27 @@
 import Axios from 'axios';
-import { DiscoveredFeed } from './Model';
+import { DiscoveredFeed, FeedList } from './Model';
 
 export default class FeedApi {
 
+    private static FEED_LIST:FeedList = [];
+
     static async getFeedList() {
         const response = await Axios.get('/feeds/me');
-        return response.data;
+        const list:FeedList = response.data;
+        FeedApi.FEED_LIST = list;
+        return list;
+    }
+
+    static getFeedDetails(feedID: string) {
+        const list = FeedApi.FEED_LIST;
+        let found = list.feeds.find(item => item.masterFeedID === feedID);
+        if(!found) {
+            list.folders.forEach(folder => {
+                found = folder.childFeeds.find(feed => feed.masterFeedID === feedID);
+            });
+        }
+
+        return found;
     }
 
     static async discoverFeed(url: string): Promise<Array<DiscoveredFeed>> {

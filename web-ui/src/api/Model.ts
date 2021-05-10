@@ -16,6 +16,12 @@ export interface Folder {
     childFeeds: Array<Feed>;
 }
 
+export interface FeedList {
+    feeds: Array<Feed>;
+    folders: Array<Folder>;
+    userID: string;
+}
+
 export interface Post {
     baseUrl: string;
     content: string;

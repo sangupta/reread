@@ -47,4 +47,23 @@ body.modal-open {
 
 .post-details {
     padding: 20px;
+    height: 100%;
+}
+
+.post-subtitle {
+    font-size: 14px;
+}
+
+.post-author {
+    font-style: italic;
+    margin-right: 1rem;
+}
+
+.post-time {
+    text-decoration: underline;
+    margin-right: 1rem;
+}
+
+.post-feed-name {
+    margin-right: 0;
 }
