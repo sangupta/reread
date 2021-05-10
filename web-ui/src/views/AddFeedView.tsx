@@ -69,7 +69,8 @@ export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
 
     render() {
         return <div className='row mt-3'>
-            <div className='col'>
+            <div className='col-md-2' />
+            <div className='col-md-4'>
                 <h1>Add site/feed</h1>
 
                 <form autoComplete='off' className='mt-3'>
@@ -83,7 +84,7 @@ export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
                 {this.showDiscoveredFeeds()}
             </div>
 
-            <div className='col'>
+            <div className='col-md-4'>
                 <h1 className='mt-3'>Import OPML file</h1>
                 <form autoComplete='off' className='mt-3'>
                     <div className="form-group">
@@ -94,6 +95,7 @@ export default class AddFeedView extends React.Component<{}, AddFeedViewState> {
                     <button type='button' className='btn btn-primary mt-3' onClick={this.importOpml}>Import</button>
                 </form>
             </div>
+            <div className='col-md-2' />
         </div>
     }
 }

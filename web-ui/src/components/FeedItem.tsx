@@ -18,8 +18,8 @@ class FeedItem extends React.Component<FeedItemProps, any> {
     render() {
         const { feed } = this.props;
 
-        return <li className="mb-1">
-            <a href='#' onClick={this.showFeed}>{feed.title}</a>
+        return <li>
+            <a href='#' className='link-dark rounded' onClick={this.showFeed}>{feed.title}</a>
         </li>
     }
 

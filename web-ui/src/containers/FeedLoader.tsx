@@ -141,7 +141,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
     render() {
         const { sortOption, includeItems, layout } = this.state;
 
-        return <div className='d-flex flex-column'>
+        return <div className='d-flex flex-column post-toolbar'>
             <Toolbar onMarkAllAs={this.markAllAsHandler}
                 sortOption={sortOption}
                 includeItems={includeItems}

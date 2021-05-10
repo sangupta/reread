@@ -6,6 +6,7 @@ import FeedItem from '../components/FeedItem';
 import { Feed, Folder } from '../api/Model';
 import Loading from '../components/Loading';
 import FeedApi from '../api/FeedApi';
+import Icon from '../components/Icon';
 
 interface FeedListProps {
     history: any;
@@ -74,23 +75,37 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         }
 
         return <>
-            <div className="p-3 bg-white" style={{ width: '280px' }}>
+            <div className="bg-white feed-list">
                 <ul className="list-unstyled ps-0">
                     <li className="mb-1">
-                        <a href='#' onClick={this.showAllFeeds}>All</a>
-                    </li>
-                    <li className="mb-1">
-                        <a href='#' onClick={this.showStars}>Stars</a>
-                    </li>
-                    <li className="mb-1">
-                        <a href='#' onClick={this.showBookmarks}>Bookmarks</a>
+                        <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li>
+                                <a href='#' className='link-dark rounded' onClick={this.showAllFeeds}>
+                                    <Icon name='basket' label='All' />
+                                </a>
+                            </li>
+                            <li>
+                                <a href='#' className='link-dark rounded' onClick={this.showStars}>
+                                    <Icon name='star' label='Stars' />
+                                </a>
+                            </li>
+                            <li>
+                                <a href='#' className='link-dark rounded' onClick={this.showBookmarks}>
+                                    <Icon name='bookmark' label='Bookmarks' />
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
                     <li className="border-top my-3"></li>
 
                     {this.showFolders()}
 
-                    {this.showFeeds()}
+                    <li className="mb-1">
+                        <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            {this.showFeeds()}
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </>

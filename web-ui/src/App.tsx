@@ -36,7 +36,7 @@ class App extends React.Component<AppProps, AppState> {
         return <>
             <BrowserRouter>
                 <Header />
-                <main role='main' className='inner cover w-100 h-100 px-3'>
+                <main role='main' className='inner cover w-100 h-100'>
                     <Switch>
                         <Route exact path='/addFeed' component={AddFeedView} />
                         <Route exact path='/settings' component={SettingsView} />
