@@ -11,7 +11,8 @@ const sortOptions: Array<DropDownOption> = [
 
 const displayItems: Array<DropDownOption> = [
     { label: 'All items', value: 'all' },
-    { label: 'Unread only', value: 'unread' }
+    { label: 'Unread only', value: 'unread' },
+    { label: 'Read only', value: 'read' },
 ];
 
 const layoutOptions: Array<DropDownOption> = [

@@ -122,7 +122,7 @@ public class PostsController {
 		for (String postID : timeline) {
 			Post post = this.postService.get(postID);
 			if(post != null) {
-				if(include == PostIncludeOption.ALL || (include == PostIncludeOption.UNREAD && post.readOn == 0)) {
+				if(include == PostIncludeOption.ALL || (include == PostIncludeOption.UNREAD && post.readOn == 0) || (include == PostIncludeOption.READ && post.readOn > 0)) {
 					posts.add(post);
 				}
 			}

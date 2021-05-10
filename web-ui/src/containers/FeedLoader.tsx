@@ -48,7 +48,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         let refetch = false;
         refetch = (mode !== oldMode);
         refetch = refetch || (sortOption != oldSortOption);
-        refetch = refetch || (displayItem != displayItem);
+        refetch = refetch || (displayItem != oldDisplayItem);
         refetch = refetch || (mode === 'feed' && feedID !== oldFeedID);
         refetch = refetch || (mode === 'folder' && folderID !== oldFolderID)
         refetch = refetch || (mode === 'search' && query !== oldQuery)
