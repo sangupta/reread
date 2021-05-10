@@ -22,6 +22,9 @@ class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItem
     }
 
     componentDidUpdate(prevProps: any) {
+        if(this.props.post === prevProps.post) {
+            return;
+        }
         const { postRead } = this.state;
         const readOn = this.props.post.readOn > 0;
         if (postRead !== readOn) {
