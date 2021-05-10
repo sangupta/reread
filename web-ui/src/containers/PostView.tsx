@@ -7,9 +7,9 @@ import Icon from '../components/Icon';
 
 interface PostViewProps {
     post: Post;
-    onPostHide: Function;
-    onPreviousPost: Function;
-    onNextPost: Function;
+    onPostHide: () => void;
+    onPreviousPost: React.MouseEventHandler;
+    onNextPost: React.MouseEventHandler;
 }
 
 export default class PostView extends React.Component<PostViewProps> {

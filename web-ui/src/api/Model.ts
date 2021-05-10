@@ -22,6 +22,11 @@ export interface FeedList {
     userID: string;
 }
 
+export interface Author {
+    name: string;
+    uri: string;
+}
+
 export interface Post {
     baseUrl: string;
     content: string;
@@ -35,4 +40,5 @@ export interface Post {
     readOn: number;
     starredOn: number;
     bookmarkedOn: number;
+    author: Author;
 }
