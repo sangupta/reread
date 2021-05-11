@@ -2,6 +2,8 @@ package com.sangupta.reread.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import com.sangupta.reread.service.PostSnippetService;
 
 @Service
 public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(HttpFeedCrawlerServiceImpl.class);
 	
 	@Autowired
 	protected MasterFeedService masterFeedService;
@@ -43,12 +47,16 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 	public void crawlFeed(String masterFeedID) {
 		MasterFeed masterFeed = this.masterFeedService.get(masterFeedID);
 		if(masterFeed == null) {
+			LOGGER.warn("Master feed not found for id: {}", masterFeed);
 			return;
 		}
 		
 		// create details object as needed
 		FeedCrawlDetails details = this.feedCrawlDetailsService.get(masterFeedID);
+		
 		if(details == null) {
+			LOGGER.debug("Feed has not been crawled before, creating details object for id: {}", masterFeed);
+			
 			details = new FeedCrawlDetails();
 			details.feedID = masterFeedID;
 			this.feedCrawlDetailsService.upsert(details);
@@ -62,6 +70,7 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		
 		// if empty, we are done
 		if(parsedFeed == null) {
+			LOGGER.warn("Parsing did not yield any posts for id: {}", masterFeed);
 			return;
 		}
 
@@ -76,6 +85,7 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		// create snippets and store each entry
 		if(AssertUtils.isEmpty(posts)) {
 			// nothing to save
+			LOGGER.debug("No posts available to save after filtering for feed: {}", masterFeed);
 			return;
 		}
 		

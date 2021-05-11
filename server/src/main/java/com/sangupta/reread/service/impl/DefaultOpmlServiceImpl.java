@@ -43,9 +43,10 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 	public List<MasterFeed> importFeeds(List<OpmlFeed> feeds) {
 		FeedList feedList = this.feedListService.getOrCreate(SecurityContext.getUserID());
 
+		final List<MasterFeed> masterFeeds = this.masterFeedService.getAll();
 		List<MasterFeed> imported = new ArrayList<>();
 		for (OpmlFeed feed : feeds) {
-			this.importFeed(imported, feedList, feed);
+			this.importFeed(masterFeeds, imported, feedList, feed);
 		}
 
 		// save the feed list
@@ -55,12 +56,12 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 		return imported;
 	}
 
-	private void importFeed(List<MasterFeed> imported, FeedList feedList, OpmlFeed feed) {
+	private void importFeed(List<MasterFeed> masterFeeds, List<MasterFeed> imported, FeedList feedList, OpmlFeed feed) {
 		final boolean isFolder = AssertUtils.isNotEmpty(feed.children);
 
 		if (isFolder) {
 			UserFeedFolder folder = feedList.getOrCreateFolder(feed.title);
-			this.importFeedsInFolder(imported, folder, feed.children);
+			this.importFeedsInFolder(masterFeeds, imported, folder, feed.children);
 			return;
 		}
 
@@ -69,12 +70,12 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 		}
 
 		LOGGER.info("Importing feed: {}", feed.xmlUrl);
-		MasterFeed mf = this.masterFeedService.getOrCreateFeedForUrl(feed.title, feed.xmlUrl);
+		MasterFeed mf = this.masterFeedService.getOrCreateFeedForUrl(masterFeeds, feed.title, feed.xmlUrl);
 		feedList.addFeed(mf);
 		imported.add(mf);
 	}
 
-	private void importFeedsInFolder(List<MasterFeed> imported, UserFeedFolder folder, List<OpmlFeed> children) {
+	private void importFeedsInFolder(List<MasterFeed> masterFeeds, List<MasterFeed> imported, UserFeedFolder folder, List<OpmlFeed> children) {
 		if (AssertUtils.isEmpty(children)) {
 			return;
 		}
@@ -85,7 +86,7 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 			}
 
 			LOGGER.info("Importing feed: {} in folder: {}", feed.xmlUrl, folder.title);
-			MasterFeed mf = this.masterFeedService.getOrCreateFeedForUrl(feed.title, feed.xmlUrl);
+			MasterFeed mf = this.masterFeedService.getOrCreateFeedForUrl(masterFeeds, feed.title, feed.xmlUrl);
 			folder.addFeed(mf);
 			imported.add(mf);
 		}

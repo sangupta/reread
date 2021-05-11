@@ -39,6 +39,12 @@ public class DefaultFeedParsingServiceImpl implements FeedParsingService {
 			feed = FeedParser.parse(feedID, contents);
 		} catch(RuntimeException e) {
 			LOGGER.error("Reading and parsing feed caused an error for feed with url: " + url + " and id: " + feedID, e);
+			return null;
+		}
+		
+		if(feed == null) {
+			LOGGER.warn("Feed returned is null for url: {}", url);
+			return null;
 		}
 		
 		feed.crawlTime = crawlTime;
@@ -50,6 +56,7 @@ public class DefaultFeedParsingServiceImpl implements FeedParsingService {
 		feed.sortPosts();
 		
 		// we are done
+		LOGGER.info("Found {} posts in feed for url: {}", feed.posts.size(), url);
 		return feed;
 	}
 
