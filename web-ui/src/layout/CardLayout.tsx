@@ -40,7 +40,8 @@ class CardItemRenderer extends React.Component<CardItemRendererProps, CardItemRe
 
     render() {
         const { post } = this.props;
-        return <div className='card fixed-card pointer' onClick={this.showPost}>
+        const { postRead } = this.state;
+        return <div className={'card fixed-card pointer ' + (postRead ? 'card-read' : 'border-primary')} onClick={this.showPost}>
             <div className="card-body">
                 <h5 className="card-title">{post.title}</h5>
                 <p className="card-text fixed-snippet">{post.snippet}</p>
@@ -58,10 +59,10 @@ export default class CardLayout extends React.Component<any, any> {
         const { posts } = this.props;
 
         return <div className='card-layout-container d-flex flex-wrap'>
-            {posts.map(item => <CardItemRenderer 
-                                    key={item.feedPostID} 
-                                    onShowPost={this.props.onShowPost}
-                                    post={item} />)}
+            {posts.map(item => <CardItemRenderer
+                key={item.feedPostID}
+                onShowPost={this.props.onShowPost}
+                post={item} />)}
         </div>
     }
 }

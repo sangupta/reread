@@ -185,3 +185,7 @@ a.folder-toggle {
 .pointer {
     cursor: pointer !important;
 }
+
+.card-read {
+    opacity: 0.6;
+}
