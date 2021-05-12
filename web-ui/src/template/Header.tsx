@@ -34,10 +34,6 @@ class Header extends React.Component {
                         </li>
                     </ul>
 
-                    <button type="button" className="btn btn-outline px-3">
-                        <Icon name='arrow-clockwise' /> Refresh
-                    </button>
-
                     <SearchBox />
 
                     <div className="text-end">

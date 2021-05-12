@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Dropdown, { DropDownOption } from '../components/Dropdown';
+import Icon from '../components/Icon';
 
 const markOptions: Array<DropDownOption> = [
     { label: 'Mark all as read', value: 'markRead' },
@@ -31,6 +32,7 @@ interface ToolbarProps {
     onSortChange: (v: string) => void;
     onIncludeChange: (v: string) => void;
     onLayoutChange: (v: string) => void;
+    onRefresh: (e:React.MouseEvent) => void;
 }
 
 export default class Toolbar extends React.Component<ToolbarProps, {}> {
@@ -43,6 +45,11 @@ export default class Toolbar extends React.Component<ToolbarProps, {}> {
         const { sortOption, includeItems, layout } = this.props;
 
         return <div className='d-flex flex-row mb-2 post-toolbar'>
+            <button type="button" className="btn btn-outline-secondary mr-3" onClick={this.props.onRefresh}>
+                <Icon name='arrow-clockwise' /> Refresh
+            </button>
+            
+            <div className='px-2' />
             <Dropdown variant='secondary' options={markOptions} onSelect={this.markChanged} label='Mark read/unread' />
 
             <div className='px-2' />

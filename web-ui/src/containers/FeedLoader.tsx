@@ -60,8 +60,19 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         }
     }
 
+    handleRefresh = (e: React.MouseEvent): void => {
+        e.preventDefault();
+
+        const { mode, match } = this.props;
+        const { feedID, folderID } = match?.params;
+
+        this.fetchData(mode, feedID, folderID);
+    }
+
     fetchData = async (mode: string, feedID: string, folderID: string) => {
         let data;
+
+        this.setState({ loading: true, errorMsg: '' });
 
         if (mode === 'search') {
             const text = this.props.query;
@@ -102,7 +113,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             data = await TimeLineApi.getFolderTimeLine(folderID);
         }
 
-        this.setState({ posts: data, loading: false, errorMsg: '' });
+        this.setState({ posts: data, loading: false });
     }
 
     markAllAsHandler = async (value: string) => {
@@ -148,7 +159,8 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
                 layout={layout}
                 onSortChange={this.sortChange}
                 onIncludeChange={this.includeChange}
-                onLayoutChange={this.layoutChange} />
+                onLayoutChange={this.layoutChange}
+                onRefresh={this.handleRefresh} />
             {this.renderContent()}
         </div>
     }
