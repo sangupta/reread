@@ -159,3 +159,11 @@ a.folder-toggle {
     overflow-y: scroll;
     max-height: 100vh;
 }
+
+.post-card {
+    margin-bottom: 20px;
+}
+
+.card-layout-container {
+    margin: 0 20px;
+}

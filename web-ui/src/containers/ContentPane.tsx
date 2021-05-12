@@ -1,6 +1,8 @@
 import React from 'react';
 
 import ListLayout from '../layout/ListLayout';
+import CardLayout from '../layout/CardLayout';
+
 import { Post } from '../api/Model';
 import PostView from './PostView';
 import PostApi from '../api/PostApi';
@@ -135,9 +137,16 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
 
         let Element;
         switch (layout) {
-            case 'cards':
+
             case 'list':
                 Element = ListLayout;
+                break;
+
+            case 'cards':
+            default:
+                Element = CardLayout;
+                break;
+    
         }
 
         return <div className='content-pane'>
