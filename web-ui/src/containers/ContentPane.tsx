@@ -6,6 +6,7 @@ import MasonryLayout from '../layout/MasonryLayout';
 import { Post } from '../api/Model';
 import PostView from './PostView';
 import PostApi from '../api/PostApi';
+import CardLayout from '../layout/CardLayout';
 
 interface ContentPaneProps {
     posts: Array<Post>;
@@ -143,6 +144,10 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
                 break;
 
             case 'cards':
+                Element = CardLayout;
+                break;
+
+            case 'masonry':
             default:
                 Element = MasonryLayout;
                 break;

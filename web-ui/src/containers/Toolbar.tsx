@@ -21,6 +21,7 @@ const displayItems: Array<DropDownOption> = [
 
 const layoutOptions: Array<DropDownOption> = [
     { label: 'Cards View', value: 'cards' },
+    { label: 'Masonry View', value: 'masonry' },
     { label: 'List View', value: 'list' }
 ];
 
