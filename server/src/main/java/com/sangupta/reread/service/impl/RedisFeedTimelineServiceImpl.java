@@ -38,7 +38,11 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 		final ListOperations<String, String> listOperation = this.redisTemplate.opsForList();
 		final String key = KEY + feedID;
 		
+		long time = System.nanoTime();
 		final List<String> list = listOperation.range(key, 0, -1);
+		long time2 = System.nanoTime();
+		
+		System.out.println("read in " + (time2 - time) + " nanos");
 		return list;
 	}
 
