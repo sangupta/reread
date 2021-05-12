@@ -36,7 +36,6 @@ export default class ImportOpmlContainer extends React.Component<{}, ImportOpmlC
         }
 
         const data: Array<OpmlFeed> = await OpmlApi.importOpml(file, confirm);
-        console.log(data);
         this.setState({ opmlFeeds: data });
     }
 
