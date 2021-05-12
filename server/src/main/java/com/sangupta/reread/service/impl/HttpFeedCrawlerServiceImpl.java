@@ -91,7 +91,7 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		
 		// create snippets
 		for(Post post : posts) {
-			this.postSnippetService.createSnippets(post);
+			this.postSnippetService.createSnippet(parsedFeed.siteUrl, post);
 		}
 		
 		// store each post in DB

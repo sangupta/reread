@@ -27,6 +27,12 @@ export interface Author {
     uri: string;
 }
 
+export interface PostImage {
+    url: string;
+    width: number;
+    height: number;
+}
+
 export interface Post {
     baseUrl: string;
     content: string;
@@ -41,6 +47,7 @@ export interface Post {
     starredOn: number;
     bookmarkedOn: number;
     author: Author;
+    image: PostImage;
 }
 
 export interface OpmlFeed {
@@ -48,5 +55,5 @@ export interface OpmlFeed {
     type: string;
     xmlUrl: string;
     htmlUrl: string;
-    children:Array<OpmlFeed>
+    children: Array<OpmlFeed>
 }

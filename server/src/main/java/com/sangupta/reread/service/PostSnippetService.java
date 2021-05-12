@@ -4,6 +4,6 @@ import com.sangupta.reread.entity.Post;
 
 public interface PostSnippetService {
 
-	public void createSnippets(Post post);
+	public void createSnippet(String siteLinkInFeed, Post post);
 
 }

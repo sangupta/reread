@@ -7,31 +7,34 @@ import TimeAgo from '../components/TimeAgo';
 class BrickRenderer extends React.Component<any, any> {
 
     render() {
-        return this.renderMasonry();
-    }
-
-    renderStack = () => {
-        const { post } = this.props;
-        return this.renderContent(post);
-    }
-
-    renderMasonry = () => {
         const { data: post, itemIdx, isMeasuring } = this.props;
-        return this.renderContent(post);
-    }
 
-    renderContent = (post: Post) => {
         return <div className="card post-card">
+            {this.renderImage(post)}
             <h5 className="card-header">{post.title}</h5>
             <div className="card-body">
                 <p className="card-text">{post.snippet}</p>
-                <a href="#" className="btn btn-primary">Go somewhere</a>
             </div>
             <div className="card-footer text-muted">
                 <small><TimeAgo millis={post.updated} /></small>
             </div>
         </div>
     }
+
+    renderImage(post: Post) {
+        if (!post.image || !post.image.url) {
+            return;
+        }
+
+        const width = post.image.width;
+        const height = post.image.height;
+        const podWidth = 278;
+        const podHeight: number = Math.floor((podWidth * height) / width);
+
+        return <img src={post.image.url} className="card-img-top"
+            alt={post.title} width={podWidth} height={podHeight} />
+    }
+
 }
 
 export default class MasonryLayout extends React.Component<any, any> {

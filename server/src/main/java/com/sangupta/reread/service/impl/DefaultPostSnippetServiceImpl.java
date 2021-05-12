@@ -51,14 +51,14 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 	protected HttpService httpService;
 
 	@Override
-	public void createSnippets(Post post) {
+	public void createSnippet(String siteLinkInFeed, Post post) {
 		if (post == null) {
 			return;
 		}
 
 		String content = post.content;
 
-		Snippet snippet = extract(post.link, content, post.enclosureURL);
+		Snippet snippet = extract(siteLinkInFeed, post.link, content, post.enclosureURL);
 
 		setFromSnippet(post, snippet);
 
@@ -93,13 +93,18 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		}
 	}
 
-	protected Snippet extract(final String feedURL, final String content, final String enclosedImage) {
+	protected Snippet extract(final String siteLinkInFeed, final String feedURL, final String content, final String enclosedImage) {
 		if (AssertUtils.isEmpty(content)) {
 			return new Snippet();
 		}
 
 		// parse to find snippet text
-		final Document document = Jsoup.parse(content, feedURL);
+		String urlToUseInParsing = siteLinkInFeed;
+		if(AssertUtils.isEmpty(siteLinkInFeed)) {
+			urlToUseInParsing = feedURL; 
+		}
+		
+		final Document document = Jsoup.parse(content, urlToUseInParsing);
 		final Snippet snippet = new Snippet();
 
 		// remove all objects
@@ -165,7 +170,12 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 	}
 
 	private boolean isRemovableImage(String imageUrl) {
-		// TODO Auto-generated method stub
+		for(String url : REMOVABLE_IMAGE_URLs) {
+			if(imageUrl.startsWith(url)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
@@ -297,10 +307,6 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 	}
 
 	public static boolean isBlockedUrl(String url) {
-		if (AssertUtils.isEmpty(BLOCKED_IMAGE_URLs)) {
-			return false;
-		}
-
 		for (String blockedURL : BLOCKED_IMAGE_URLs) {
 			if (url.startsWith(blockedURL)) {
 				return true;
