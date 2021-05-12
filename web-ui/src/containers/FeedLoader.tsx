@@ -64,12 +64,20 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         }
     }
 
-    handleRefresh = (e: React.MouseEvent): void => {
+    handleRefresh = async (e: React.MouseEvent): void => {
         e.preventDefault();
 
         const { mode, match } = this.props;
         const { feedID, folderID } = match?.params;
 
+        if(mode === 'feed') {
+            await FeedApi.refreshFeed(feedID);
+        }
+        if(mode === 'folder') {
+            await FeedApi.refreshFolder(folderID);
+        }
+
+        // reload data from server
         this.fetchData(mode, feedID, folderID);
     }
 

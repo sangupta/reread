@@ -13,7 +13,7 @@ export default class FeedApi {
     }
 
     static async getFeedCrawlDetails(feedID: string) {
-        const response = await Axios.get('/details/feed/'+ feedID);
+        const response = await Axios.get('/details/feed/' + feedID);
         return response.data;
     }
 
@@ -45,4 +45,15 @@ export default class FeedApi {
         });
         return response.data;
     }
+
+    static async refreshFeed(feedID: string) {
+        const response = await Axios.get('/refresh/feed/' + feedID);
+        return response.data;
+    }
+
+    static async refreshFolder(folderID: string) {
+        const response = await Axios.get('/refresh/folder/' + folderID);
+        return response.data;
+    }
+    
 }

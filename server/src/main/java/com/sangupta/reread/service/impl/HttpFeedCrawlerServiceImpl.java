@@ -108,9 +108,11 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		this.masterFeedService.updateField(feed, "title", parsedFeed.feedTitle);
 		this.masterFeedService.updateField(feed, "siteUrl", parsedFeed.siteUrl);
 
-		details.latestPostID = posts.get(0).uniqueID;
-		if(AssertUtils.isEmpty(details.latestPostID)) {
-			details.latestPostID = "hash:" + posts.get(0).hash;
+		if(AssertUtils.isNotEmpty(posts)) {
+			details.latestPostID = posts.get(0).uniqueID;
+			if(AssertUtils.isEmpty(details.latestPostID)) {
+				details.latestPostID = "hash:" + posts.get(0).hash;
+			}
 		}
 		
 		details.lastCrawled = parsedFeed.crawlTime;
