@@ -2,11 +2,12 @@ import React from 'react';
 
 import ListLayout from '../layout/ListLayout';
 import MasonryLayout from '../layout/MasonryLayout';
+import MagazineLayout from '../layout/MagazineLayout';
+import CardLayout from '../layout/CardLayout';
 
 import { Post } from '../api/Model';
 import PostView from './PostView';
 import PostApi from '../api/PostApi';
-import CardLayout from '../layout/CardLayout';
 
 interface ContentPaneProps {
     posts: Array<Post>;
@@ -139,19 +140,24 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         let Element;
         switch (layout) {
 
-            case 'list':
-                Element = ListLayout;
-                break;
-
             case 'cards':
                 Element = CardLayout;
                 break;
 
             case 'masonry':
-            default:
                 Element = MasonryLayout;
                 break;
-    
+
+            case 'magazine':
+                Element = MagazineLayout;
+                break;
+
+            case 'list':
+            default:
+                Element = ListLayout;
+                break;
+
+
         }
 
         return <div className='content-pane'>

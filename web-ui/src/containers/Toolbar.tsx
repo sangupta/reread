@@ -22,7 +22,8 @@ const displayItems: Array<DropDownOption> = [
 const layoutOptions: Array<DropDownOption> = [
     { label: 'Cards View', value: 'cards' },
     { label: 'Masonry View', value: 'masonry' },
-    { label: 'List View', value: 'list' }
+    { label: 'List View', value: 'list' },
+    { label: 'Magazine View', value: 'magazine' }
 ];
 
 interface ToolbarProps {
@@ -44,7 +45,7 @@ export default class Toolbar extends React.Component<ToolbarProps, {}> {
     }
 
     feedModal = () => {
-        
+
     }
 
     showFeedDetails = () => {

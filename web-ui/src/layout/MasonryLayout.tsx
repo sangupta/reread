@@ -14,7 +14,7 @@ class BrickRenderer extends React.Component<any, any> {
         }
 
         return <div className="card post-card">
-            {hasImage && this.renderImage(post)}
+            {this.renderImage(post)}
             {!hasImage && <h5 className="card-header">{post.title}</h5>}
             <div className="card-body">
                 {hasImage && <h5 className="card-title">{post.title}</h5>}
@@ -27,6 +27,10 @@ class BrickRenderer extends React.Component<any, any> {
     }
 
     renderImage(post: Post) {
+        if (!post.image || !post.image.url) {
+            return null;
+        }
+        
         const width = post.image.width;
         const height = post.image.height;
         const podWidth = 278;

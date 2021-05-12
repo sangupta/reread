@@ -189,3 +189,7 @@ a.folder-toggle {
 .card-read {
     opacity: 0.6;
 }
+
+.card-magazine {
+    margin: 10px 20px;
+}
