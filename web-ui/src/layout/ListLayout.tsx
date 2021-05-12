@@ -32,7 +32,7 @@ class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItem
         }
     }
 
-    toggleContent = (e: React.MouseEvent) => {
+    showPost = (e: React.MouseEvent) => {
         e.preventDefault();
         this.setState({ postRead: true });
         this.props.onShowPost(this.props.post);
@@ -43,7 +43,7 @@ class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItem
         const { postRead } = this.state;
         const css: string = postRead ? ' list-group-item-secondary' : '';
 
-        return <a key={post.feedPostID} href='#' className={'list-group-item list-group-item-action py-3 lh-tight ' + css} onClick={this.toggleContent}>
+        return <a key={post.feedPostID} href='#' className={'list-group-item list-group-item-action py-3 lh-tight ' + css} onClick={this.showPost}>
             <div className='d-flex w-100 align-items-center justify-content-between'>
                 <strong className='mb-1'>{post.title}</strong>
                 <small>

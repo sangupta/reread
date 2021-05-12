@@ -155,7 +155,7 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         }
 
         return <div className='content-pane'>
-            <Element posts={filtered} onShowPost={this.showPost} onPostHide={this.hidePost} />
+            <Element posts={filtered} onShowPost={this.showPost} />
             {this.renderPost()}
         </div>
     }

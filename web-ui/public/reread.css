@@ -181,3 +181,7 @@ a.folder-toggle {
     -webkit-box-orient: vertical;
     overflow-y: hidden;
 }
+
+.pointer {
+    cursor: pointer !important;
+}
