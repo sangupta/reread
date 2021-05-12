@@ -33,7 +33,8 @@ interface ToolbarProps {
     onSortChange: (v: string) => void;
     onIncludeChange: (v: string) => void;
     onLayoutChange: (v: string) => void;
-    onRefresh: (e:React.MouseEvent) => void;
+    onRefresh: (e: React.MouseEvent) => void;
+    showFeedDetails: boolean;
 }
 
 export default class Toolbar extends React.Component<ToolbarProps, {}> {
@@ -42,14 +43,29 @@ export default class Toolbar extends React.Component<ToolbarProps, {}> {
         this.props.onMarkAllAs(value);
     }
 
+    feedModal = () => {
+        
+    }
+
+    showFeedDetails = () => {
+        return <>
+            <button type="button" className="btn btn-sm btn-outline-secondary mr-3" onClick={this.feedModal}>
+                <Icon name='binoculars' /> Feed Details
+            </button>
+            <div className='px-2' />
+        </>
+    }
+
     render() {
-        const { sortOption, includeItems, layout } = this.props;
+        const { sortOption, includeItems, layout, showFeedDetails } = this.props;
 
         return <div className='d-flex flex-row mb-2 post-toolbar'>
+            {showFeedDetails && this.showFeedDetails()}
+
             <button type="button" className="btn btn-sm btn-outline-secondary mr-3" onClick={this.props.onRefresh}>
                 <Icon name='arrow-clockwise' /> Refresh
             </button>
-            
+
             <div className='px-2' />
             <Dropdown variant='secondary' options={markOptions} onSelect={this.markChanged} label='Mark read/unread' />
 

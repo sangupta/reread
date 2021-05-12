@@ -151,12 +151,15 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
 
     render() {
         const { sortOption, includeItems, layout } = this.state;
+        const { mode } = this.props;
+        const singleFeed = mode === 'feed';
 
         return <div className='d-flex flex-column'>
             <Toolbar onMarkAllAs={this.markAllAsHandler}
                 sortOption={sortOption}
                 includeItems={includeItems}
                 layout={layout}
+                showFeedDetails={singleFeed}
                 onSortChange={this.sortChange}
                 onIncludeChange={this.includeChange}
                 onLayoutChange={this.layoutChange}
