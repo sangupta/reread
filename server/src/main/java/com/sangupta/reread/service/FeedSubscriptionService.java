@@ -5,7 +5,7 @@ import com.sangupta.reread.entity.MasterFeed;
 
 public interface FeedSubscriptionService {
 
-	public MasterFeed subscribe(String url);
+	public MasterFeed subscribe(MasterFeed mf);
 
 	public FeedList unsubscribe(String feedID);
 

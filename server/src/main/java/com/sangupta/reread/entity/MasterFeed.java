@@ -13,6 +13,8 @@ public class MasterFeed {
 	public final String url;
 
 	public String siteUrl;
+	
+	public String iconUrl;
 
 	public final String normalizedUrl;
 

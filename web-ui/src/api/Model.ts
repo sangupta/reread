@@ -1,5 +1,7 @@
 export interface DiscoveredFeed {
-    url: string;
+    feedUrl: string;
+    iconUrl: string;
+    siteUrl: string;
     rel: string;
     title: string;
     type: string;
@@ -8,6 +10,8 @@ export interface DiscoveredFeed {
 export interface Feed {
     masterFeedID: string;
     title: string;
+    website: string;
+    iconUrl: string;
 }
 
 export interface Folder {

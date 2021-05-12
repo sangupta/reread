@@ -3,11 +3,11 @@ import { DiscoveredFeed, FeedList } from './Model';
 
 export default class FeedApi {
 
-    private static FEED_LIST:FeedList = [];
+    private static FEED_LIST: FeedList = [];
 
     static async getFeedList() {
         const response = await Axios.get('/feeds/me');
-        const list:FeedList = response.data;
+        const list: FeedList = response.data;
         FeedApi.FEED_LIST = list;
         return list;
     }
@@ -15,7 +15,7 @@ export default class FeedApi {
     static getFeedDetails(feedID: string) {
         const list = FeedApi.FEED_LIST;
         let found = list.feeds.find(item => item.masterFeedID === feedID);
-        if(!found) {
+        if (!found) {
             list.folders.forEach(folder => {
                 found = folder.childFeeds.find(feed => feed.masterFeedID === feedID);
             });
@@ -33,7 +33,10 @@ export default class FeedApi {
 
     static async subscribeFeed(feed: DiscoveredFeed) {
         const response = await Axios.post('/feeds/subscribe', {
-            url: feed.url
+            url: feed.feedUrl,
+            site: feed.siteUrl,
+            iconUrl: feed.iconUrl,
+            title: feed.title
         });
         return response.data;
     }

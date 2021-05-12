@@ -13,35 +13,34 @@ import com.sangupta.reread.service.MasterFeedService;
 public class RedisMasterFeedServiceImpl extends RedisDataStoreServiceImpl<MasterFeed> implements MasterFeedService {
 
 	@Override
-	public MasterFeed getOrCreateFeedForUrl(String url) {
-		return this.getOrCreateFeedForUrl(url, url);
+	public MasterFeed getOrCreateFeedForUrl(MasterFeed mf) {
+		return this.getOrCreateFeedForUrl(null, mf);
 	}
 
-	@Override
-	public MasterFeed getOrCreateFeedForUrl(String title, String url) {
-		return this.getOrCreateFeedForUrl(null, title, url);
-	}
-	
 	public MasterFeed getOrCreateFeedForUrl(List<MasterFeed> masterFeeds, String title, String url) {
-		String normalizedUrl = MasterFeed.getNormalizedUrl(url);
+		MasterFeed mf = new MasterFeed(url);
+		mf.title = title;
+		
+		return this.getOrCreateFeedForUrl(null, mf);
+	}
 
-		if(masterFeeds == null) {
+	protected MasterFeed getOrCreateFeedForUrl(List<MasterFeed> masterFeeds, MasterFeed feedToAdd) {
+		if (masterFeeds == null) {
 			masterFeeds = this.getAll();
 		}
 
 		if (AssertUtils.isNotEmpty(masterFeeds)) {
 			for (MasterFeed feed : masterFeeds) {
-				if (feed.normalizedUrl.equals(normalizedUrl)) {
+				if (feed.normalizedUrl.equals(feedToAdd.normalizedUrl)) {
 					return feed;
 				}
 			}
 		}
-		
-		MasterFeed feed = new MasterFeed(url);
-		feed.title = title;
 
-		this.insert(feed);
-		return feed;
+		// insert this one
+		feedToAdd.feedID = null;
+		this.insert(feedToAdd);
+		return feedToAdd;
 	}
 
 }

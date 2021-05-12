@@ -2,18 +2,22 @@ package com.sangupta.reread.entity;
 
 public class DiscoveredFeed {
 	
-	public String url;
+	public String feedUrl;
 	
-	public String urlWithoutScheme;
+	public String feedUrlWithoutScheme;
 	
 	public String title;
+	
+	public String siteUrl;
+	
+	public String iconUrl;
 	
 	public String rel;
 	
 	public String type;
 
 	public DiscoveredFeed(String url, String title, String type) {
-		this.url = url;
+		this.feedUrl = url;
 		this.title = title;
 		this.type = type;
 	}

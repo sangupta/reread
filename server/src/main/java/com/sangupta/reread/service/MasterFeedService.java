@@ -7,9 +7,7 @@ import com.sangupta.reread.entity.MasterFeed;
 
 public interface MasterFeedService extends DataStoreService<MasterFeed> {
 
-	public MasterFeed getOrCreateFeedForUrl(String url);
-	
-	public MasterFeed getOrCreateFeedForUrl(String title, String url);
+	public MasterFeed getOrCreateFeedForUrl(MasterFeed mf);
 	
 	public MasterFeed getOrCreateFeedForUrl(List<MasterFeed> masterFeeds, String title, String url);
 

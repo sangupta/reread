@@ -26,9 +26,9 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 	protected FeedCrawlerService feedCrawlerService;
 
 	@Override
-	public MasterFeed subscribe(String url) {
+	public MasterFeed subscribe(MasterFeed mf) {
 		// find master feed for one
-		MasterFeed feed = this.masterFeedService.getOrCreateFeedForUrl(url);
+		MasterFeed feed = this.masterFeedService.getOrCreateFeedForUrl(mf);
 		
 		// add the same to the user's subscribe list
 		FeedList feedList = this.feedListService.getOrCreate(SecurityContext.getUserID());

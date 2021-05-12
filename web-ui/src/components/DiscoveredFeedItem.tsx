@@ -21,10 +21,12 @@ class DiscoveredFeedItem extends React.Component<DiscoveredFeedProps, {}> {
 
     render() {
         const { feed } = this.props;
-
+        const hasImage = !!feed.iconUrl;
         return <div className='row'>
             <div className='col-auto'>
-                <Icon name='rss' />&nbsp;{feed.title}
+                {hasImage && <img src={feed.iconUrl} width={16} />}
+                {!hasImage && <Icon name='rss' />}
+                {feed.title}
             </div>
             <div className='col-auto'>
                 <button className='btn btn-sm btn-outline-primary' onClick={this.addFeed}>Add</button>

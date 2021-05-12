@@ -37,7 +37,13 @@ public class FeedListController {
 
 	@PostMapping("/subscribe")
 	public MasterFeed subscribe(@RequestBody FeedControllerPayload payload) {
-		return this.feedSubscriptionService.subscribe(payload.url);
+		MasterFeed mf = new MasterFeed(payload.url);
+		
+		mf.title = payload.title;
+		mf.iconUrl = payload.iconUrl;
+		mf.siteUrl = payload.siteUrl;
+		
+		return this.feedSubscriptionService.subscribe(mf);
 	}
 
 	@PostMapping("/unsubscribe")
@@ -54,7 +60,10 @@ public class FeedListController {
 	private static class FeedControllerPayload {
 		String url;
 		String feedID;
-
+		String siteUrl;
+		String iconUrl;
+		String title;
+		
 		/**
 		 * @return the url
 		 */
@@ -81,6 +90,48 @@ public class FeedListController {
 		 */
 		public void setFeedID(String feedID) {
 			this.feedID = feedID;
+		}
+
+		/**
+		 * @return the siteUrl
+		 */
+		public String getSiteUrl() {
+			return siteUrl;
+		}
+
+		/**
+		 * @param siteUrl the siteUrl to set
+		 */
+		public void setSiteUrl(String siteUrl) {
+			this.siteUrl = siteUrl;
+		}
+
+		/**
+		 * @return the iconUrl
+		 */
+		public String getIconUrl() {
+			return iconUrl;
+		}
+
+		/**
+		 * @param iconUrl the iconUrl to set
+		 */
+		public void setIconUrl(String iconUrl) {
+			this.iconUrl = iconUrl;
+		}
+
+		/**
+		 * @return the title
+		 */
+		public String getTitle() {
+			return title;
+		}
+
+		/**
+		 * @param title the title to set
+		 */
+		public void setTitle(String title) {
+			this.title = title;
 		}
 	}
 }

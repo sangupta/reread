@@ -48,7 +48,7 @@ export default class AddFeedContainer extends React.Component<{}, AddFeedContain
 
         return <div className='mt-3'>
             <h2>Discovered Feeds</h2>
-            {feeds.map(feed => <DiscoveredFeedItem key={feed.url} feed={feed} />)}
+            {feeds.map(feed => <DiscoveredFeedItem key={feed.feedUrl} feed={feed} />)}
         </div>
     }
 

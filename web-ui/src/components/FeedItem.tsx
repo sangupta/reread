@@ -20,10 +20,12 @@ class FeedItem extends React.Component<FeedItemProps, any> {
 
     render() {
         const { feed } = this.props;
-
+        const hasImage = !!feed.iconUrl;
         return <li>
             <a href='#' className='link-dark rounded' onClick={this.showFeed}>
-                <Icon name='rss' label={feed.title} />
+                {hasImage && <img src={feed.iconUrl} width={16} /> }
+                {!hasImage && <Icon name='rss' />}
+                {feed.title}
             </a>
         </li>
     }
