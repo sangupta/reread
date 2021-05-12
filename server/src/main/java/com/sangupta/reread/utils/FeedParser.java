@@ -68,10 +68,17 @@ public class FeedParser {
 			}
 		}
 
+		// check and add post title, if not present
+		for(Post post : parsedFeed.posts) {
+			if(AssertUtils.isEmpty(post.title)) {
+				post.title = parsedFeed.feedTitle; 
+			}
+		}
+
 		final long end = System.currentTimeMillis();
 
 		LOGGER.debug("Feed {} parsed in {}ms", masterFeedID, (end - start));
-
+		
 		return parsedFeed;
 	}
 

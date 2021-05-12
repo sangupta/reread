@@ -58,6 +58,16 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 
 		content = massageContent(content, baseURL);
 		post.content = content;
+		
+		if(AssertUtils.isEmpty(post.title) && AssertUtils.isNotEmpty(post.snippet)) {
+			int len = post.snippet.length();
+			if(len <= 50) {
+				post.title = post.snippet;
+			} else {
+				// TODO: add ellipsis at the break of word
+				post.title = post.snippet.substring(0, 40) + "...";
+			}
+		}
 	}
 
 	protected Snippet extract(final String feedURL, final String content, final String enclosedImage) {
