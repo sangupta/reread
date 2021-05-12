@@ -20,14 +20,12 @@ interface PostViewProps {
 export default class PostView extends React.Component<PostViewProps> {
 
     componentDidMount() {
-        document.body.classList.add('modal-open');
-
         const { post } = this.props;
-        PostApi.markRead(post.feedPostID);
-    }
-
-    componentWillUnmount() {
-        document.body.classList.remove('modal-open');
+        if(post.readOn === 0) {
+            // only mark read if the post is not already read
+            // otherwise we will create duplicate entries in analytics
+            PostApi.markRead(post.feedPostID);
+        }
     }
 
     showPostAuthor = () => {

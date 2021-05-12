@@ -8,10 +8,12 @@ interface ModalProps {
 export default class Modal extends React.Component<ModalProps, {}> {
 
     componentDidMount() {
+        document.body.classList.add('modal-open');
         document.addEventListener('keydown', this.handleEscape);
     }
 
     componentWillUnmount() {
+        document.body.classList.remove('modal-open');
         document.removeEventListener('keydown', this.handleEscape);
     }
 
