@@ -22,7 +22,7 @@ public class DefaultFeedParsingServiceImpl implements FeedParsingService {
 	protected HttpService httpService;
 
 	@Override
-	public ParsedFeed parseFeedFromUrl(String feedID, String url) {
+	public ParsedFeed parseFeedFromUrl(String feedID, String url, String latestPostID) {
 		final long crawlTime = System.currentTimeMillis();
 		
 		WebResponse response = this.httpService.getResponse(url);
@@ -36,7 +36,7 @@ public class DefaultFeedParsingServiceImpl implements FeedParsingService {
 		
 		ParsedFeed feed = null;
 		try {
-			feed = FeedParser.parse(feedID, contents);
+			feed = FeedParser.parse(feedID, contents, latestPostID);
 		} catch(RuntimeException e) {
 			LOGGER.error("Reading and parsing feed caused an error for feed with url: " + url + " and id: " + feedID, e);
 			return null;

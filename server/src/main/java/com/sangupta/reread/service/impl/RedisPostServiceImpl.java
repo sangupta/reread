@@ -7,8 +7,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sangupta.jerry.util.AssertUtils;
-import com.sangupta.jerry.util.HashUtils;
-import com.sangupta.reread.entity.ParsedFeed;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
 import com.sangupta.reread.service.AnalyticsService;
@@ -32,19 +30,13 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 	protected AnalyticsService analyticsService;
 
 	@Override
-	public void filterAlreadyExistingPosts(ParsedFeed parsedFeed) {
-		if (parsedFeed == null) {
+	public void filterAlreadyExistingPosts(List<Post> posts) {
+		if (AssertUtils.isEmpty(posts)) {
 			return;
 		}
 
-		if (AssertUtils.isEmpty(parsedFeed.posts)) {
-			return;
-		}
-
-		// compute the hash
-		for (Post post : parsedFeed.posts) {
-			post.hash = HashUtils.getMD5Hex(post.content);
-		}
+		// this is to filter posts across all feeds and
+		// not just the same feed
 	}
 
 	@Override

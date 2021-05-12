@@ -63,7 +63,7 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		}
 		
 		// read feed
-		ParsedFeed parsedFeed = this.feedParsingService.parseFeedFromUrl(masterFeed.feedID, masterFeed.url);
+		ParsedFeed parsedFeed = this.feedParsingService.parseFeedFromUrl(masterFeed.feedID, masterFeed.url, details.latestPostID);
 		
 		// update last crawl time
 		this.feedCrawlDetailsService.updateField(details, "lastCrawled", System.currentTimeMillis());
@@ -75,12 +75,12 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		}
 
 		// update master feed
-		this.updateEntities(masterFeed, details, parsedFeed);
-		
 		final List<Post> posts = parsedFeed.posts;
+
+		this.updateEntities(masterFeed, details, parsedFeed, posts);
 		
 		// de-dupe entries
-		this.postService.filterAlreadyExistingPosts(parsedFeed);
+		this.postService.filterAlreadyExistingPosts(posts);
 		
 		// create snippets and store each entry
 		if(AssertUtils.isEmpty(posts)) {
@@ -104,10 +104,15 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		this.feedTimelineService.updateAllTimeline(posts);
 	}
 
-	protected void updateEntities(MasterFeed feed, FeedCrawlDetails details, ParsedFeed parsedFeed) {
+	protected void updateEntities(MasterFeed feed, FeedCrawlDetails details, ParsedFeed parsedFeed, List<Post> posts) {
 		this.masterFeedService.updateField(feed, "title", parsedFeed.feedTitle);
 		this.masterFeedService.updateField(feed, "siteUrl", parsedFeed.siteUrl);
 
+		details.latestPostID = posts.get(0).uniqueID;
+		if(AssertUtils.isEmpty(details.latestPostID)) {
+			details.latestPostID = "hash:" + posts.get(0).hash;
+		}
+		
 		details.lastCrawled = parsedFeed.crawlTime;
 		details.lastModifiedHeader = parsedFeed.lastModifiedHeader;
 		details.lastModifiedTime = parsedFeed.lastModifiedTimestamp;

@@ -3,7 +3,6 @@ package com.sangupta.reread.utils;
 import java.io.StringReader;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.DateUtils;
+import com.sangupta.jerry.util.HashUtils;
 import com.sangupta.jerry.util.UriUtils;
 import com.sangupta.reread.entity.ParsedFeed;
 import com.sangupta.reread.entity.Post;
@@ -33,16 +33,16 @@ public class FeedParser {
 
 	private static final Set<String> VALID_IMAGE_TYPES = Set.of("image/png", "image/gif", "image/jpg", "image/jpeg");
 
-	public static ParsedFeed parse(String masterFeedID, String feedContents) {
+	public static ParsedFeed parse(String masterFeedID, String feedContents, String latestPostID) {
 		try {
-			return parseInternal(masterFeedID, feedContents);
-		} catch(RuntimeException e) {
+			return parseInternal(masterFeedID, feedContents, latestPostID);
+		} catch (RuntimeException e) {
 			LOGGER.error("Unable to parse contents for feedID: " + masterFeedID, e);
 			return null;
 		}
 	}
-	
-	protected static ParsedFeed parseInternal(String masterFeedID, String feedContents) {
+
+	protected static ParsedFeed parseInternal(String masterFeedID, String feedContents, String latestPostID) {
 		SyndFeed feed = extractSyndFeed(masterFeedID, feedContents);
 		if (feed == null) {
 			LOGGER.error("Feed object is null for contents: {}", feedContents);
@@ -56,38 +56,24 @@ public class FeedParser {
 
 		// start parsing the entire thing now
 		final long start = System.currentTimeMillis();
-		ParsedFeed parsedFeed = getParsedFeed(masterFeedID, feed);
+		ParsedFeed parsedFeed = getParsedFeed(masterFeedID, feed, latestPostID);
 
 		final List<Post> entries = parsedFeed.posts;
 		if (AssertUtils.isNotEmpty(entries)) {
-			try {
-				Collections.sort(entries);
-			} catch (Exception e) {
-				LOGGER.error("Unable to sort entries for feed " + masterFeedID, e);
-				// this may happen due to duplicate entries
-				Set<Post> set = new HashSet<>(entries);
-				entries.clear();
-				entries.addAll(set);
-
-				try {
-					Collections.sort(entries);
-				} catch (Exception e1) {
-					LOGGER.error("Unable to sort unique entries for feed " + masterFeedID, e1);
-				}
-			}
+			Collections.sort(entries);
 		}
 
 		// check and add post title, if not present
-		for(Post post : parsedFeed.posts) {
-			if(AssertUtils.isEmpty(post.title)) {
-				post.title = parsedFeed.feedTitle; 
+		for (Post post : parsedFeed.posts) {
+			if (AssertUtils.isEmpty(post.title)) {
+				post.title = parsedFeed.feedTitle;
 			}
 		}
 
 		final long end = System.currentTimeMillis();
 
 		LOGGER.debug("Feed {} parsed in {}ms", masterFeedID, (end - start));
-		
+
 		return parsedFeed;
 	}
 
@@ -158,7 +144,7 @@ public class FeedParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected static ParsedFeed getParsedFeed(final String masterFeedID, final SyndFeed feed) {
+	protected static ParsedFeed getParsedFeed(final String masterFeedID, final SyndFeed feed, String latestPostID) {
 		final ParsedFeed parsedFeed = new ParsedFeed();
 		parsedFeed.feedTitle = feed.getTitle();
 		parsedFeed.siteUrl = feed.getLink();
@@ -171,20 +157,35 @@ public class FeedParser {
 
 		final String baseUrl = UriUtils.getBaseUrl(feed.getLink());
 
-		Post parsedFeedEntry = null;
+		Post post = null;
 		long timeDifference = System.currentTimeMillis();
 		for (SyndEntry entry : entries) {
 			try {
-				parsedFeedEntry = extractParsedFeedEntry(entry, baseUrl, timeDifference);
+				post = extractParsedFeedEntry(entry, baseUrl, timeDifference);
 				timeDifference = timeDifference - 10;
 			} catch (Exception e) {
 				LOGGER.error("Unable to extract entry from feed contents", e);
 			}
 
 			// add to the list of entries
-			if (parsedFeedEntry != null) {
-				parsedFeedEntry.masterFeedID = masterFeedID;
-				parsedFeed.posts.add(parsedFeedEntry);
+			if (post != null) {
+				post.masterFeedID = masterFeedID;
+
+				// compute has for the post
+				post.hash = HashUtils.getMD5Hex(post.content);
+
+				if(post.uniqueID != null && post.uniqueID.equalsIgnoreCase(latestPostID)) {
+					// we got a unique match
+					break;
+				}
+				
+				if(latestPostID != null && latestPostID.startsWith("hash:") && post.hash.equals(latestPostID.substring(5))) {
+					// we match via hash
+					break;
+				}
+				
+				// post has never been seen before - pick it up
+				parsedFeed.posts.add(post);
 			}
 		}
 
@@ -198,7 +199,7 @@ public class FeedParser {
 		// get the author
 		if (AssertUtils.isNotEmpty(entry.getAuthors())) {
 			SyndPersonImpl personImpl = (SyndPersonImpl) entry.getAuthors().get(0);
-			if(personImpl != null) {
+			if (personImpl != null) {
 				post.author = new PostAuthor();
 				post.author.name = personImpl.getName();
 				post.author.uri = personImpl.getUri();
@@ -252,7 +253,7 @@ public class FeedParser {
 				}
 			}
 		}
-		
+
 		// if we still cannot find the date, let's choose the current date
 		// of crawl - atleast we will have something to display
 		if (updatedDate != null) {
