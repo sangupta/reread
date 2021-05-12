@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.redislabs.redistimeseries.Measurement;
 import com.redislabs.redistimeseries.RedisTimeSeries;
 import com.sangupta.reread.SpringBeans;
 import com.sangupta.reread.entity.Post;
@@ -29,21 +30,21 @@ public class RedisAnalyticsServiceImpl implements AnalyticsService {
 	@Override
 	public boolean recordNewPosts(List<Post> posts) {
 		
+		Measurement[] measurements = new Measurement[posts.size()];
+		int index = 0; 
 		for(Post post : posts) {
 			String key = "timeSeries-feed:" + post.masterFeedID;
 			this.createTimeSeriesIfNeeded(key);
-			
-			if(post.feedPostID == null) {
-				System.out.println("break");
-			}
 			
 			long timestamp = post.updated;
 			Map<String, String> labels = new HashMap<>(); 
 			labels.put("postID", post.feedPostID); 
 		
-			this.timeSeries.add(key, timestamp, 1, labels);
+			measurements[index]= new Measurement(key, timestamp, 1);
+			index++;
 		}
 		
+		this.timeSeries.madd(measurements);
 		return true;
 	}
 
