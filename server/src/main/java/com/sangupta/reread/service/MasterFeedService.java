@@ -12,5 +12,5 @@ public interface MasterFeedService extends DataStoreService<MasterFeed> {
 	public MasterFeed getOrCreateFeed(List<MasterFeed> masterFeeds, MasterFeed mf);
 	
 	public MasterFeed getOrCreateFeedForUrl(List<MasterFeed> masterFeeds, String title, String url);
-
+	
 }

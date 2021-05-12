@@ -8,6 +8,8 @@ import ContentPane from './ContentPane';
 import { Post } from '../api/Model';
 import PostApi from '../api/PostApi';
 import Toolbar from './Toolbar';
+import FeedApi from '../api/FeedApi';
+import FeedDetailsContainer from './FeedDetailsContainer';
 
 interface FeedLoaderProps {
     mode: 'feed' | 'folder' | 'all' | 'search' | 'stars' | 'bookmarks';
@@ -22,6 +24,7 @@ interface FeedLoaderState {
     sortOption: string;
     includeItems: string;
     layout: string;
+    feedDetails: any;
 }
 
 class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
@@ -32,7 +35,8 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         posts: [],
         sortOption: 'newest',
         includeItems: 'all',
-        layout: 'list'
+        layout: 'list',
+        feedDetails: null
     }
 
     componentDidMount() {
@@ -149,6 +153,14 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         this.setState({ layout: v });
     }
 
+    showFeedDetails = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        const { match } = this.props;
+        const { feedID } = match?.params;
+        const data = await FeedApi.getFeedCrawlDetails(feedID);
+        this.setState({ feedDetails: data });
+    }
+
     render() {
         const { sortOption, includeItems, layout } = this.state;
         const { mode } = this.props;
@@ -162,10 +174,25 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
                 showFeedDetails={singleFeed}
                 onSortChange={this.sortChange}
                 onIncludeChange={this.includeChange}
+                onFeedDetails={this.showFeedDetails}
                 onLayoutChange={this.layoutChange}
                 onRefresh={this.handleRefresh} />
             {this.renderContent()}
+            {this.renderFeedDetailsModal()}
         </div>
+    }
+
+    closeDetailsModal = (e: React.MouseEvent): void => {
+        this.setState({ feedDetails: null });
+    }
+
+    renderFeedDetailsModal = () => {
+        const { feedDetails } = this.state;
+        if (!feedDetails) {
+            return null;
+        }
+
+        return <FeedDetailsContainer details={feedDetails} onModalClose={this.closeDetailsModal} />
     }
 
     renderContent() {

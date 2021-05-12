@@ -47,5 +47,11 @@ public class RedisMasterFeedServiceImpl extends RedisDataStoreServiceImpl<Master
 		this.insert(feedToAdd);
 		return feedToAdd;
 	}
+	
+	@Override
+	public boolean insert(MasterFeed entity) {
+		entity.added = System.currentTimeMillis();
+		return super.insert(entity);
+	}
 
 }

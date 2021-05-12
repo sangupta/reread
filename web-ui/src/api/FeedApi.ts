@@ -12,6 +12,11 @@ export default class FeedApi {
         return list;
     }
 
+    static async getFeedCrawlDetails(feedID: string) {
+        const response = await Axios.get('/details/feed/'+ feedID);
+        return response.data;
+    }
+
     static getFeedDetails(feedID: string) {
         const list = FeedApi.FEED_LIST;
         let found = list.feeds.find(item => item.masterFeedID === feedID);

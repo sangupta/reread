@@ -31,4 +31,8 @@ public interface FeedTimelineService {
 	
 	public void removeFromSpecialTimeline(String timelineID, String postID);
 
+	public String getLatestID(String feedID);
+
+	public long size(String feedID);
+
 }

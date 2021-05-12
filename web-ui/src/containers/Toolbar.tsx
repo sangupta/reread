@@ -2,6 +2,7 @@ import React from 'react';
 
 import Dropdown, { DropDownOption } from '../components/Dropdown';
 import Icon from '../components/Icon';
+import FeedApi from '../api/FeedApi';
 
 const markOptions: Array<DropDownOption> = [
     { label: 'Mark all as read', value: 'markRead' },
@@ -30,27 +31,33 @@ interface ToolbarProps {
     sortOption: string;
     includeItems: string;
     layout: string;
+    showFeedDetails: boolean;
     onMarkAllAs: Function;
     onSortChange: (v: string) => void;
     onIncludeChange: (v: string) => void;
     onLayoutChange: (v: string) => void;
     onRefresh: (e: React.MouseEvent) => void;
-    showFeedDetails: boolean;
+    onFeedDetails: (e: React.MouseEvent) => void;
 }
 
-export default class Toolbar extends React.Component<ToolbarProps, {}> {
+interface ToolbarState {
+
+}
+
+export default class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
 
     markChanged = (value: string) => {
         this.props.onMarkAllAs(value);
     }
 
-    feedModal = () => {
-
-    }
-
     showFeedDetails = () => {
+        const { showFeedDetails } = this.props;
+        if (!showFeedDetails) {
+            return null;
+        }
+
         return <>
-            <button type="button" className="btn btn-sm btn-outline-secondary mr-3" onClick={this.feedModal}>
+            <button type="button" className="btn btn-sm btn-outline-secondary mr-3" onClick={this.props.onFeedDetails}>
                 <Icon name='binoculars' /> Feed Details
             </button>
             <div className='px-2' />
@@ -58,10 +65,10 @@ export default class Toolbar extends React.Component<ToolbarProps, {}> {
     }
 
     render() {
-        const { sortOption, includeItems, layout, showFeedDetails } = this.props;
+        const { sortOption, includeItems, layout } = this.props;
 
         return <div className='d-flex flex-row mb-2 post-toolbar'>
-            {showFeedDetails && this.showFeedDetails()}
+            {this.showFeedDetails()}
 
             <button type="button" className="btn btn-sm btn-outline-secondary mr-3" onClick={this.props.onRefresh}>
                 <Icon name='arrow-clockwise' /> Refresh

@@ -19,6 +19,8 @@ public class MasterFeed {
 	public final String normalizedUrl;
 
 	public String title;
+	
+	public long added;
 
 	public MasterFeed(String url) {
 		url = UrlCanonicalizer.canonicalize(url);

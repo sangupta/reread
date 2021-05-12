@@ -86,5 +86,24 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 	public void removeFromSpecialTimeline(String timelineID, String postID) {
 		this.redisTemplate.opsForSet().remove(SORTED_TIMELINE + timelineID, postID);
 	}
+
+	@Override
+	public String getLatestID(String feedID) {
+		final ListOperations<String, String> listOperation = this.redisTemplate.opsForList();
+		final String key = KEY + feedID;
+		return listOperation.index(key, 0);
+	}
+
+	@Override
+	public long size(String feedID) {
+		final ListOperations<String, String> listOperation = this.redisTemplate.opsForList();
+		final String key = KEY + feedID;
+		Long num = listOperation.size(key);
+		if(num == null) {
+			return 0;
+		}
+		
+		return num.longValue();
+	}
 	
 }
