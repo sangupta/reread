@@ -57,10 +57,34 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		}
 
 		String content = post.content;
+		if(AssertUtils.isEmpty(content)) {
+			return;
+		}
 
-		Snippet snippet = extract(siteLinkInFeed, post.link, content, post.enclosureURL);
+		// parse to find snippet text
+		String urlToUseInParsing = siteLinkInFeed;
+		if(AssertUtils.isEmpty(siteLinkInFeed)) {
+			urlToUseInParsing = post.link; 
+		}
 
-		setFromSnippet(post, snippet);
+		// massage the content for delay loading of all images etc
+		String baseURL = post.baseUrl;
+		if (AssertUtils.isEmpty(baseURL)) {
+			baseURL = post.link;
+		}
+
+		// parse 
+		final Document document = Jsoup.parse(content, urlToUseInParsing);
+		Snippet snippet = generateSnippet(document, post.enclosureURL);
+		
+		post.image = snippet.articleImage;
+		post.mainElement = snippet.articleElement;
+		post.plainText = snippet.allText;
+		post.snippet = snippet.snippetText;
+		
+		// extra sinppet
+		content = massageContent(document, baseURL);
+		post.content = content;
 
 		// reset content if modified by snippet processor
 		if (snippet.content != null) {
@@ -71,16 +95,6 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		if (AssertUtils.isEmpty(post.title)) {
 			post.title = snippet.postTitle;
 		}
-
-		// massage the content for delay loading of all images etc
-		// this will make sure that we load content really fast
-		String baseURL = post.baseUrl;
-		if (AssertUtils.isEmpty(baseURL)) {
-			baseURL = post.link;
-		}
-
-		content = massageContent(content, baseURL);
-		post.content = content;
 
 		if (AssertUtils.isEmpty(post.title) && AssertUtils.isNotEmpty(post.snippet)) {
 			int len = post.snippet.length();
@@ -93,30 +107,21 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		}
 	}
 
-	protected Snippet extract(final String siteLinkInFeed, final String feedURL, final String content, final String enclosedImage) {
-		if (AssertUtils.isEmpty(content)) {
-			return new Snippet();
-		}
-
-		// parse to find snippet text
-		String urlToUseInParsing = siteLinkInFeed;
-		if(AssertUtils.isEmpty(siteLinkInFeed)) {
-			urlToUseInParsing = feedURL; 
-		}
-		
-		final Document document = Jsoup.parse(content, urlToUseInParsing);
+	protected Snippet generateSnippet(final Document document, final String enclosedImage) {
 		final Snippet snippet = new Snippet();
 
 		// remove all objects
 		document.select("object").remove();
 
+		// find major image
+		snippet.articleImage = this.extractImage(document, enclosedImage);
+
 		// extract the snippet text
+		// this needs to be the last item in this method
+		// as we remove images and other clutter from the feed
 		String allText = document.body().text();
 		snippet.allText = allText;
 		snippet.snippetText = getPlainText(allText);
-
-		// find major image
-		snippet.articleImage = this.extractImage(document, enclosedImage);
 
 		return snippet;
 	}
@@ -136,6 +141,9 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 	}
 
 	private PostImage extractImageFromHtmlDocument(Document document) {
+		PostImage postImage = null;
+		
+		// loop on all images
 		Elements images = document.getElementsByTag("img");
 		if (images != null && images.size() > 0) {
 			int size = images.size();
@@ -157,16 +165,15 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 				String height = image.attr("height");
 				String width = image.attr("width");
 
-				PostImage postImage = this.filterImage(imageUrl, width, height);
-
-				// if we have the image - break out
-				if (postImage != null) {
-					return postImage;
+				if(postImage == null) {
+					// the reason we do not break here
+					// is to ensure that we can remove all removable images
+					postImage = this.filterImage(imageUrl, width, height);
 				}
 			}
 		}
 
-		return null;
+		return postImage;
 	}
 
 	private boolean isRemovableImage(String imageUrl) {
@@ -262,13 +269,7 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		return text;
 	}
 
-	protected String massageContent(String content, final String baseUrl) {
-		if (AssertUtils.isEmpty(content)) {
-			return content;
-		}
-
-		Document document = Jsoup.parse(content, baseUrl);
-
+	protected String massageContent(Document document, final String baseUrl) {
 		// remove all scripts
 		document.getElementsByTag("script").remove();
 
@@ -316,22 +317,6 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		return false;
 	}
 
-	protected void setFromSnippet(Post entry, Snippet snippet) {
-		if (snippet == null) {
-			entry.snippet = null;
-			entry.image = null;
-			entry.mainElement = null;
-			entry.thumbnail = null;
-			return;
-		}
-
-		entry.plainText = snippet.allText;
-		entry.snippet = snippet.snippetText;
-		entry.image = snippet.articleImage;
-		entry.mainElement = snippet.articleElement;
-		entry.thumbnail = snippet.thumb;
-	}
-
 	protected PostImage getPostImageWithDimensions(String url) {
 		WebResponse response = httpService.getResponse(url);
 		if (response == null || !response.isSuccess()) {
@@ -358,8 +343,6 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		public String snippetText;
 
 		public PostImage articleImage;
-
-		public PostImage thumb;
 
 		public String articleElement;
 
