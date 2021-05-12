@@ -1,5 +1,7 @@
 package com.sangupta.reread.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.jsoup.Jsoup;
@@ -9,14 +11,35 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sangupta.imagelib.ImageLibDimensions;
+import com.sangupta.imagelib.vo.ImageDimensions;
+import com.sangupta.jerry.http.WebResponse;
 import com.sangupta.jerry.http.service.HttpService;
 import com.sangupta.jerry.util.AssertUtils;
+import com.sangupta.jerry.util.StringUtils;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.entity.PostImage;
 import com.sangupta.reread.service.PostSnippetService;
 
 @Service
 public class DefaultPostSnippetServiceImpl implements PostSnippetService {
+
+	public static final int MIN_IMAGE_DIMENSION_HEIGHT = 20;
+
+	public static final int MIN_IMAGE_DIMENSION_WIDTH = 20;
+
+	public static final List<String> BLOCKED_IMAGE_URLs = new ArrayList<>();
+
+	public static final List<String> REMOVABLE_IMAGE_URLs = new ArrayList<>();
+
+	static {
+		// blocked
+		BLOCKED_IMAGE_URLs.add("https://fi1.ypncdn.com/");
+
+		// removable
+		REMOVABLE_IMAGE_URLs.add("http://feeds.feedburner.com/~ff");
+		REMOVABLE_IMAGE_URLs.add("https://feeds.feedburner.com/~ff");
+	}
 
 	public static final int HTML_SNIPPET_TEXT_LENGTH_MIN = 100;
 
@@ -58,10 +81,10 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 
 		content = massageContent(content, baseURL);
 		post.content = content;
-		
-		if(AssertUtils.isEmpty(post.title) && AssertUtils.isNotEmpty(post.snippet)) {
+
+		if (AssertUtils.isEmpty(post.title) && AssertUtils.isNotEmpty(post.snippet)) {
 			int len = post.snippet.length();
-			if(len <= 50) {
+			if (len <= 50) {
 				post.title = post.snippet;
 			} else {
 				// TODO: add ellipsis at the break of word
@@ -76,9 +99,8 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		}
 
 		// parse to find snippet text
-		final Document document = Jsoup.parse(content);
-
-		Snippet snippet = new Snippet();
+		final Document document = Jsoup.parse(content, feedURL);
+		final Snippet snippet = new Snippet();
 
 		// remove all objects
 		document.select("object").remove();
@@ -88,10 +110,86 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		snippet.allText = allText;
 		snippet.snippetText = getPlainText(allText);
 
+		// find major image
+		snippet.articleImage = this.extractImage(document, enclosedImage);
+
 		return snippet;
 	}
 
-	private static String getPlainText(String text) {
+	protected PostImage extractImage(Document document, String enclosedImage) {
+		PostImage image = null;
+
+		if (enclosedImage != null) {
+			image = this.getPostImageWithDimensions(enclosedImage);
+		}
+
+		if (image != null) {
+			return image;
+		}
+
+		return this.extractImageFromHtmlDocument(document);
+	}
+
+	private PostImage extractImageFromHtmlDocument(Document document) {
+		Elements images = document.getElementsByTag("img");
+		if (images != null && images.size() > 0) {
+			int size = images.size();
+			for (int index = 0; index < size; index++) {
+				Element image = images.get(index);
+				String imageUrl = image.absUrl("src");
+
+				// check for blocked urls
+				if (isBlockedUrl(imageUrl)) {
+					continue;
+				}
+
+				if (isRemovableImage(imageUrl)) {
+					image.remove();
+					continue;
+				}
+
+				// extract height and width
+				String height = image.attr("height");
+				String width = image.attr("width");
+
+				PostImage postImage = this.filterImage(imageUrl, width, height);
+
+				// if we have the image - break out
+				if (postImage != null) {
+					return postImage;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private boolean isRemovableImage(String imageUrl) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	protected PostImage filterImage(String url, String width, String height) {
+
+		int widthValue = StringUtils.getIntValue(width, 0);
+		int heightValue = StringUtils.getIntValue(height, 0);
+
+		if (heightValue >= MIN_IMAGE_DIMENSION_HEIGHT && widthValue >= MIN_IMAGE_DIMENSION_WIDTH) {
+			return new PostImage(url, widthValue, heightValue);
+		}
+
+		// send this over to the thumbnail server
+		PostImage image = this.getPostImageWithDimensions(url);
+		if (image != null) {
+			if (image.height >= MIN_IMAGE_DIMENSION_HEIGHT && image.width >= MIN_IMAGE_DIMENSION_WIDTH) {
+				return image;
+			}
+		}
+
+		return null;
+	}
+
+	protected static String getPlainText(String text) {
 		// if text is smaller, return as is
 		if (text.length() <= HTML_SNIPPET_TEXT_LENGTH_MIN) {
 			return text;
@@ -163,7 +261,7 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 
 		// remove all scripts
 		document.getElementsByTag("script").remove();
-		
+
 		// convert urls to absolute
 		convertToAbsoluteURI(document, "a", "href");
 		convertToAbsoluteURI(document, "img", "src");
@@ -198,6 +296,20 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		}
 	}
 
+	public static boolean isBlockedUrl(String url) {
+		if (AssertUtils.isEmpty(BLOCKED_IMAGE_URLs)) {
+			return false;
+		}
+
+		for (String blockedURL : BLOCKED_IMAGE_URLs) {
+			if (url.startsWith(blockedURL)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	protected void setFromSnippet(Post entry, Snippet snippet) {
 		if (snippet == null) {
 			entry.snippet = null;
@@ -214,8 +326,27 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		entry.thumbnail = snippet.thumb;
 	}
 
+	protected PostImage getPostImageWithDimensions(String url) {
+		WebResponse response = httpService.getResponse(url);
+		if (response == null || !response.isSuccess()) {
+			return null;
+		}
+
+		byte[] bytes = response.asBytes();
+		if (AssertUtils.isEmpty(bytes)) {
+			return null;
+		}
+
+		ImageDimensions dim = ImageLibDimensions.getImageDimensions(bytes);
+		if (dim == null) {
+			return null;
+		}
+
+		return new PostImage(url, dim.width, dim.height);
+	}
+
 	private static class Snippet {
-		
+
 		public String allText;
 
 		public String snippetText;
