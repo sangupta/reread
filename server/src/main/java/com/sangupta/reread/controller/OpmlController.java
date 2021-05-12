@@ -3,6 +3,8 @@ package com.sangupta.reread.controller;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,8 @@ import com.sangupta.reread.service.OpmlService;
 @RestController
 @RequestMapping("/opml")
 public class OpmlController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpmlController.class);
 	
 	@Autowired
 	protected OpmlService opmlService;
@@ -45,6 +49,8 @@ public class OpmlController {
 		
 		// schedule a background thread to refresh these feeds immediately
 		this.feedRefreshService.refreshFeeds(imported);
+		
+		LOGGER.info("OPML import is complete with {} feeds", imported.size());
 		
 		// all done
 		return feeds;

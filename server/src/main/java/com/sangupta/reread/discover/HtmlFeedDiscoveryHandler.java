@@ -23,11 +23,11 @@ import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.DiscoveredFeed;
 
 public class HtmlFeedDiscoveryHandler implements FeedDiscoveryHandler {
-	
+
 	public static final Logger LOGGER = LoggerFactory.getLogger(HtmlFeedDiscoveryHandler.class);
-	
+
 	protected HttpService httpService;
-	
+
 	@Override
 	public boolean canHandleDiscovery(String url, String host, String path) {
 		return true;
@@ -82,123 +82,123 @@ public class HtmlFeedDiscoveryHandler implements FeedDiscoveryHandler {
 				}
 			}
 		}
-		
+
 		// this should be an HTML file
 		// parse it up
 		return parseExpectingHtml(contentType, content, response.getCharSet(), url);
 	}
 
 	protected Set<DiscoveredFeed> parseExpectingHtml(String contentType, String content, Charset charSet, String url) {
-		if(AssertUtils.isEmpty(content)) {
+		if (AssertUtils.isEmpty(content)) {
 			return null;
 		}
-		
-		if(AssertUtils.isEmpty(contentType)) {
+
+		if (AssertUtils.isEmpty(contentType)) {
 			contentType = decipherContentTypeFromContent(content);
 		}
-		
+
 		int index = contentType.indexOf(';');
-		if(index > 0) {
+		if (index > 0) {
 			contentType = contentType.substring(0, index);
 		}
-		
-		if("text/html".equalsIgnoreCase(contentType)) {
+
+		if ("text/html".equalsIgnoreCase(contentType)) {
 			return parseHTML(url, content);
 		}
 
-		if("text/xml".equalsIgnoreCase(contentType) || "application/xml".equalsIgnoreCase(contentType)) {
-			if(charSet != null) {
+		if ("text/xml".equalsIgnoreCase(contentType) || "application/xml".equalsIgnoreCase(contentType)) {
+			if (charSet != null) {
 				return parseXML(url, content.getBytes(charSet));
 			}
-			
+
 			return parseXML(url, content.getBytes());
 		}
-		
+
 		LOGGER.debug("Unable to identify the content type: {}", contentType);
 		return null;
 	}
-	
+
 	protected Set<DiscoveredFeed> parseXML(String url, byte[] bytes) {
 		String type = isAtomOrRSSFeed(bytes);
-		if(type == null) {
+		if (type == null) {
 			return null;
 		}
-		
+
 		return Set.of(new DiscoveredFeed(url, "", type));
 	}
-	
+
 	protected Set<DiscoveredFeed> parseHTML(final String url, final String content) {
 		Document doc = Jsoup.parse(content, url);
-		if(doc == null) {
+		if (doc == null) {
 			LOGGER.error("Unable to parse HTML via JSOUP from URL: {}", url);
 			return null;
 		}
-		
+
 		final Set<DiscoveredFeed> feeds = new HashSet<>();
-		
+
 		// find links in header code
 		findHTMLAlternateLinks(url, doc, feeds);
-		
+
 		return feeds;
 	}
-	
+
 	protected void findHTMLAlternateLinks(final String url, Document doc, final Set<DiscoveredFeed> feeds) {
 		Elements elements = doc.getElementsByTag("link");
-		if(elements == null || elements.size() == 0) {
+		if (elements == null || elements.size() == 0) {
 			// no direct link tag found
 			return;
 		}
-		
-		for(int index = 0; index < elements.size(); index++) {
+
+		for (int index = 0; index < elements.size(); index++) {
 			Element element = elements.get(index);
-			if("alternate".equalsIgnoreCase(element.attr("rel"))) {
+			if ("alternate".equalsIgnoreCase(element.attr("rel"))) {
 				// we have a link with us
 				String title = element.attr("title");
 				String href = element.absUrl("href");
 				String type = element.attr("type");
-				
-				if(AssertUtils.isEmpty(href) || AssertUtils.isEmpty(type)) {
+
+				if (AssertUtils.isEmpty(href) || AssertUtils.isEmpty(type)) {
 					// skip this one
 					LOGGER.debug("No href/type specified for alternate in url: {}", url);
 					continue;
 				}
-				
+
 				feeds.add(new DiscoveredFeed(href, title, type));
 			}
 		}
 	}
-	
+
 	protected String decipherContentTypeFromContent(String content) {
 		content = content.trim();
-		
-		if(content.indexOf("<?xml") < 10) {
+
+		if (content.indexOf("<?xml") < 10) {
 			return "text/xml";
 		}
-		
-		if(content.indexOf("<html") < 10) {
+
+		if (content.indexOf("<html") < 10) {
 			return "text/html";
 		}
-		
+
 		return null;
 	}
-	
+
 	protected String isAtomOrRSSFeed(byte[] bytes) {
 		try {
-		    DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-		    f.setNamespaceAware(true);
-		    DocumentBuilder builder = f.newDocumentBuilder();
-		    org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(bytes));
-		    org.w3c.dom.Element e = doc.getDocumentElement(); 
-		    if(e.getLocalName().equals("feed") && e.getNamespaceURI().equals("http://www.w3.org/2005/Atom")) {
-		    	return "atom";
-		    }
-		    
-		    if(e.getLocalName().equals("rss")) {
-		    	return "rss";
-		    }
-		    
-		    return null;
-		} catch(Exception e) {
+			DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+			f.setNamespaceAware(true);
+			DocumentBuilder builder = f.newDocumentBuilder();
+			org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(bytes));
+			org.w3c.dom.Element e = doc.getDocumentElement();
+			if (e.getLocalName().equals("feed") && e.getNamespaceURI().equals("http://www.w3.org/2005/Atom")) {
+				return "atom";
+			}
+
+			if (e.getLocalName().equals("rss")) {
+				return "rss";
+			}
+
+			return null;
+		} catch (Exception e) {
 			return null;
 		}
 	}

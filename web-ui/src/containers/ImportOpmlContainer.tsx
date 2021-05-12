@@ -49,9 +49,9 @@ export default class ImportOpmlContainer extends React.Component<{}, ImportOpmlC
             <div className='opml-feed-list mt-3'>
                 <h2>Discovered Feeds</h2>
 
-                <div className='opml-feeds-container'>
+                <div className='opml-feeds-container scrollable'>
                     <ul>
-                        {opmlFeeds.map(item => <li>
+                        {opmlFeeds.map((item, index) => <li key={index}>
                             <a key={item.xmlUrl} href={item.xmlUrl}>{item.title}</a> (<a href={item.htmlUrl}>site</a>)
                     {this.showChildFeeds(item)}
                         </li>)}
@@ -67,8 +67,8 @@ export default class ImportOpmlContainer extends React.Component<{}, ImportOpmlC
         }
 
         return <ul>
-            {feed.children.map(item => <li>
-                <a key={item.xmlUrl} href={item.xmlUrl}>{item.title}</a> (<a href={item.htmlUrl}>site</a>)
+            {feed.children.map(item => <li key={item.xmlUrl} >
+                <a href={item.xmlUrl}>{item.title}</a> (<a href={item.htmlUrl}>site</a>)
             </li>)}
         </ul>
     }

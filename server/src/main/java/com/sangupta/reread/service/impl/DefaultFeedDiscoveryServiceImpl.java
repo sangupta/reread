@@ -25,7 +25,7 @@ public class DefaultFeedDiscoveryServiceImpl implements FeedDiscoveryService {
 
 	protected static final List<FeedDiscoveryHandler> HANDLERS = List.of(
 			// use feedly as the default handler for it provides us the icon/title/website
-			new FeedlyBasedDiscoveryHandler(),
+//			new FeedlyBasedDiscoveryHandler(),
 
 			// use non-HTTP based handlers next
 			new BlogspotDiscoveryHandler(),

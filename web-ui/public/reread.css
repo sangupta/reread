@@ -207,3 +207,8 @@ a.folder-toggle {
 .feed-list-link {
     align-items: flex-start;
 }
+
+.scrollable {
+    overflow-y: scroll;
+    max-height: 450px;
+}
