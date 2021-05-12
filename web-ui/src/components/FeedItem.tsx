@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { Feed } from '../api/Model';
+import Icon from './Icon';
 
 interface FeedItemProps {
     feed: Feed;
@@ -21,7 +22,9 @@ class FeedItem extends React.Component<FeedItemProps, any> {
         const { feed } = this.props;
 
         return <li>
-            <a href='#' className='link-dark rounded' onClick={this.showFeed}>{feed.title}</a>
+            <a href='#' className='link-dark rounded' onClick={this.showFeed}>
+                <Icon name='rss' label={feed.title} />
+            </a>
         </li>
     }
 
