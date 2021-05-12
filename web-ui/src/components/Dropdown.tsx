@@ -38,8 +38,29 @@ interface DropdownState {
 
 export default class Dropdown extends React.Component<DropdownProps, DropdownState> {
 
-    state = {
-        open: false
+    wrapperRef: React.RefObject<any>;
+
+    constructor(props: DropdownProps) {
+        super(props);
+
+        this.wrapperRef = React.createRef();
+        this.state = {
+            open: false
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    handleClickOutside = (event: any) => {
+        if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+            this.setState({ open: false });
+        }
     }
 
     toggleDropdown = () => {
@@ -60,7 +81,7 @@ export default class Dropdown extends React.Component<DropdownProps, DropdownSta
         const selectedOption = options.find(item => item.value === value);
         const dropdownLabel = selectedOption ? selectedOption.label : label;
 
-        return <div className="dropdown">
+        return <div className="dropdown" ref={this.wrapperRef}>
             <button className={'btn btn-outline-' + variant + ' btn-sm dropdown-toggle'} type="button" aria-expanded="false" onClick={this.toggleDropdown}>{dropdownLabel}</button>
             <ul className={'dropdown-menu ' + (open ? 'show' : '')}>
                 {options.map(option => <DropdownItem key={option.value} option={option} onClick={this.itemClicked} />)}
