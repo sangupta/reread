@@ -38,9 +38,9 @@ class Header extends React.Component {
 
                     <div className="text-end">
                         <Link className="btn btn-primary me-2" route='/addFeed'>+ Add</Link>
-                        <Link className="btn btn-secondary me-2" route='/settings'>
+                        {/* <Link className="btn btn-secondary me-2" route='/settings'>
                             <Icon name='gear' />
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </div>
