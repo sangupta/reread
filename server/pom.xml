@@ -153,13 +153,21 @@
 			<artifactId>imagelib</artifactId>
 			<version>master-SNAPSHOT</version>
 		</dependency>
-		
+
 		<!-- redis time series for analytics -->
 		<dependency>
 			<groupId>com.redislabs</groupId>
 			<artifactId>jredistimeseries</artifactId>
 			<version>1.4.0</version>
 		</dependency>
+
+		<!-- bloom filter for de-duping same post -->
+		<dependency>
+			<groupId>com.redislabs</groupId>
+			<artifactId>jrebloom</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

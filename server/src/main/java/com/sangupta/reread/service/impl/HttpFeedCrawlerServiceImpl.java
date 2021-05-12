@@ -89,6 +89,11 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 
 		this.updateEntities(masterFeed, details, parsedFeed, posts);
 		
+		// create snippets
+		for(Post post : posts) {
+			this.postSnippetService.createSnippet(parsedFeed.siteUrl, post);
+		}
+		
 		// de-dupe entries
 		this.postService.filterAlreadyExistingPosts(posts);
 		
@@ -97,11 +102,6 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 			// nothing to save
 			LOGGER.debug("No posts available to save after filtering for feed: {}", masterFeed);
 			return;
-		}
-		
-		// create snippets
-		for(Post post : posts) {
-			this.postSnippetService.createSnippet(parsedFeed.siteUrl, post);
 		}
 		
 		// store each post in DB

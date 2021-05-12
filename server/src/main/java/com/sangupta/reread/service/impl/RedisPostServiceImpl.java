@@ -1,5 +1,6 @@
 package com.sangupta.reread.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +8,15 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sangupta.jerry.util.AssertUtils;
+import com.sangupta.reread.SpringBeans;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
 import com.sangupta.reread.service.AnalyticsService;
 import com.sangupta.reread.service.FeedTimelineService;
 import com.sangupta.reread.service.PostSearchService;
 import com.sangupta.reread.service.PostService;
+
+import io.rebloom.client.Client;
 
 @Service
 public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implements PostService {
@@ -28,6 +32,8 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 	
 	@Autowired
 	protected AnalyticsService analyticsService;
+	
+	protected Client bloomFilter = new Client(SpringBeans.REDIS_HOST, SpringBeans.REDIS_PORT);
 
 	@Override
 	public void filterAlreadyExistingPosts(List<Post> posts) {
@@ -37,6 +43,30 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 
 		// this is to filter posts across all feeds and
 		// not just the same feed
+		Iterator<Post> postIterator = posts.iterator();
+		while(postIterator.hasNext()) {
+			Post post = postIterator.next();
+			boolean exists = this.bloomFilter.exists("bloom:hash", post.hash);
+			if(!exists) {
+				continue;
+			}
+			
+			// pure text
+			exists = this.bloomFilter.exists("bloom:text", post.plainText);
+			if(!exists) {
+				continue;
+			}
+			
+			// may exist
+			exists = this.bloomFilter.exists("bloom:uniqueID", post.uniqueID);
+			if(!exists) {
+				continue;
+			}
+			
+			// this post looks like already exists
+			// we will remove it
+			postIterator.remove();
+		}
 	}
 
 	@Override
@@ -47,6 +77,11 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 
 		for (Post post : posts) {
 			this.insert(post);
+			
+			// add to bloom filter
+			this.bloomFilter.add("bloom:hash", post.hash);
+			this.bloomFilter.add("bloom:text", post.plainText);
+			this.bloomFilter.add("bloom:uniqueID", post.uniqueID);
 			
 			// also index this post for search
 			this.postSearchService.indexPost(post);
