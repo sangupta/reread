@@ -119,6 +119,7 @@ body.modal-open {
 }
 
 .feed-list {
+    min-width: 220px;
     width: 280px;
     max-width: 280px;
     border-right: 1px solid #dee2e6;
