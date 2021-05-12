@@ -8,11 +8,16 @@ class BrickRenderer extends React.Component<any, any> {
 
     render() {
         const { data: post, itemIdx, isMeasuring } = this.props;
+        let hasImage = false;
+        if (post.image && post.image.url) {
+            hasImage = true;
+        }
 
         return <div className="card post-card">
-            {this.renderImage(post)}
-            <h5 className="card-header">{post.title}</h5>
+            {hasImage && this.renderImage(post)}
+            {!hasImage && <h5 className="card-header">{post.title}</h5>}
             <div className="card-body">
+                {hasImage && <h5 className="card-title">{post.title}</h5>}
                 <p className="card-text">{post.snippet}</p>
             </div>
             <div className="card-footer text-muted">
@@ -22,10 +27,6 @@ class BrickRenderer extends React.Component<any, any> {
     }
 
     renderImage(post: Post) {
-        if (!post.image || !post.image.url) {
-            return;
-        }
-
         const width = post.image.width;
         const height = post.image.height;
         const podWidth = 278;
