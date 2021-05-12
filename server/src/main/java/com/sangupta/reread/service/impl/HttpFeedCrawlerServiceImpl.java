@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sangupta.jerry.util.AssertUtils;
+import com.sangupta.jerry.util.DateUtils;
 import com.sangupta.reread.entity.FeedCrawlDetails;
 import com.sangupta.reread.entity.MasterFeed;
 import com.sangupta.reread.entity.ParsedFeed;
@@ -54,6 +55,15 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		// create details object as needed
 		FeedCrawlDetails details = this.feedCrawlDetailsService.get(masterFeedID);
 		
+		if(details != null) {
+			long delta = System.currentTimeMillis() - details.lastCrawled;
+			if(delta < DateUtils.ONE_MINUTE) {
+				LOGGER.info("Feed was crawled within last one minute, skipping");
+				return;
+			}
+		}
+
+		// create a new one if needed
 		if(details == null) {
 			LOGGER.debug("Feed has not been crawled before, creating details object for id: {}", masterFeed);
 			

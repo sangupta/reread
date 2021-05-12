@@ -19,6 +19,7 @@ import com.sangupta.reread.entity.MasterFeed;
 import com.sangupta.reread.service.FeedCrawlDetailsService;
 import com.sangupta.reread.service.FeedCrawlerService;
 import com.sangupta.reread.service.FeedRefreshService;
+import com.sangupta.reread.service.MasterFeedService;
 
 @Service
 public class AsyncFeedRefreshServiceImpl implements FeedRefreshService {
@@ -36,6 +37,9 @@ public class AsyncFeedRefreshServiceImpl implements FeedRefreshService {
 	
 	@Autowired
 	protected FeedCrawlerService feedCrawlerService;
+	
+	@Autowired
+	protected MasterFeedService masterFeedService;
 	
 	protected FeedRefreshJob job;
 	
@@ -118,6 +122,11 @@ public class AsyncFeedRefreshServiceImpl implements FeedRefreshService {
 
 		// start workers
 		job.startJobAsync(5);
+	}
+
+	@Override
+	public boolean refreshFeed(String masterFeedID) {
+		return this.refreshFeed(this.masterFeedService.get(masterFeedID));
 	}
 
 	@Override
