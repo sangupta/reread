@@ -58,9 +58,13 @@ public class RedisPostSearchServiceImpl implements PostSearchService {
 			return;
 		}
 		
+		if(AssertUtils.isEmpty(post.title)) {
+			System.out.println("break");
+		}
+		
 		Map<String, Object> fields = new HashMap<>();
 		fields.put("title", post.title);
-		fields.put("content", post.content);
+		fields.put("content", post.plainText);
 		fields.put("feedID", post.masterFeedID);
 		if(post.author != null) {
 			if(AssertUtils.isNotEmpty(post.author.name)) {

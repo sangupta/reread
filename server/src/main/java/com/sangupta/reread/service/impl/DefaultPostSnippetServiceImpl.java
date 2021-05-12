@@ -74,14 +74,14 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 		document.select("object").remove();
 
 		// extract the snippet text
-		snippet.text = getPlainText(document);
+		String allText = document.body().text();
+		snippet.allText = allText;
+		snippet.snippetText = getPlainText(allText);
 
 		return snippet;
 	}
 
-	private static String getPlainText(Document document) {
-		String text = document.body().text();
-
+	private static String getPlainText(String text) {
 		// if text is smaller, return as is
 		if (text.length() <= HTML_SNIPPET_TEXT_LENGTH_MIN) {
 			return text;
@@ -197,15 +197,18 @@ public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 			return;
 		}
 
-		entry.snippet = snippet.text;
+		entry.plainText = snippet.allText;
+		entry.snippet = snippet.snippetText;
 		entry.image = snippet.articleImage;
 		entry.mainElement = snippet.articleElement;
 		entry.thumbnail = snippet.thumb;
 	}
 
 	private static class Snippet {
+		
+		public String allText;
 
-		public String text;
+		public String snippetText;
 
 		public PostImage articleImage;
 

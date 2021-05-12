@@ -15,7 +15,15 @@ public class Post implements Comparable<Post> {
 	
 	public String baseUrl;
 	
+	/**
+	 * HTML content of the entry
+	 */
 	public String content;
+	
+	/**
+	 * Text used for indexing purpose and thus is declared transient
+	 */
+	public transient String plainText;
 	
 	public String snippet;
 	
