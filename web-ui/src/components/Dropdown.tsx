@@ -61,7 +61,7 @@ export default class Dropdown extends React.Component<DropdownProps, DropdownSta
         const dropdownLabel = selectedOption ? selectedOption.label : label;
 
         return <div className="dropdown">
-            <button className={'btn btn-outline-' + variant + ' dropdown-toggle'} type="button" aria-expanded="false" onClick={this.toggleDropdown}>{dropdownLabel}</button>
+            <button className={'btn btn-outline-' + variant + ' btn-sm dropdown-toggle'} type="button" aria-expanded="false" onClick={this.toggleDropdown}>{dropdownLabel}</button>
             <ul className={'dropdown-menu ' + (open ? 'show' : '')}>
                 {options.map(option => <DropdownItem key={option.value} option={option} onClick={this.itemClicked} />)}
             </ul>

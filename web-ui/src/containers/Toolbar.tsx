@@ -45,7 +45,7 @@ export default class Toolbar extends React.Component<ToolbarProps, {}> {
         const { sortOption, includeItems, layout } = this.props;
 
         return <div className='d-flex flex-row mb-2 post-toolbar'>
-            <button type="button" className="btn btn-outline-secondary mr-3" onClick={this.props.onRefresh}>
+            <button type="button" className="btn btn-sm btn-outline-secondary mr-3" onClick={this.props.onRefresh}>
                 <Icon name='arrow-clockwise' /> Refresh
             </button>
             
