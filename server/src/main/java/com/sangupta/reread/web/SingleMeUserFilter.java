@@ -17,11 +17,11 @@ import com.sangupta.reread.entity.User;
 @Component
 public class SingleMeUserFilter implements Filter, Ordered {
 	
-	private static final User USER = new User("me", "Friend");
+	public static final User USER_ME = new User("me", "Friend");
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-		SecurityContext.setPrincipal(USER);
+		SecurityContext.setPrincipal(USER_ME);
 		try {
 			filterChain.doFilter(request, response);
 		} finally {

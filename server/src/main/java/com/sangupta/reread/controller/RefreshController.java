@@ -1,18 +1,21 @@
 package com.sangupta.reread.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sangupta.jerry.security.SecurityContext;
+import com.sangupta.jerry.util.DateUtils;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedCrawlerService;
 import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedRefreshService;
+import com.sangupta.reread.web.SingleMeUserFilter;
 
 @RestController
 @RequestMapping("/refresh")
@@ -63,4 +66,11 @@ public class RefreshController {
 		
 		return "done";
 	}
+	
+	@Scheduled(fixedDelay = DateUtils.FIVE_MINUTES)
+	public void backgroundRefresh() {
+		SecurityContext.setPrincipal(SingleMeUserFilter.USER_ME);
+		this.refreshAll();
+	}
+	
 }

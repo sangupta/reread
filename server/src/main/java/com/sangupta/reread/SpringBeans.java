@@ -6,12 +6,14 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.jerry.http.service.HttpService;
 import com.sangupta.jerry.http.service.impl.DefaultHttpServiceImpl;
 
 @Configuration
+@EnableScheduling
 public class SpringBeans {
 	
 	public static final String REDIS_HOST = "localhost";
