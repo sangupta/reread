@@ -34,6 +34,15 @@ public class FeedParser {
 	private static final Set<String> VALID_IMAGE_TYPES = Set.of("image/png", "image/gif", "image/jpg", "image/jpeg");
 
 	public static ParsedFeed parse(String masterFeedID, String feedContents) {
+		try {
+			return parseInternal(masterFeedID, feedContents);
+		} catch(RuntimeException e) {
+			LOGGER.error("Unable to parse contents for feedID: " + masterFeedID, e);
+			return null;
+		}
+	}
+	
+	protected static ParsedFeed parseInternal(String masterFeedID, String feedContents) {
 		SyndFeed feed = extractSyndFeed(masterFeedID, feedContents);
 		if (feed == null) {
 			LOGGER.error("Feed object is null for contents: {}", feedContents);
@@ -83,7 +92,7 @@ public class FeedParser {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static SyndFeed extractSyndFeed(String masterFeedID, String feedContents) {
+	protected static SyndFeed extractSyndFeed(String masterFeedID, String feedContents) {
 		if (AssertUtils.isEmpty(feedContents)) {
 			return null;
 		}
@@ -149,7 +158,7 @@ public class FeedParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static ParsedFeed getParsedFeed(final String masterFeedID, final SyndFeed feed) {
+	protected static ParsedFeed getParsedFeed(final String masterFeedID, final SyndFeed feed) {
 		final ParsedFeed parsedFeed = new ParsedFeed();
 		parsedFeed.feedTitle = feed.getTitle();
 		parsedFeed.siteUrl = feed.getLink();
@@ -183,7 +192,7 @@ public class FeedParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Post extractParsedFeedEntry(SyndEntry entry, final String baseURL, final long timeDifference) {
+	protected static Post extractParsedFeedEntry(SyndEntry entry, final String baseURL, final long timeDifference) {
 		Post post = new Post();
 
 		// get the author
@@ -264,11 +273,11 @@ public class FeedParser {
 		return post;
 	}
 
-	private static boolean isImageType(String type) {
+	protected static boolean isImageType(String type) {
 		return VALID_IMAGE_TYPES.contains(type);
 	}
 
-	private static String extractLink(List<SyndLink> links, String linkRel) {
+	protected static String extractLink(List<SyndLink> links, String linkRel) {
 		if (links == null || links.isEmpty()) {
 			return null;
 		}

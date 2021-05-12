@@ -32,21 +32,26 @@ public class FeedlyBasedDiscoveryHandler implements FeedDiscoveryHandler {
 			return null;
 		}
 		
-		FeedlyResults fr = GsonUtils.getGson().fromJson(json, FeedlyResults.class);
-		if(fr == null || AssertUtils.isEmpty(fr.results)) {
+		FeedlyResults feedlyResults = GsonUtils.getGson().fromJson(json, FeedlyResults.class);
+		if(feedlyResults == null || AssertUtils.isEmpty(feedlyResults.results)) {
 			return null;
 		}
 		
 		Set<DiscoveredFeed> set = new HashSet<>();
-		for(FeedlyResult r : fr.results) {
-			String feedUrl = r.id;
+		for(FeedlyResult feedlyResult : feedlyResults.results) {
+			String feedUrl = feedlyResult.id;
 			if(feedUrl.startsWith("feed/")) {
 				feedUrl = feedUrl.substring(5);
 			}
 			
-			DiscoveredFeed df = new DiscoveredFeed(feedUrl, r.websiteTitle, "rss");
-			df.iconUrl = r.iconUrl;
-			df.siteUrl = r.website;
+			String title = feedlyResult.title;
+			if(AssertUtils.isEmpty(title)) {
+				title = feedlyResult.websiteTitle;
+			}
+			
+			DiscoveredFeed df = new DiscoveredFeed(feedUrl, title, "rss");
+			df.iconUrl = feedlyResult.iconUrl;
+			df.siteUrl = feedlyResult.website;
 			set.add(df);
 		}
 		
@@ -62,6 +67,7 @@ public class FeedlyBasedDiscoveryHandler implements FeedDiscoveryHandler {
 		public String id;
 		public String iconUrl;
 		public String website;
+		public String title;
 	}
 	
 }

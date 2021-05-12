@@ -28,7 +28,7 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 	@Override
 	public MasterFeed subscribe(MasterFeed mf) {
 		// find master feed for one
-		MasterFeed feed = this.masterFeedService.getOrCreateFeedForUrl(mf);
+		MasterFeed feed = this.masterFeedService.getOrCreateFeed(mf);
 		
 		// add the same to the user's subscribe list
 		FeedList feedList = this.feedListService.getOrCreate(SecurityContext.getUserID());

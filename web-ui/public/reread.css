@@ -193,3 +193,17 @@ a.folder-toggle {
 .card-magazine {
     margin: 10px 20px;
 }
+
+.feed-list-icon {
+    max-width: 16px;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    object-fit: contain;
+    margin-right: 8px;
+    padding-top: 5px;
+}
+
+.feed-list-link {
+    align-items: flex-start;
+}

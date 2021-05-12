@@ -13,18 +13,23 @@ import com.sangupta.reread.service.MasterFeedService;
 public class RedisMasterFeedServiceImpl extends RedisDataStoreServiceImpl<MasterFeed> implements MasterFeedService {
 
 	@Override
-	public MasterFeed getOrCreateFeedForUrl(MasterFeed mf) {
-		return this.getOrCreateFeedForUrl(null, mf);
+	public MasterFeed getOrCreateFeed(MasterFeed mf) {
+		return this.getOrCreateInternal(null, mf);
+	}
+	
+	@Override
+	public MasterFeed getOrCreateFeed(List<MasterFeed> masterFeeds, MasterFeed mf) {
+		return this.getOrCreateInternal(masterFeeds, mf);
 	}
 
 	public MasterFeed getOrCreateFeedForUrl(List<MasterFeed> masterFeeds, String title, String url) {
 		MasterFeed mf = new MasterFeed(url);
 		mf.title = title;
 		
-		return this.getOrCreateFeedForUrl(null, mf);
+		return this.getOrCreateInternal(null, mf);
 	}
 
-	protected MasterFeed getOrCreateFeedForUrl(List<MasterFeed> masterFeeds, MasterFeed feedToAdd) {
+	protected MasterFeed getOrCreateInternal(List<MasterFeed> masterFeeds, MasterFeed feedToAdd) {
 		if (masterFeeds == null) {
 			masterFeeds = this.getAll();
 		}

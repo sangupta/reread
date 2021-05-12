@@ -26,6 +26,13 @@ public class MasterFeed {
 		this.normalizedUrl = normalizeUrl(url);
 	}
 
+	public MasterFeed(DiscoveredFeed df) {
+		this(df.feedUrl);
+		this.siteUrl = df.siteUrl;
+		this.iconUrl = df.iconUrl;
+		this.title = df.title;
+	}
+
 	public static String getNormalizedUrl(String url) {
 		return normalizeUrl(UrlCanonicalizer.canonicalize(url));
 	}
