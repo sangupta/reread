@@ -14,8 +14,8 @@ import com.sangupta.jerry.http.service.impl.DefaultHttpServiceImpl;
 @Configuration
 public class SpringBeans {
 	
-	public final String REDIS_HOST = "localhost";
-	public final int REDIS_PORT = 6379;
+	public static final String REDIS_HOST = "localhost";
+	public static final int REDIS_PORT = 6379;
 	
 	@Bean
 	public JedisConnectionFactory redisConnectionFactory() {

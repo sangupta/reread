@@ -153,6 +153,13 @@
 			<artifactId>imagelib</artifactId>
 			<version>master-SNAPSHOT</version>
 		</dependency>
+		
+		<!-- redis time series for analytics -->
+		<dependency>
+			<groupId>com.redislabs</groupId>
+			<artifactId>jredistimeseries</artifactId>
+			<version>1.4.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

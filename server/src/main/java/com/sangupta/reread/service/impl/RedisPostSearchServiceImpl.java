@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sangupta.jerry.util.AssertUtils;
+import com.sangupta.reread.SpringBeans;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.service.PostSearchService;
 import com.sangupta.reread.service.PostService;
@@ -32,7 +33,7 @@ public class RedisPostSearchServiceImpl implements PostSearchService {
 	protected Client redisSearchClient;
 
 	public RedisPostSearchServiceImpl() {
-		this.redisSearchClient = new Client("postSearch", "localhost", 6379);
+		this.redisSearchClient = new Client("postSearch", SpringBeans.REDIS_HOST, SpringBeans.REDIS_PORT);
 	}
 
 	@PostConstruct

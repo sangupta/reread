@@ -21,8 +21,10 @@ import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.entity.Post;
+import com.sangupta.reread.entity.UserActivity;
 import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
+import com.sangupta.reread.service.AnalyticsService;
 import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedTimelineService;
 import com.sangupta.reread.service.PostSearchService;
@@ -40,9 +42,12 @@ public class PostsController {
 
 	@Autowired
 	protected FeedListService feedListService;
-	
+
 	@Autowired
 	protected PostSearchService postSearchService;
+
+	@Autowired
+	protected AnalyticsService analyticsService;
 
 	@GetMapping("/all")
 	public List<Post> getAllPosts() {
@@ -50,7 +55,7 @@ public class PostsController {
 		this.addPostsForTimeline(posts, FeedTimelineService.ALL_TIMELINE_ID);
 		return posts;
 	}
-	
+
 	@GetMapping("/stars")
 	public List<Post> getStarredPosts() {
 		List<Post> posts = new ArrayList<>();
@@ -58,7 +63,7 @@ public class PostsController {
 		this.addPostsForIDs(posts, ids);
 		return posts;
 	}
-	
+
 	@GetMapping("/bookmarks")
 	public List<Post> getBookmarkedPosts() {
 		List<Post> posts = new ArrayList<>();
@@ -75,30 +80,36 @@ public class PostsController {
 
 		return posts;
 	}
-	
+
 	@GetMapping("/read/{postID}")
 	public Post markPostRead(@PathVariable String postID) {
-		return this.postService.markRead(postID);
+		Post post = this.postService.markRead(postID);
+		this.analyticsService.recordUserActivity(UserActivity.READ, post);
+		return post;
 	}
-	
+
 	@GetMapping("/unread/{postID}")
 	public Post markPostUnread(@PathVariable String postID) {
 		return this.postService.markUnread(postID);
 	}
-	
+
 	@GetMapping("/star/{postID}")
 	public Post starPost(@PathVariable String postID) {
-		return this.postService.starPost(postID);
+		Post post = this.postService.starPost(postID);
+		this.analyticsService.recordUserActivity(UserActivity.READ, post);
+		return post;
 	}
 
 	@GetMapping("/unstar/{postID}")
 	public Post unstarPost(@PathVariable String postID) {
 		return this.postService.unstarPost(postID);
 	}
-	
+
 	@GetMapping("/bookmark/{postID}")
 	public Post bookmark(@PathVariable String postID) {
-		return this.postService.bookmarkPost(postID);
+		Post post = this.postService.bookmarkPost(postID);
+		this.analyticsService.recordUserActivity(UserActivity.READ, post);
+		return post;
 	}
 
 	@GetMapping("/unbookmark/{postID}")
@@ -122,55 +133,55 @@ public class PostsController {
 		for (UserFeed feed : folder.childFeeds) {
 			this.addPostsForTimeline(posts, feed.masterFeedID);
 		}
-		
+
 		Collections.sort(posts);
 		return posts;
 	}
-	
+
 	@PostMapping("/markAllRead")
 	public List<Post> markAllRead(@RequestBody List<String> ids) {
-		if(AssertUtils.isEmpty(ids)) {
+		if (AssertUtils.isEmpty(ids)) {
 			throw new HttpException(HttpStatusCode.BAD_REQUEST);
 		}
-		
+
 		List<Post> posts = new ArrayList<>();
-		for(String id : ids) {
+		for (String id : ids) {
 			Post post = this.postService.markRead(id);
-			if(post != null) {
+			if (post != null) {
 				posts.add(post);
 			}
 		}
-		
+
 		return posts;
 	}
-	
+
 	@PostMapping("/markAllUnread")
 	public List<Post> markAllUnread(@RequestBody List<String> ids) {
-		if(AssertUtils.isEmpty(ids)) {
+		if (AssertUtils.isEmpty(ids)) {
 			throw new HttpException(HttpStatusCode.BAD_REQUEST);
 		}
-		
+
 		List<Post> posts = new ArrayList<>();
-		for(String id : ids) {			
+		for (String id : ids) {
 			Post post = this.postService.markUnread(id);
-			if(post != null) {
+			if (post != null) {
 				posts.add(post);
 			}
 		}
-		
+
 		return posts;
 	}
-	
+
 	@GetMapping("/search")
 	public List<Post> search(@RequestParam String query) {
 		return this.postSearchService.search(query);
 	}
-	
+
 	protected void addPostsForTimeline(List<Post> posts, String timelineID) {
 		List<String> timeline = this.feedTimelineService.getTimeLine(timelineID);
 		this.addPostsForIDs(posts, timeline);
 	}
-	
+
 	protected void addPostsForIDs(List<Post> posts, Collection<String> timeline) {
 		if (AssertUtils.isEmpty(timeline)) {
 			return;
@@ -178,7 +189,7 @@ public class PostsController {
 
 		for (String postID : timeline) {
 			Post post = this.postService.get(postID);
-			if(post != null) {
+			if (post != null) {
 				posts.add(post);
 			}
 		}

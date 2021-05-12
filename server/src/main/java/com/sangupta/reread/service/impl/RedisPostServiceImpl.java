@@ -11,6 +11,7 @@ import com.sangupta.jerry.util.HashUtils;
 import com.sangupta.reread.entity.ParsedFeed;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
+import com.sangupta.reread.service.AnalyticsService;
 import com.sangupta.reread.service.FeedTimelineService;
 import com.sangupta.reread.service.PostSearchService;
 import com.sangupta.reread.service.PostService;
@@ -26,6 +27,9 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 
 	@Autowired
 	protected FeedTimelineService feedTimelineService;
+	
+	@Autowired
+	protected AnalyticsService analyticsService;
 
 	@Override
 	public void filterAlreadyExistingPosts(ParsedFeed parsedFeed) {
@@ -51,10 +55,13 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 
 		for (Post post : posts) {
 			this.insert(post);
-
+			
 			// also index this post for search
 			this.postSearchService.indexPost(post);
 		}
+
+		// track via analytics
+		this.analyticsService.recordNewPosts(posts);
 	}
 
 	@Override
