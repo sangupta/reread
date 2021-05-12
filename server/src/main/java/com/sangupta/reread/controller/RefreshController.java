@@ -6,7 +6,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sangupta.jerry.security.SecurityContext;
+import com.sangupta.reread.entity.FeedList;
+import com.sangupta.reread.entity.UserFeed;
+import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedCrawlerService;
+import com.sangupta.reread.service.FeedListService;
+import com.sangupta.reread.service.FeedRefreshService;
 
 @RestController
 @RequestMapping("/refresh")
@@ -15,6 +21,12 @@ public class RefreshController {
 	@Autowired
 	protected FeedCrawlerService feedCrawlerService;
 
+	@Autowired
+	protected FeedListService feedListService;
+	
+	@Autowired
+	protected FeedRefreshService feedRefreshService;
+	
 	@GetMapping("/feed/{feedID}")
 	public String refreshFeed(@PathVariable String feedID) {
 		this.feedCrawlerService.crawlFeed(feedID);
@@ -23,6 +35,32 @@ public class RefreshController {
 	
 	@GetMapping("/folder/{folderID}")
 	public String refreshFolder(@PathVariable String folderID) {
+		FeedList list = this.feedListService.get(SecurityContext.getUserID());
+		UserFeedFolder folder = list.getFolder(folderID);
+		
+		for(UserFeed feed : folder.childFeeds) {
+			this.feedRefreshService.refreshFeed(feed.masterFeedID);
+		}
+		
+		return "done";
+	}
+	
+	@GetMapping("/all")
+	public String refreshAll() {
+		FeedList list = this.feedListService.get(SecurityContext.getUserID());
+
+		// folders
+		for(UserFeedFolder folder : list.folders) {
+			for(UserFeed feed : folder.childFeeds) {
+				this.feedRefreshService.refreshFeed(feed.masterFeedID);
+			}
+		}
+		
+		// individual feeds
+		for(UserFeed feed : list.feeds) {
+			this.feedRefreshService.refreshFeed(feed.masterFeedID);
+		}
+		
 		return "done";
 	}
 }

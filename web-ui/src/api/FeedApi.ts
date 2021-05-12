@@ -55,5 +55,9 @@ export default class FeedApi {
         const response = await Axios.get('/refresh/folder/' + folderID);
         return response.data;
     }
-    
+
+    static async refreshAll() {
+        const response = await Axios.get('/refresh/all');
+        return response.data;
+    }
 }

@@ -6,8 +6,10 @@ import com.sangupta.reread.entity.MasterFeed;
 
 public interface FeedRefreshService {
 
+	public boolean refreshFeed(String masterFeedID);
+	
 	public boolean refreshFeed(MasterFeed feed);
 	
 	public boolean refreshFeeds(List<MasterFeed> feeds);
-	
+
 }

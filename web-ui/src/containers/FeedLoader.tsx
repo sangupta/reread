@@ -77,6 +77,10 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             await FeedApi.refreshFolder(folderID);
         }
 
+        if(mode === 'all') {
+            await FeedApi.refreshAll();
+        }
+
         // reload data from server
         this.fetchData(mode, feedID, folderID);
     }
