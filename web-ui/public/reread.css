@@ -212,3 +212,38 @@ a.folder-toggle {
     overflow-y: scroll;
     max-height: 450px;
 }
+
+/** Below are styles for post content modal */
+
+.post-details img {
+    vertical-align: initial;
+    max-width: 600px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: auto;
+    height: auto;
+}
+
+.post-details h1 {
+    font-size: 28px;
+}
+
+.post-details h2 {
+    font-size: 24px;
+}
+
+.post-details h3 {
+    font-size: 20px;
+}
+
+.post-details h4 {
+    font-size: 18px;
+}
+
+.post-details h5 {
+    font-size: 16px;
+}
+
+.post-details h6 {
+    font-size: 14px;
+}
