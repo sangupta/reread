@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ListLayout from '../layout/ListLayout';
-import CardLayout from '../layout/CardLayout';
+import MasonryLayout from '../layout/MasonryLayout';
 
 import { Post } from '../api/Model';
 import PostView from './PostView';
@@ -144,7 +144,7 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
 
             case 'cards':
             default:
-                Element = CardLayout;
+                Element = MasonryLayout;
                 break;
     
         }

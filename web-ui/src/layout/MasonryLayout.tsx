@@ -2,8 +2,9 @@ import React from 'react';
 import { Masonry } from 'gestalt';
 import 'gestalt/dist/gestalt.css';
 import { Post } from '../api/Model';
+import TimeAgo from '../components/TimeAgo';
 
-class CardRenderer extends React.Component<any, any> {
+class BrickRenderer extends React.Component<any, any> {
 
     render() {
         return this.renderMasonry();
@@ -21,17 +22,19 @@ class CardRenderer extends React.Component<any, any> {
 
     renderContent = (post: Post) => {
         return <div className="card post-card">
-            {/* <img src="http://i.imgur.com/PlMvMqN.jpg" className="card-img-top" alt="..." width='278px' height='165px' /> */}
+            <h5 className="card-header">{post.title}</h5>
             <div className="card-body">
-                <h5 className="card-title">{post.title}</h5>
                 <p className="card-text">{post.snippet}</p>
                 <a href="#" className="btn btn-primary">Go somewhere</a>
+            </div>
+            <div className="card-footer text-muted">
+                <small><TimeAgo millis={post.updated} /></small>
             </div>
         </div>
     }
 }
 
-export default class CardLayout extends React.Component<any, any> {
+export default class MasonryLayout extends React.Component<any, any> {
 
     getContentPane() {
         return document.querySelector('.content-pane');
@@ -40,7 +43,7 @@ export default class CardLayout extends React.Component<any, any> {
     render() {
         const { posts } = this.props;
 
-        return <Masonry comp={CardRenderer}
+        return <Masonry comp={BrickRenderer}
             items={posts}
             virtualize={true} scrollContainer={this.getContentPane}
             virtualBoundsBottom={1000}
