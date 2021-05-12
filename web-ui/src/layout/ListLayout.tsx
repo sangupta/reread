@@ -22,7 +22,7 @@ class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItem
     }
 
     componentDidUpdate(prevProps: any) {
-        if(this.props.post === prevProps.post) {
+        if (this.props.post === prevProps.post) {
             return;
         }
         const { postRead } = this.state;
@@ -67,16 +67,12 @@ export default class ListLayout extends React.Component<ListLayoutProps, any> {
     render() {
         const { posts } = this.props;
 
-        return <div className='row'>
-            <div className='col'>
-                <div className='list-group list-group-flush border-bottom scrollarea'>
-                    {posts.map(item =>
-                        <ListLayoutItem key={item.feedPostID}
-                            post={item}
-                            onShowPost={this.props.onShowPost} />
-                    )}
-                </div>
-            </div>
+        return <div className='list-group list-group-flush border-bottom scrollarea'>
+            {posts.map(item =>
+                <ListLayoutItem key={item.feedPostID}
+                    post={item}
+                    onShowPost={this.props.onShowPost} />
+            )}
         </div>
     }
 
