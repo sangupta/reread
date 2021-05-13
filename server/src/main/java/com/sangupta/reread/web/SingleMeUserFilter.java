@@ -14,6 +14,13 @@ import org.springframework.stereotype.Component;
 import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.reread.entity.User;
 
+/**
+ * A {@link Filter} implementation that sets the same user
+ * for every request that we process.
+ * 
+ * @author sangupta
+ *
+ */
 @Component
 public class SingleMeUserFilter implements Filter, Ordered {
 	

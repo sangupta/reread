@@ -9,6 +9,12 @@ import com.sangupta.jerry.util.GsonUtils;
 import com.sangupta.jerry.util.UriUtils;
 import com.sangupta.reread.entity.DiscoveredFeed;
 
+/**
+ * Discovery handler that uses Feedly service for discovery.
+ * 
+ * @author sangupta
+ *
+ */
 public class FeedlyBasedDiscoveryHandler implements FeedDiscoveryHandler {
 	
 	protected HttpService httpService;

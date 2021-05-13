@@ -22,6 +22,12 @@ import com.sangupta.jerry.http.service.HttpService;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.DiscoveredFeed;
 
+/**
+ * Our HTML parsing based discovery handler.
+ * 
+ * @author sangupta
+ *
+ */
 public class HtmlFeedDiscoveryHandler implements FeedDiscoveryHandler {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(HtmlFeedDiscoveryHandler.class);

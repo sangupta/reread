@@ -5,6 +5,13 @@ import java.util.List;
 
 import com.sangupta.jerry.util.AssertUtils;
 
+/**
+ * Stores details about one folder in the user's
+ * {@link FeedList}.
+ * 
+ * @author sangupta
+ *
+ */
 public class UserFeedFolder {
 	
 	public String folderID;

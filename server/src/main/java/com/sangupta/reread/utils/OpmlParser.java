@@ -11,8 +11,21 @@ import org.jsoup.select.Elements;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.OpmlFeed;
 
+/**
+ * Utility class to parse an OPML file.
+ * 
+ * @author sangupta
+ *
+ */
 public class OpmlParser {
 	
+	/**
+	 * Parse an OPML file represented as {@link String} in correct
+	 * encoding.
+	 * 
+	 * @param opml
+	 * @return
+	 */
 	public static List<OpmlFeed> parse(String opml) {
 		if (AssertUtils.isEmpty(opml)) {
 			return null;

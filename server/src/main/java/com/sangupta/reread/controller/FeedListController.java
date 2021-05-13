@@ -17,6 +17,12 @@ import com.sangupta.reread.service.FeedDiscoveryService;
 import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedSubscriptionService;
 
+/**
+ * REST end points related to everything with feeds.
+ * 
+ * @author sangupta
+ *
+ */
 @RestController
 @RequestMapping("/feeds")
 public class FeedListController {
@@ -30,11 +36,22 @@ public class FeedListController {
 	@Autowired
 	protected FeedDiscoveryService feedDiscoveryService;
 
+	/**
+	 * Retrieve feed list for the user.
+	 * 
+	 * @return
+	 */
 	@GetMapping("/me")
 	public FeedList getFeedList() {
 		return this.feedListService.getOrCreate(SecurityContext.getUserID());
 	}
 
+	/**
+	 * Subscribe a user to a new feed.
+	 * 
+	 * @param payload
+	 * @return
+	 */
 	@PostMapping("/subscribe")
 	public MasterFeed subscribe(@RequestBody FeedControllerPayload payload) {
 		MasterFeed mf = new MasterFeed(payload.url);
@@ -46,16 +63,34 @@ public class FeedListController {
 		return this.feedSubscriptionService.subscribe(mf);
 	}
 
+	/**
+	 * Unsubscribe the user from this feed.
+	 * 
+	 * @param payload
+	 * @return
+	 */
 	@PostMapping("/unsubscribe")
 	public FeedList unsubscribe(@RequestBody FeedControllerPayload payload) {
 		return this.feedSubscriptionService.unsubscribe(payload.feedID);
 	}
 
+	/**
+	 * Discover if feeds are available for a given site URL.
+	 * 
+	 * @param payload
+	 * @return
+	 */
 	@PostMapping("/discover")
 	public Set<DiscoveredFeed> discoverFeed(@RequestBody FeedControllerPayload payload) {
 		return this.feedDiscoveryService.discoverFeeds(payload.url);
 	}
 
+	/**
+	 * Request/Response payload class.
+	 * 
+	 * @author sangupta
+	 *
+	 */
 	@SuppressWarnings("unused")
 	private static class FeedControllerPayload {
 		String url;

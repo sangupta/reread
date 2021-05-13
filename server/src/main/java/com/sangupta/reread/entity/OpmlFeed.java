@@ -3,9 +3,16 @@ package com.sangupta.reread.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents one feed in the OPML file.
+ * Entity is not written to DB.
+ * 
+ * @author sangupta
+ *
+ */
 public class OpmlFeed {
 	
-public String text;
+	public String text;
 	
 	public String title;
 	

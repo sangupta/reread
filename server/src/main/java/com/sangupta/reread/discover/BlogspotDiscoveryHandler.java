@@ -5,6 +5,12 @@ import java.util.Set;
 import com.sangupta.jerry.http.service.HttpService;
 import com.sangupta.reread.entity.DiscoveredFeed;
 
+/**
+ * Quick handler that generates RSS feed urls for Blogspot site.
+ * 
+ * @author sangupta
+ *
+ */
 public class BlogspotDiscoveryHandler implements FeedDiscoveryHandler {
 	
 	protected HttpService httpService;

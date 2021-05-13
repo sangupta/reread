@@ -12,6 +12,12 @@ import com.sangupta.reread.service.FeedCrawlDetailsService;
 import com.sangupta.reread.service.FeedTimelineService;
 import com.sangupta.reread.service.MasterFeedService;
 
+/**
+ * REST controller which serves details to client about a single feed.
+ * 
+ * @author sangupta
+ *
+ */
 @RestController
 @RequestMapping("/details")
 public class DetailsController {

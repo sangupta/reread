@@ -7,11 +7,20 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Service;
 
 import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.jerry.http.service.HttpService;
 import com.sangupta.jerry.http.service.impl.DefaultHttpServiceImpl;
 
+/**
+ * Configuration for Spring based beans that need to be configured.
+ * Implementations to our own services is done using {@link Service}
+ * annotation.
+ * 
+ * @author sangupta
+ *
+ */
 @Configuration
 @EnableScheduling
 public class SpringBeans {

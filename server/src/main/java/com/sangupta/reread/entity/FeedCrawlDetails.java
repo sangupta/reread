@@ -2,6 +2,13 @@ package com.sangupta.reread.entity;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Stores details about crawling one single feed. This
+ * entity is written to DB.
+ * 
+ * @author sangupta
+ *
+ */
 public class FeedCrawlDetails {
 
 	@Id

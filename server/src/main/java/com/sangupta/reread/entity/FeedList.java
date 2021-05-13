@@ -8,6 +8,13 @@ import org.springframework.data.annotation.Id;
 
 import com.sangupta.jerry.util.AssertUtils;
 
+/**
+ * Stores entire feed list for a given user as individual feeds
+ * as well as in folders. Entity is written to DB.
+ * 
+ * @author sangupta
+ *
+ */
 public class FeedList {
 	
 	@Id

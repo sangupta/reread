@@ -1,5 +1,12 @@
 package com.sangupta.reread.entity;
 
+/**
+ * Entity holding information about one feed discovered from 
+ * a given URL. It is not written to DB.
+ * 
+ * @author sangupta
+ *
+ */
 public class DiscoveredFeed {
 	
 	public String feedUrl;

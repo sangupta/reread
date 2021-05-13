@@ -30,6 +30,12 @@ import com.sangupta.reread.service.FeedTimelineService;
 import com.sangupta.reread.service.PostSearchService;
 import com.sangupta.reread.service.PostService;
 
+/**
+ * REST end points dedicated to all about posts.
+ * 
+ * @author sangupta
+ *
+ */
 @RestController
 @RequestMapping("/posts")
 public class PostsController {
@@ -49,6 +55,11 @@ public class PostsController {
 	@Autowired
 	protected AnalyticsService analyticsService;
 
+	/**
+	 * Get posts about the All timeline.
+	 * 
+	 * @return
+	 */
 	@GetMapping("/all")
 	public List<Post> getAllPosts() {
 		List<Post> posts = new ArrayList<>();
@@ -56,6 +67,11 @@ public class PostsController {
 		return posts;
 	}
 
+	/**
+	 * Get posts about the Stars timeline.
+	 * 
+	 * @return
+	 */
 	@GetMapping("/stars")
 	public List<Post> getStarredPosts() {
 		List<Post> posts = new ArrayList<>();
@@ -64,6 +80,11 @@ public class PostsController {
 		return posts;
 	}
 
+	/**
+	 * Get posts about the Bookmarks timeline.
+	 * 
+	 * @return
+	 */
 	@GetMapping("/bookmarks")
 	public List<Post> getBookmarkedPosts() {
 		List<Post> posts = new ArrayList<>();
@@ -72,6 +93,12 @@ public class PostsController {
 		return posts;
 	}
 
+	/**
+	 * Get posts about a single feed.
+	 * 
+	 * @param feedID
+	 * @return
+	 */
 	@GetMapping("/feed/{feedID}")
 	public List<Post> getFeedPosts(@PathVariable String feedID) {
 		List<Post> posts = new ArrayList<>();
@@ -81,6 +108,12 @@ public class PostsController {
 		return posts;
 	}
 
+	/**
+	 * Mark a given post as read
+	 * 
+	 * @param postID
+	 * @return
+	 */
 	@GetMapping("/read/{postID}")
 	public Post markPostRead(@PathVariable String postID) {
 		Post post = this.postService.markRead(postID);
@@ -88,11 +121,23 @@ public class PostsController {
 		return post;
 	}
 
+	/**
+	 * Mark a given post as unread
+	 * 
+	 * @param postID
+	 * @return
+	 */
 	@GetMapping("/unread/{postID}")
 	public Post markPostUnread(@PathVariable String postID) {
 		return this.postService.markUnread(postID);
 	}
 
+	/**
+	 * Star a given post
+	 * 
+	 * @param postID
+	 * @return
+	 */
 	@GetMapping("/star/{postID}")
 	public Post starPost(@PathVariable String postID) {
 		Post post = this.postService.starPost(postID);
@@ -100,11 +145,23 @@ public class PostsController {
 		return post;
 	}
 
+	/**
+	 * Unstar the given post
+	 * 
+	 * @param postID
+	 * @return
+	 */
 	@GetMapping("/unstar/{postID}")
 	public Post unstarPost(@PathVariable String postID) {
 		return this.postService.unstarPost(postID);
 	}
 
+	/**
+	 * Bookmark a given post
+	 * 
+	 * @param postID
+	 * @return
+	 */
 	@GetMapping("/bookmark/{postID}")
 	public Post bookmark(@PathVariable String postID) {
 		Post post = this.postService.bookmarkPost(postID);
@@ -112,11 +169,23 @@ public class PostsController {
 		return post;
 	}
 
+	/**
+	 * Unbookmark the given post
+	 * 
+	 * @param postID
+	 * @return
+	 */
 	@GetMapping("/unbookmark/{postID}")
 	public Post unbookmarkPost(@PathVariable String postID) {
 		return this.postService.unbookmarkPost(postID);
 	}
 
+	/**
+	 * Get posts about the folder timeline.
+	 * 
+	 * @param folderID
+	 * @return
+	 */
 	@GetMapping("/folder/{folderID}")
 	public List<Post> getFolderPosts(@PathVariable String folderID) {
 		FeedList feedList = this.feedListService.get(SecurityContext.getUserID());
@@ -138,6 +207,13 @@ public class PostsController {
 		return posts;
 	}
 
+	/**
+	 * Mark all posts are read.
+	 * 
+	 * @param ids List of all post IDs that are to be marked as read.
+	 * 
+	 * @return
+	 */
 	@PostMapping("/markAllRead")
 	public List<Post> markAllRead(@RequestBody List<String> ids) {
 		if (AssertUtils.isEmpty(ids)) {
@@ -154,7 +230,13 @@ public class PostsController {
 
 		return posts;
 	}
-
+	
+	/**
+	 * Mark all posts are unread.
+	 * 
+	 * @param ids List of all post IDs that are to be marked as unread.
+	 * @return
+	 */
 	@PostMapping("/markAllUnread")
 	public List<Post> markAllUnread(@RequestBody List<String> ids) {
 		if (AssertUtils.isEmpty(ids)) {
@@ -172,22 +254,43 @@ public class PostsController {
 		return posts;
 	}
 
+	/**
+	 * Search for all posts with a given term.
+	 * 
+	 * @param query the search text query
+	 * 
+	 * @return
+	 */
 	@GetMapping("/search")
 	public List<Post> search(@RequestParam String query) {
 		return this.postSearchService.search(query);
 	}
 
+	/**
+	 * Add posts to the list from given timeline ID.
+	 * 
+	 * @param posts list to add posts to
+	 * 
+	 * @param timelineID the timeline ID to fetch posts from
+	 */
 	protected void addPostsForTimeline(List<Post> posts, String timelineID) {
 		List<String> timeline = this.feedTimelineService.getTimeLine(timelineID);
 		this.addPostsForIDs(posts, timeline);
 	}
 
-	protected void addPostsForIDs(List<Post> posts, Collection<String> timeline) {
-		if (AssertUtils.isEmpty(timeline)) {
+	/**
+	 * Add posts to the list for given post IDs.
+	 * 
+	 * @param posts list to add posts to
+	 * 
+	 * @param postIdsToBeAdded ID of each post to be added
+	 */
+	protected void addPostsForIDs(List<Post> posts, Collection<String> postIdsToBeAdded) {
+		if (AssertUtils.isEmpty(postIdsToBeAdded)) {
 			return;
 		}
 
-		for (String postID : timeline) {
+		for (String postID : postIdsToBeAdded) {
 			Post post = this.postService.get(postID);
 			if (post != null) {
 				posts.add(post);

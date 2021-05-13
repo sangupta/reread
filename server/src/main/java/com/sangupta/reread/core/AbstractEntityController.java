@@ -21,6 +21,13 @@ import com.sangupta.jerry.exceptions.HttpException;
 import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.jerry.util.AssertUtils;
 
+/**
+ * Abstract controller that handles a single entity.
+ * 
+ * @author sangupta
+ *
+ * @param <T>
+ */
 public abstract class AbstractEntityController<T> {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEntityController.class);

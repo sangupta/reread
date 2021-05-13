@@ -1,5 +1,12 @@
 package com.sangupta.reread.entity;
 
+/**
+ * Stores settings configured by a user for the project. 
+ * Unfortunately, didn't get time to implement this.
+ * 
+ * @author sangupta
+ *
+ */
 public class UserSettings {
 
 	public boolean showFeedList;

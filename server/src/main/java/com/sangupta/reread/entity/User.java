@@ -1,7 +1,17 @@
 package com.sangupta.reread.entity;
 
 import com.sangupta.jerry.entity.UserAwarePrincipal;
+import com.sangupta.reread.web.SingleMeUserFilter;
 
+/**
+ * Signifies a user in the project. Currently, there is
+ * a default user configured using {@link SingleMeUserFilter}.
+ * We can enhance it later to allow multiple accounts in a single
+ * installation.
+ * 
+ * @author sangupta
+ *
+ */
 public class User implements UserAwarePrincipal {
 	
 	public String userID;

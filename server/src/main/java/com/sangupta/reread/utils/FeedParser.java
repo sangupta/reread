@@ -27,12 +27,36 @@ import com.sun.syndication.feed.synd.SyndPersonImpl;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 
+/**
+ * Utility class to help parse a feed contents.
+ * 
+ * @author sangupta
+ *
+ */
 public class FeedParser {
 
+	/**
+	 * My logger
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(FeedParser.class);
 
+	/**
+	 * Valid image types
+	 */
 	private static final Set<String> VALID_IMAGE_TYPES = Set.of("image/png", "image/gif", "image/jpg", "image/jpeg");
 
+	/**
+	 * Parse a given feed whose contents are provided. Ignore entries older than the latest
+	 * post ID provided.
+	 * 
+	 * @param masterFeedID the feedID represented in system
+	 * 
+	 * @param feedContents the feed contents in proper encoding
+	 * 
+	 * @param latestPostID most recent post ID that was crawled, if available
+	 * 
+	 * @return a {@link ParsedFeed} instance consisting of all details
+	 */
 	public static ParsedFeed parse(String masterFeedID, String feedContents, String latestPostID) {
 		try {
 			return parseInternal(masterFeedID, feedContents, latestPostID);
@@ -274,6 +298,12 @@ public class FeedParser {
 		return post;
 	}
 
+	/**
+	 * Is given image type a valid image type.
+	 * 
+	 * @param type
+	 * @return
+	 */
 	protected static boolean isImageType(String type) {
 		return VALID_IMAGE_TYPES.contains(type);
 	}

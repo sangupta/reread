@@ -17,6 +17,12 @@ import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedRefreshService;
 import com.sangupta.reread.web.SingleMeUserFilter;
 
+/**
+ * REST end points around refreshing feeds.
+ * 
+ * @author sangupta
+ *
+ */
 @RestController
 @RequestMapping("/refresh")
 public class RefreshController {
@@ -30,12 +36,24 @@ public class RefreshController {
 	@Autowired
 	protected FeedRefreshService feedRefreshService;
 	
+	/**
+	 * Refresh a given feed sync.
+	 * 
+	 * @param feedID
+	 * @return
+	 */
 	@GetMapping("/feed/{feedID}")
 	public String refreshFeed(@PathVariable String feedID) {
 		this.feedCrawlerService.crawlFeed(feedID);
 		return "done";
 	}
 	
+	/**
+	 * Refresh a given folder async.
+	 * 
+	 * @param folderID
+	 * @return
+	 */
 	@GetMapping("/folder/{folderID}")
 	public String refreshFolder(@PathVariable String folderID) {
 		FeedList list = this.feedListService.get(SecurityContext.getUserID());
@@ -48,6 +66,11 @@ public class RefreshController {
 		return "done";
 	}
 	
+	/**
+	 * Refresh all feeds in the feed list async.
+	 * 
+	 * @return
+	 */
 	@GetMapping("/all")
 	public String refreshAll() {
 		FeedList list = this.feedListService.get(SecurityContext.getUserID());
@@ -66,7 +89,11 @@ public class RefreshController {
 		
 		return "done";
 	}
-	
+
+	/**
+	 * Refresh all feeds in user's feed list async.
+	 * 
+	 */
 	@Scheduled(fixedDelay = DateUtils.FIVE_MINUTES)
 	public void backgroundRefresh() {
 		SecurityContext.setPrincipal(SingleMeUserFilter.USER_ME);

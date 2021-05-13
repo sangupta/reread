@@ -5,6 +5,13 @@ import org.springframework.data.annotation.Id;
 import com.sangupta.jerry.util.UriUtils;
 import com.sangupta.jerry.util.UrlCanonicalizer;
 
+/**
+ * Master details about one feed being processed by the system. 
+ * Entity is written to DB.
+ * 
+ * @author sangupta
+ *
+ */
 public class MasterFeed {
 
 	@Id

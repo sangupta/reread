@@ -2,6 +2,13 @@ package com.sangupta.reread.entity;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Post constructed by parsing the feed URL contents. Entity 
+ * is written to DB.
+ * 
+ * @author sangupta
+ *
+ */
 public class Post implements Comparable<Post> {
 	
 	@Id

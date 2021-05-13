@@ -12,6 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
+/**
+ * A {@link Filter} implementation that enables CORS for
+ * all methods and all domains.
+ * 
+ * @author sangupta
+ *
+ */
 @Component
 public class CorsFilter implements Filter, Ordered {
 

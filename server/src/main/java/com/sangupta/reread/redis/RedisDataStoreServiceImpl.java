@@ -26,6 +26,13 @@ import com.sangupta.reread.core.DataStoreService;
 import com.sangupta.reread.core.UpdateTimeStampedEntity;
 import com.sangupta.reread.core.UserOwnedEntity;
 
+/**
+ * A Redis {@link JReJSON} based implementation to the {@link DataStoreService}.
+ * 
+ * @author sangupta
+ *
+ * @param <T>
+ */
 public class RedisDataStoreServiceImpl<T> implements DataStoreService<T> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedisDataStoreServiceImpl.class);

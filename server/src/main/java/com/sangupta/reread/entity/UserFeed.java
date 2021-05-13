@@ -1,5 +1,13 @@
 package com.sangupta.reread.entity;
 
+/**
+ * Stores details about one feed in the user's {@link FeedList}. This
+ * is different than {@link MasterFeed} to allow for
+ * customization by each user.
+ * 
+ * @author sangupta
+ *
+ */
 public class UserFeed {
 
 	public String masterFeedID;

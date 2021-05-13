@@ -9,10 +9,27 @@ import org.slf4j.LoggerFactory;
 import com.sangupta.jerry.http.WebResponse;
 import com.sangupta.jerry.util.AssertUtils;
 
+/**
+ * Utility class to parse response from the web using
+ * the correct encoding.
+ * 
+ * @author sangupta
+ *
+ */
 public class WebResponseParser {
 	
+	/**
+	 * My logger
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(WebResponseParser.class);
 	
+	/**
+	 * Read contents using the proper encoding specified in response header
+	 * or by detecting one using the {@link UniversalDetector} from Mozilla.
+	 * 
+	 * @param webResponse
+	 * @return
+	 */
 	public static String getContentWithProperEncoding(WebResponse webResponse) {
 		byte[] bytes = webResponse.asBytes();
 		if(AssertUtils.isEmpty(bytes)) {
