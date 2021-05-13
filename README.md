@@ -116,7 +116,9 @@ application is continuously built and deployed. Open your favorite editor like
 
 The back-end application is written in Java and uses Spring Boot. All custom
 beans are defined in `SpringBeans.java` file. All services are wired to their
-implementation using the `@Service` annotation.
+implementation using the `@Service` annotation. **Javadocs** are mentioned over
+the classes as well as methods to indicate what they do. That should help one
+get started.
 
 ## Improvement items
 

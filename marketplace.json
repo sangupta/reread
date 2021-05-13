@@ -10,14 +10,51 @@
     "hosted_url": "",
     "quick_deploy": "false",
     "deploy_buttons": [],
-    "language": ["Java", "Javascript", "Typescript"],
-    "redis_commands": [],
-    "redis_features": ["caching"],
-    "redis_modules": ["RediJSON", "RedisTimeseries", "RedisGraph", "RediSearch", "RedisBlooom"],
-    "app_image_urls": [
+    "language": [
+        "Java",
+        "Javascript",
+        "Typescript"
     ],
+    "redis_commands": [
+        "EXISTS",
+        "KEYS",
+        "LPUSH",
+        "LRANGE",
+        "LINDEX",
+        "LLEN",
+        "SADD",
+        "SMEMBERS",
+        "SREM",
+        "BF.RESERVE",
+        "BF.ADD",
+        "BF.EXISTS",
+        "TS.CREATE",
+        "TS.ADD",
+        "TS.MADD",
+        "JSON.GET",
+        "JSON.DEL",
+        "JSON.SET",
+        "FT.CREATE",
+        "FT.SEARCH",
+        "FT.ADD"
+    ],
+    "redis_features": [
+        "caching"
+    ],
+    "redis_modules": [
+        "RediJSON",
+        "RedisTimeseries",
+        "RedisGraph",
+        "RediSearch",
+        "RedisBlooom"
+    ],
+    "app_image_urls": [],
     "youtube_url": "",
-    "special_tags": ["Hackathon"],
-    "verticals": ["Technology"],
+    "special_tags": [
+        "Hackathon"
+    ],
+    "verticals": [
+        "Technology"
+    ],
     "markdown": "https://raw.githubusercontent.com/sangupta/reread/main/README.md",
 }
