@@ -74,6 +74,9 @@ public class RefreshController {
 	@GetMapping("/all")
 	public String refreshAll() {
 		FeedList list = this.feedListService.get(SecurityContext.getUserID());
+		if(list == null) {
+			return "nothing to do";
+		}
 
 		// folders
 		for(UserFeedFolder folder : list.folders) {

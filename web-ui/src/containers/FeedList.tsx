@@ -26,7 +26,11 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         loading: true
     }
 
-    componentDidMount = async () => {
+    componentDidMount = () => {
+        this.fetchList();
+    }
+
+    fetchList = async () => {
         const feedList: any = await FeedApi.getFeedList();
         if (feedList) {
             this.setState({ feeds: feedList.feeds, folders: feedList.folders, loading: false });
@@ -68,6 +72,16 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         this.props.history.push('/feeds/bookmarks')
     }
 
+    createFolder = async () => {
+        const folderName = window.prompt('Enter the name of the folder: ', '');
+        if(!folderName) {
+            return;
+        }
+
+        const data = await FeedApi.createFolder(folderName);
+        this.fetchList();
+    }
+
     render() {
         const { loading } = this.state;
         if (loading) {
@@ -92,6 +106,18 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
                             <li>
                                 <a href='#' className='link-dark rounded' onClick={this.showBookmarks}>
                                     <Icon name='bookmark' label='Bookmarks' />
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li className="border-top my-3"></li>
+
+                    <li>
+                        <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li>
+                                <a href='#' className='link-dark rounded' onClick={this.createFolder}>
+                                    <Icon name='folder-plus' label='Create Folder' />
                                 </a>
                             </li>
                         </ul>

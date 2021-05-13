@@ -78,4 +78,8 @@ export default class FeedApi {
         return response.data;
     }
 
+    static async createFolder(name: string) {
+        const response = await Axios.post('/feeds/folder?name=' + encodeURIComponent(name));
+        return response.data;
+    }
 }

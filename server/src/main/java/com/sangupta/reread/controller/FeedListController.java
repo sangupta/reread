@@ -1,18 +1,21 @@
 package com.sangupta.reread.controller;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.reread.entity.DiscoveredFeed;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.entity.MasterFeed;
+import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedDiscoveryService;
 import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedSubscriptionService;
@@ -83,6 +86,20 @@ public class FeedListController {
 	@PostMapping("/discover")
 	public Set<DiscoveredFeed> discoverFeed(@RequestBody FeedControllerPayload payload) {
 		return this.feedDiscoveryService.discoverFeeds(payload.url);
+	}
+	
+	@PostMapping("/folder")
+	public UserFeedFolder createFolder(@RequestParam String name) {
+		FeedList list = this.feedListService.getOrCreate(SecurityContext.getUserID());
+		
+		UserFeedFolder folder = new UserFeedFolder();
+		folder.folderID = UUID.randomUUID().toString();
+		folder.title = name;
+		
+		list.folders.add(folder);
+		
+		this.feedListService.update(list);
+		return folder;
 	}
 
 	/**
