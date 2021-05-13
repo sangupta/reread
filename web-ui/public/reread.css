@@ -247,3 +247,24 @@ a.folder-toggle {
 .post-details h6 {
     font-size: 14px;
 }
+
+.feed-details-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.feed-details-header h5 {
+    font-size: 13px;
+}
+
+.chart-label {
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+    width: 100%;
+}
+
+.feed-details-chart {
+    width: 820px;
+    height: 420px;
+    margin: 0 auto;
+}

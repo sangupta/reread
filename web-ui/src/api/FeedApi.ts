@@ -12,11 +12,6 @@ export default class FeedApi {
         return list;
     }
 
-    static async getFeedCrawlDetails(feedID: string) {
-        const response = await Axios.get('/details/feed/' + feedID);
-        return response.data;
-    }
-
     static getFeedDetails(feedID: string) {
         const list = FeedApi.FEED_LIST;
         let found = list.feeds.find(item => item.masterFeedID === feedID);
@@ -46,18 +41,34 @@ export default class FeedApi {
         return response.data;
     }
 
-    static async refreshFeed(feedID: string) {
+    static async refreshFeed(feedID: string): Promise<String> {
         const response = await Axios.get('/refresh/feed/' + feedID);
         return response.data;
     }
 
-    static async refreshFolder(folderID: string) {
+    static async refreshFolder(folderID: string): Promise<String> {
         const response = await Axios.get('/refresh/folder/' + folderID);
         return response.data;
     }
 
-    static async refreshAll() {
+    static async refreshAll(): Promise<String> {
         const response = await Axios.get('/refresh/all');
         return response.data;
     }
+
+    static async getFeedCrawlDetails(feedID: string) {
+        const response = await Axios.get('/details/feed/' + feedID);
+        return response.data;
+    }
+
+    static async getFeedChart(feedID: string) {
+        const response = await Axios.get('/details/chart/feed/' + feedID);
+        return response.data;
+    }
+
+    static async getActivityChart(activity: string) {
+        const response = await Axios.get('/details/chart/activity/' + activity.toUpperCase());
+        return response.data;
+    }
+
 }

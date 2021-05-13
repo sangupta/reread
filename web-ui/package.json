@@ -14,7 +14,8 @@
         "react-router-dom": "^5.2.0",
         "react-recollect": "^5.2.3",
         "axios": "^0.21.1",
-        "gestalt": "^21.15.5"
+        "gestalt": "^21.15.5",
+        "react-vis": "^1.11.7"
     },
     "devDependencies": {
         "@types/gestalt": "^21.0.0",

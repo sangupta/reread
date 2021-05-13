@@ -2,6 +2,7 @@ package com.sangupta.reread.service;
 
 import java.util.List;
 
+import com.redislabs.redistimeseries.Value;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.entity.UserActivity;
 
@@ -31,5 +32,9 @@ public interface AnalyticsService {
 	 * @return
 	 */
 	public boolean recordUserActivity(UserActivity activity, Post post);
+	
+	public Value[] getFeedChart(String feedID, long start, long end, long interval, String metrics);
+	
+	public Value[] getActivityChart(UserActivity activity, long start, long end, long interval, String metrics);
 	
 }

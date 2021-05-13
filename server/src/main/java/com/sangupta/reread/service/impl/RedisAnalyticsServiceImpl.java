@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.redislabs.redistimeseries.Aggregation;
 import com.redislabs.redistimeseries.Measurement;
 import com.redislabs.redistimeseries.RedisTimeSeries;
+import com.redislabs.redistimeseries.Value;
 import com.sangupta.reread.SpringBeans;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.entity.UserActivity;
@@ -72,6 +74,39 @@ public class RedisAnalyticsServiceImpl implements AnalyticsService {
 		if(exists != null && !exists) {
 			this.timeSeries.create(key);
 		}		
+	}
+	
+	@Override
+	public Value[] getFeedChart(String feedID, long start, long end, long interval, String metrics) {
+		String key = "timeSeries-feed:" + feedID;
+		Aggregation aggregation = this.getAggregation(metrics);
+
+		return this.timeSeries.range(key, start, end, aggregation, interval);
+	}
+	
+	@Override
+	public Value[] getActivityChart(UserActivity activity, long start, long end, long interval, String metrics) {
+		String key = "timeSeries-activity:" + activity;
+		Aggregation aggregation = this.getAggregation(metrics);
+
+		return this.timeSeries.range(key, start, end, aggregation, interval);
+	}
+
+	protected Aggregation getAggregation(String metrics) {
+		if ("avg".equalsIgnoreCase(metrics)) {
+			return Aggregation.AVG;
+		}
+		if ("count".equalsIgnoreCase(metrics)) {
+			return Aggregation.COUNT;
+		}
+		if ("min".equalsIgnoreCase(metrics)) {
+			return Aggregation.MIN;
+		}
+		if ("max".equalsIgnoreCase(metrics)) {
+			return Aggregation.MAX;
+		}
+		
+		return Aggregation.COUNT;
 	}
 	
 }
