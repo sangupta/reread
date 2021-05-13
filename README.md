@@ -92,6 +92,8 @@ $ docker run -d -p 6379:6379 redislabs/redismd
 $ java -jar server/target/reread-1.0.jar
 ```
 
+You can now access the application at http://localhost:1309
+
 ## Hacking
 
 `reread` is 100% hackable from the word **go**. 
