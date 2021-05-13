@@ -141,7 +141,7 @@ public class PostsController {
 	@GetMapping("/star/{postID}")
 	public Post starPost(@PathVariable String postID) {
 		Post post = this.postService.starPost(postID);
-		this.analyticsService.recordUserActivity(UserActivity.READ, post);
+		this.analyticsService.recordUserActivity(UserActivity.STAR, post);
 		return post;
 	}
 
@@ -165,7 +165,7 @@ public class PostsController {
 	@GetMapping("/bookmark/{postID}")
 	public Post bookmark(@PathVariable String postID) {
 		Post post = this.postService.bookmarkPost(postID);
-		this.analyticsService.recordUserActivity(UserActivity.READ, post);
+		this.analyticsService.recordUserActivity(UserActivity.BOOKMARK, post);
 		return post;
 	}
 
