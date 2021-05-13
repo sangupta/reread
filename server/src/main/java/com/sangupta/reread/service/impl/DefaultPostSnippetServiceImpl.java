@@ -21,6 +21,12 @@ import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.entity.PostImage;
 import com.sangupta.reread.service.PostSnippetService;
 
+/**
+ * Default implementation for the {@link PostSnippetService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class DefaultPostSnippetServiceImpl implements PostSnippetService {
 

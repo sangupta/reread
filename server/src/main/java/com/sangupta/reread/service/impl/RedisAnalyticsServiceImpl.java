@@ -15,6 +15,12 @@ import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.entity.UserActivity;
 import com.sangupta.reread.service.AnalyticsService;
 
+/**
+ * {@link RedisTimeSeries} based implementation of the {@link AnalyticsService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class RedisAnalyticsServiceImpl implements AnalyticsService {
 	

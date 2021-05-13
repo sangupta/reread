@@ -13,6 +13,12 @@ import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedSubscriptionService;
 import com.sangupta.reread.service.MasterFeedService;
 
+/**
+ * Default implementation to the {@link FeedSubscriptionService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionService {
 	

@@ -21,6 +21,12 @@ import com.sangupta.reread.service.FeedCrawlerService;
 import com.sangupta.reread.service.FeedRefreshService;
 import com.sangupta.reread.service.MasterFeedService;
 
+/**
+ * Queue based async implementation to the {@link FeedRefreshService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class AsyncFeedRefreshServiceImpl implements FeedRefreshService {
 	

@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.service.FeedTimelineService;
 
+/**
+ * {@link RedisTemplate} based implementation of the {@link FeedTimelineService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 	

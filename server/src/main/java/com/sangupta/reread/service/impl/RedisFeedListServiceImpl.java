@@ -2,10 +2,17 @@ package com.sangupta.reread.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
 import com.sangupta.reread.service.FeedListService;
 
+/**
+ * Redis {@link JReJSON} based implementation of the {@link FeedListService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class RedisFeedListServiceImpl extends RedisDataStoreServiceImpl<FeedList> implements FeedListService {
 

@@ -24,6 +24,12 @@ import io.redisearch.client.Client;
 import io.redisearch.client.IndexDefinition;
 import redis.clients.jedis.exceptions.JedisDataException;
 
+/**
+ * RedisSearch {@link Client} based implementation of the {@link PostSearchService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class RedisPostSearchServiceImpl implements PostSearchService {
 	

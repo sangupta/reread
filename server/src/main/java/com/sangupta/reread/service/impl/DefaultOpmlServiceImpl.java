@@ -22,6 +22,12 @@ import com.sangupta.reread.service.MasterFeedService;
 import com.sangupta.reread.service.OpmlService;
 import com.sangupta.reread.utils.OpmlParser;
 
+/**
+ * Default implementation for the {@link OpmlService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class DefaultOpmlServiceImpl implements OpmlService {
 

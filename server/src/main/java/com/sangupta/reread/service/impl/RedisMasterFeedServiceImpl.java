@@ -4,11 +4,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.MasterFeed;
 import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
 import com.sangupta.reread.service.MasterFeedService;
 
+/**
+ * Redis {@link JReJSON} based implementation of the {@link MasterFeedService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class RedisMasterFeedServiceImpl extends RedisDataStoreServiceImpl<MasterFeed> implements MasterFeedService {
 

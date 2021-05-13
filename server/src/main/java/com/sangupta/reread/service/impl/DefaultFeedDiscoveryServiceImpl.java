@@ -13,11 +13,16 @@ import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.UriUtils;
 import com.sangupta.reread.discover.BlogspotDiscoveryHandler;
 import com.sangupta.reread.discover.FeedDiscoveryHandler;
-import com.sangupta.reread.discover.FeedlyBasedDiscoveryHandler;
 import com.sangupta.reread.discover.HtmlFeedDiscoveryHandler;
 import com.sangupta.reread.entity.DiscoveredFeed;
 import com.sangupta.reread.service.FeedDiscoveryService;
 
+/**
+ * Default implementation of the {@link FeedDiscoveryService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class DefaultFeedDiscoveryServiceImpl implements FeedDiscoveryService {
 

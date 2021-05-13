@@ -13,6 +13,12 @@ import com.sangupta.reread.service.FeedParsingService;
 import com.sangupta.reread.utils.FeedParser;
 import com.sangupta.reread.utils.WebResponseParser;
 
+/**
+ * Default implementation of the {@link FeedParsingService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class DefaultFeedParsingServiceImpl implements FeedParsingService {
 	

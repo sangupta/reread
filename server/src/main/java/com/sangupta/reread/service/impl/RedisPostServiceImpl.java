@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.SpringBeans;
 import com.sangupta.reread.entity.Post;
@@ -18,6 +19,12 @@ import com.sangupta.reread.service.PostService;
 
 import io.rebloom.client.Client;
 
+/**
+ * Redis {@link JReJSON} based implementation of the {@link PostService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implements PostService {
 

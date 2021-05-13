@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sangupta.jerry.http.service.HttpService;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.DateUtils;
 import com.sangupta.reread.entity.FeedCrawlDetails;
@@ -21,6 +22,12 @@ import com.sangupta.reread.service.MasterFeedService;
 import com.sangupta.reread.service.PostService;
 import com.sangupta.reread.service.PostSnippetService;
 
+/**
+ * {@link HttpService} based implementation of the {@link FeedCrawlerService}.
+ * 
+ * @author sangupta
+ *
+ */
 @Service
 public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 	
