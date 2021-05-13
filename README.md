@@ -31,13 +31,14 @@ that I can use in future as well. And thus was born `reread`.
 
 ## Technologies Used
 
-* JDK 11
-* Spring Boot
+* [JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+* [Spring Boot](https://spring.io/projects/spring-boot)
 * Redis core and enterprise modules (via Redis docker image)
-* React 17
-* Bootstrap 5.0
-* Apache Maven (for building server)
-* NPM/Yarn (for building client)
+* [Typescript](https://www.typescriptlang.org/)
+* [React 17](https://reactjs.org/)
+* [Bootstrap 5.0](https://getbootstrap.com/)
+* [Apache Maven](https://maven.apache.org/) (for building server)
+* [NPM](https://www.npmjs.com/)/[Yarn](https://yarnpkg.com/) (for building client)
 
 ## Redis modules used
 
@@ -90,6 +91,32 @@ $ docker run -d -p 6379:6379 redislabs/redismd
 # Start the project
 $ java -jar server/target/reread-1.0.jar
 ```
+
+## Hacking
+
+`reread` is 100% hackable from the word **go**. 
+
+### Front-end
+
+The front-end application is written in 100% Typescript and uses React
+underneath. To make changes to the UI client:
+
+```sh
+# Install dependencies
+$ cd web-ui
+$ npm install (or yarn install)
+$ npm run watch
+```
+This shall start a local development server on http://localhost:1234 where the React
+application is continuously built and deployed. Open your favorite editor like 
+[VSCode](https://code.visualstudio.com/), [Atom](https://atom.io/) or 
+[Sublime Text](https://www.sublimetext.com/) and start making changes.
+
+### Back-end
+
+The back-end application is written in Java and uses Spring Boot. All custom
+beans are defined in `SpringBeans.java` file. All services are wired to their
+implementation using the `@Service` annotation.
 
 ## Improvement items
 
