@@ -5,7 +5,7 @@ export default class FeedApi {
 
     private static FEED_LIST: FeedList = [];
 
-    static async getFeedList() {
+    static async getFeedList(): Promise<FeedList> {
         const response = await Axios.get('/feeds/me');
         const list: FeedList = response.data;
         FeedApi.FEED_LIST = list;
@@ -31,17 +31,18 @@ export default class FeedApi {
         return response.data;
     }
 
-    static async subscribeFeed(feed: DiscoveredFeed) {
+    static async subscribeFeed(feed: DiscoveredFeed, folder: string) {
         const response = await Axios.post('/feeds/subscribe', {
             url: feed.feedUrl,
             site: feed.siteUrl,
             iconUrl: feed.iconUrl,
-            title: feed.title
+            title: feed.title,
+            folder: folder
         });
         return response.data;
     }
 
-    static async unsubscribeFeed(feedID: string) {
+    static async unsubscribeFeed(feedID: string): Promise<FeedList> {
         const response = await Axios.post('/feeds/unsubscribe', {
             feedID: feedID
         });

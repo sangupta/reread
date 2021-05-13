@@ -1,22 +1,36 @@
 import React from 'react';
 
 import DiscoveredFeedItem from './../components/DiscoveredFeedItem';
+
 import FeedApi from '../api/FeedApi';
-import { DiscoveredFeed } from '../api/Model';
+import { DiscoveredFeed, Folder } from '../api/Model';
+import Dropdown, { DropDownOption } from '../components/Dropdown';
+import { DropdownOption } from 'gestalt';
 
 interface AddFeedContainerState {
     url: string;
     feeds: Array<DiscoveredFeed>;
     discovered: boolean;
+    folders: Array<Folder>;
+    folder: string;
 }
 
 export default class AddFeedContainer extends React.Component<{}, AddFeedContainerState> {
 
     state = {
         url: 'https://news.ycombinator.com/rss',
-        feeds: [],
+        feeds: new Array<DiscoveredFeed>(),
         discovered: false,
+        folders: new Array<Folder>(),
+        folder: ''
     };
+
+    componentDidMount = async () => {
+        const feedList: any = await FeedApi.getFeedList();
+        if (feedList) {
+            this.setState({ folders: feedList.folders });
+        }
+    }
 
     /**
      * Set the URL when text box is edited
@@ -36,8 +50,28 @@ export default class AddFeedContainer extends React.Component<{}, AddFeedContain
         }
     }
 
+    setFolder = (v: string) => {
+        this.setState({ folder: v });
+    }
+
+    showFolders = () => {
+        const { folders, folder } = this.state;
+        const options: Array<DropdownOption> = [
+            { label: '<No folder>', value: '' }
+        ];
+
+        folders.forEach((item: Folder) => {
+            options.push({ label: item.title, value: item.folderID });
+        });
+
+        return <div className='d-flex flex-row'>
+            <div className='px-2'>Choose folder to add feed to: </div>
+            <Dropdown variant='secondary' options={options} onSelect={this.setFolder} value={folder} />
+        </div>
+    }
+
     showDiscoveredFeeds = () => {
-        const { discovered, feeds } = this.state;
+        const { discovered, feeds, folder } = this.state;
         if (!discovered) {
             return null;
         }
@@ -48,7 +82,10 @@ export default class AddFeedContainer extends React.Component<{}, AddFeedContain
 
         return <div className='mt-3'>
             <h2>Discovered Feeds</h2>
-            {feeds.map(feed => <DiscoveredFeedItem key={feed.feedUrl} feed={feed} />)}
+            <div className='my-3' />
+            {this.showFolders()}
+            <div className='my-3' />
+            {feeds.map(feed => <DiscoveredFeedItem key={feed.feedUrl} feed={feed} folder={folder} />)}
         </div>
     }
 

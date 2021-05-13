@@ -11,6 +11,7 @@ import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.entity.MasterFeed;
+import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedCrawlerService;
 import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedSubscriptionService;
@@ -39,28 +40,34 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 	protected FeedTimelineService feedTimelineService;
 	
 	@Override
-	public MasterFeed subscribe(MasterFeed mf) {
+	public MasterFeed subscribe(MasterFeed mf, String folder) {
 		// find master feed for one
-		MasterFeed feed = this.masterFeedService.getOrCreateFeed(mf);
+		MasterFeed masterFeed = this.masterFeedService.getOrCreateFeed(mf);
 		
 		// add the same to the user's subscribe list
 		FeedList feedList = this.feedListService.getOrCreate(SecurityContext.getUserID());
-		if(feedList.containsFeed(feed.feedID)) {
+		if(feedList.containsFeed(masterFeed.feedID)) {
 			throw new HttpException(HttpStatusCode.CONFLICT, "Feed already subscribed");
 		}
 		
 		// crawl this feed now
-		this.feedCrawlerService.crawlFeed(feed.feedID);
+		this.feedCrawlerService.crawlFeed(masterFeed.feedID);
 		
 		// re-read master feed as title may have changed
-		feed = this.masterFeedService.get(feed.feedID);
+		masterFeed = this.masterFeedService.get(masterFeed.feedID);
 		
 		// add feed to list
-		feedList.addFeed(feed);
+		if(AssertUtils.isEmpty(folder)) {
+			feedList.addFeed(masterFeed);
+		} else {
+			UserFeedFolder feedFolder = feedList.getFolder(folder);
+			feedFolder.addFeed(masterFeed);
+		}
+		
 		this.feedListService.update(feedList);
 		
 		// all done
-		return feed;
+		return masterFeed;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public interface FeedSubscriptionService {
 	 * @param mf
 	 * @return
 	 */
-	public MasterFeed subscribe(MasterFeed mf);
+	public MasterFeed subscribe(MasterFeed mf, String folder);
 
 	/**
 	 * Unsusbcribe the user from the given {@link MasterFeed#feedID}

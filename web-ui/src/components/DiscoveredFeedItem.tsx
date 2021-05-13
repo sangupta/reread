@@ -8,12 +8,13 @@ import Icon from './Icon';
 interface DiscoveredFeedProps {
     feed: DiscoveredFeed;
     history: any;
+    folder: string;
 }
 
 class DiscoveredFeedItem extends React.Component<DiscoveredFeedProps, {}> {
 
     addFeed = async () => {
-        const data = await FeedApi.subscribeFeed(this.props.feed);
+        const data = await FeedApi.subscribeFeed(this.props.feed, this.props.folder);
         if (data && data.feedID) {
             this.props.history.push('/feed/' + data.feedID);
         }
@@ -22,7 +23,7 @@ class DiscoveredFeedItem extends React.Component<DiscoveredFeedProps, {}> {
     render() {
         const { feed } = this.props;
         const hasImage = !!feed.iconUrl;
-        return <div className='row'>
+        return <div className='row px-2'>
             <div className='col-auto'>
                 {hasImage && <img src={feed.iconUrl} width={16} />}
                 {!hasImage && <Icon name='rss' />}

@@ -63,7 +63,7 @@ public class FeedListController {
 		mf.iconUrl = payload.iconUrl;
 		mf.siteUrl = payload.siteUrl;
 		
-		return this.feedSubscriptionService.subscribe(mf);
+		return this.feedSubscriptionService.subscribe(mf, payload.folder);
 	}
 
 	/**
@@ -115,6 +115,7 @@ public class FeedListController {
 		String siteUrl;
 		String iconUrl;
 		String title;
+		String folder;
 		
 		/**
 		 * @return the url
@@ -184,6 +185,20 @@ public class FeedListController {
 		 */
 		public void setTitle(String title) {
 			this.title = title;
+		}
+
+		/**
+		 * @return the folder
+		 */
+		public String getFolder() {
+			return folder;
+		}
+
+		/**
+		 * @param folder the folder to set
+		 */
+		public void setFolder(String folder) {
+			this.folder = folder;
 		}
 	}
 }
