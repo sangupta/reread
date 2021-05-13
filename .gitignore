@@ -42,6 +42,7 @@ package-lock.json
 yarn.lock
 yarn-error.log
 .cache
+.parcel-cache/
 
 # Project specific
 dist/
