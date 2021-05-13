@@ -1,0 +1,23 @@
+{
+    "app_name": "reread",
+    "description": "Local/Self-hosted RSS reader",
+    "hidden": "false",
+    "rank": "20",
+    "type": "Full App",
+    "contributed_by": "Community",
+    "repo_url": "https://github.com/sangupta/reread",
+    "download_url": "",
+    "hosted_url": "",
+    "quick_deploy": "false",
+    "deploy_buttons": [],
+    "language": ["Java", "Javascript", "Typescript"],
+    "redis_commands": [],
+    "redis_features": ["caching"],
+    "redis_modules": ["RediJSON", "RedisTimeseries", "RedisGraph", "RediSearch", "RedisBlooom"],
+    "app_image_urls": [
+    ],
+    "youtube_url": "",
+    "special_tags": ["Hackathon"],
+    "verticals": ["Technology"],
+    "markdown": "https://raw.githubusercontent.com/sangupta/reread/main/README.md",
+}
