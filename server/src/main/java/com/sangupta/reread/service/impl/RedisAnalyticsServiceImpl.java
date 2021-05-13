@@ -87,6 +87,11 @@ public class RedisAnalyticsServiceImpl implements AnalyticsService {
 	@Override
 	public Value[] getActivityChart(UserActivity activity, long start, long end, long interval, String metrics) {
 		String key = "timeSeries-activity:" + activity;
+		boolean exists = this.redisTemplate.hasKey(key);
+		if(!exists) {
+			return null;
+		}
+		
 		Aggregation aggregation = this.getAggregation(metrics);
 
 		return this.timeSeries.range(key, start, end, aggregation, interval);

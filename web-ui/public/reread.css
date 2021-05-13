@@ -268,3 +268,12 @@ a.folder-toggle {
     height: 420px;
     margin: 0 auto;
 }
+
+.activity-container {
+    margin: 20px;
+}
+
+.activity-toolbar {
+    margin-bottom: 20px;
+    justify-content: center;
+}

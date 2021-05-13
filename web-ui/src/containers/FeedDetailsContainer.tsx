@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '../components/Modal';
 import FeedApi from '../api/FeedApi';
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, ChartLabel, LineMarkSeries } from 'react-vis';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries } from 'react-vis';
 import DisplayDate from '../components/DisplayDate';
 
 interface FeedDetailsContainerProps {

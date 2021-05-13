@@ -66,8 +66,8 @@ export default class FeedApi {
         return response.data;
     }
 
-    static async getActivityChart(activity: string) {
-        const response = await Axios.get('/details/chart/activity/' + activity.toUpperCase());
+    static async getActivityChart(activity: string, type: string, interval: string): Promise<Array<any>> {
+        const response = await Axios.get('/details/chart/activity/' + activity.toUpperCase() + '?metrics=' + type + '&interval=' + interval);
         return response.data;
     }
 

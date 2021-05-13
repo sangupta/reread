@@ -2,7 +2,6 @@ import React from 'react';
 
 import Dropdown, { DropDownOption } from '../components/Dropdown';
 import Icon from '../components/Icon';
-import FeedApi from '../api/FeedApi';
 
 const markOptions: Array<DropDownOption> = [
     { label: 'Mark all as read', value: 'markRead' },

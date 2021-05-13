@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sangupta.jerry.constants.HttpStatusCode;
 import com.sangupta.jerry.exceptions.HttpException;
+import com.sangupta.jerry.util.DateUtils;
 import com.sangupta.reread.entity.FeedCrawlDetails;
 import com.sangupta.reread.entity.MasterFeed;
 import com.sangupta.reread.entity.UserActivity;
@@ -73,8 +74,10 @@ public class DetailsController {
 	}
 	
 	@GetMapping("/chart/activity/{activity}")
-	public Object getActivityData(@PathVariable UserActivity activity, @RequestParam(required = false) long start, @RequestParam(required = false) long end, @RequestParam(required = false) String interval, @RequestParam(required = false) String metrics) {
+	public Object getActivityData(@PathVariable UserActivity activity, @RequestParam(required = false, defaultValue = "1") String interval, @RequestParam(required = false) String metrics) {
 		long duration = Long.parseLong(interval) * 60l * 1000l;
+		long end = System.currentTimeMillis() + DateUtils.ONE_DAY;
+		long start = end - DateUtils.ONE_YEAR;
 		return this.analyticsService.getActivityChart(activity, start, end, duration, metrics);
 	}
 

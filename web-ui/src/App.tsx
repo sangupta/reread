@@ -7,6 +7,7 @@ import Header from './template/Header';
 import AddFeedView from './views/AddFeedView';
 import HomeView from './views/HomeView';
 import SettingsView from './views/SettingsView';
+import ActivityView from './views/ActivityView';
 
 interface AppProps extends WithStoreProp {
 
@@ -40,6 +41,7 @@ class App extends React.Component<AppProps, AppState> {
                     <Switch>
                         <Route exact path='/addFeed' component={AddFeedView} />
                         <Route exact path='/settings' component={SettingsView} />
+                        <Route exact path='/activity' component={ActivityView} />
 
                         <Route exact path='/feeds/all'><HomeView mode='all' /></Route>
                         <Route exact path='/feeds/stars'><HomeView mode='stars' /></Route>
