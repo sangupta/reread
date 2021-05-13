@@ -1,8 +1,11 @@
 import React from 'react';
-import Modal from '../components/Modal';
-import FeedApi from '../api/FeedApi';
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries } from 'react-vis';
+
+import { withRouter } from 'react-router-dom';
+
+import Modal from '../components/Modal';
 import DisplayDate from '../components/DisplayDate';
+import FeedApi from '../api/FeedApi';
 
 interface FeedDetailsContainerProps {
     details: any;
@@ -25,7 +28,7 @@ const normalizeMaxY = function (y) {
     return Number(normalized);
 }
 
-export default class FeedDetailsContainer extends React.Component<FeedDetailsContainerProps, FeedDetailsContainerState> {
+class FeedDetailsContainer extends React.Component<FeedDetailsContainerProps, FeedDetailsContainerState> {
 
     state = {
         chart: []
@@ -83,6 +86,13 @@ export default class FeedDetailsContainer extends React.Component<FeedDetailsCon
         return '';
     }
 
+    unsubscribeFeed = async () => {
+        const { details } = this.props;
+        const data = await FeedApi.unsubscribeFeed(details.feedID);
+        this.props.onModalClose();
+        this.props.history.push('/');
+    }
+
     render() {
         const { details } = this.props;
 
@@ -102,9 +112,11 @@ export default class FeedDetailsContainer extends React.Component<FeedDetailsCon
                     {this.renderChart()}
                 </div>
                 <div className="modal-footer">
-                    <button type="button" className="btn btn-danger">Unsubscribe</button>
+                    <button type="button" className="btn btn-danger" onClick={this.unsubscribeFeed}>Unsubscribe</button>
                 </div>
             </div>
         </Modal>
     }
 }
+
+export default withRouter(FeedDetailsContainer);

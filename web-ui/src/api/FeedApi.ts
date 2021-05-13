@@ -41,6 +41,13 @@ export default class FeedApi {
         return response.data;
     }
 
+    static async unsubscribeFeed(feedID: string) {
+        const response = await Axios.post('/feeds/unsubscribe', {
+            feedID: feedID
+        });
+        return response.data;
+    }
+
     static async refreshFeed(feedID: string): Promise<String> {
         const response = await Axios.get('/refresh/feed/' + feedID);
         return response.data;

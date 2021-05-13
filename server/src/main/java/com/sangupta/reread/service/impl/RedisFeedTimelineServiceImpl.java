@@ -50,29 +50,6 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 
 	@Override
 	public void updateAllTimeline(List<Post> posts) {
-//		final ListOperations<String, String> listOperation = this.redisTemplate.opsForList();
-//		final ZSetOperations<String, String> setOperations = this.redisTemplate.opsForZSet();
-//
-//		// add to sorted set
-//		for (Post post : posts) {
-//			setOperations.add(SORTED_TIMELINE + ALL_TIMELINE_ID, post.feedPostID, post.updated);
-//		}
-//
-//		// now get all these ids and add them to a normal timeline
-//		long cardinality = setOperations.zCard(SORTED_TIMELINE + ALL_TIMELINE_ID);
-//		ScanOptions scanOptions = ScanOptions.scanOptions().count(cardinality).build();
-//		Cursor<TypedTuple<String>> cursor = setOperations.scan(SORTED_TIMELINE + ALL_TIMELINE_ID, scanOptions);
-//		List<String> ids = new ArrayList<>();
-//		while (cursor.hasNext()) {
-//			String id = cursor.next().getValue();
-//			ids.add(id);
-//		}
-//
-//		String tempKey = KEY + ALL_TIMELINE_ID + "temp";
-//		listOperation.leftPushAll(tempKey, ids);
-//		this.redisTemplate.rename(tempKey, KEY + ALL_TIMELINE_ID);
-//		this.redisTemplate.delete(tempKey);
-		
 		this.updateTimeline(ALL_TIMELINE_ID, posts);
 	}
 	
@@ -88,7 +65,7 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 	public void removeFromSpecialTimeline(String timelineID, String postID) {
 		this.redisTemplate.opsForSet().remove(SORTED_TIMELINE + timelineID, postID);
 	}
-
+	
 	@Override
 	public String getLatestID(String feedID) {
 		final ListOperations<String, String> listOperation = this.redisTemplate.opsForList();
@@ -106,6 +83,12 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 		}
 		
 		return num.longValue();
+	}
+
+	@Override
+	public void removePost(String timelineID, String id) {
+		final ListOperations<String, String> listOperation = this.redisTemplate.opsForList();
+		listOperation.remove(timelineID, 0, id);
 	}
 	
 }

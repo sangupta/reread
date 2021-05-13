@@ -89,4 +89,6 @@ public interface FeedTimelineService {
 	 */
 	public long size(String feedID);
 
+	public void removePost(String allTimelineId, String id);
+
 }
