@@ -43,7 +43,7 @@ class MagazineItem extends React.Component {
         const { post } = this.props;
         const { postRead } = this.state;
 
-        return <div className={"card mb-3 card-magazine pointer " + (postRead ? 'card-read' : '') onClick={this.showPost}>
+        return <div className={"card mb-3 card-magazine pointer " + (postRead ? 'card-read' : '')} onClick={this.showPost}>
             <div className="row g-0">
                 <div className="col-md-4">
                     {this.renderImage(post)}
