@@ -38,7 +38,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         includeItems: 'all',
         layout: 'list',
         feedDetails: null,
-        showLoadMoreButton:true
+        showLoadMoreButton: true
     }
 
     componentDidMount() {
@@ -96,9 +96,6 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         const { posts, sortOption, includeItems } = this.state;
         const afterPostID = (posts[posts.length - 1] as Post).feedPostID;
 
-        console.log('posts: ', posts);
-        console.log('getting posts after postID: ' + afterPostID);
-
         const newPosts = await PostApi.getPosts(mode, (text || ''), feedID, folderID, sortOption, includeItems, afterPostID);
         if (newPosts) {
             if (newPosts.length === 0) {
@@ -113,7 +110,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
     fetchData = async (mode: string, feedID: string, folderID: string, afterPostID: string = '') => {
         let data;
 
-        this.setState({ loading: true, errorMsg: '' });
+        this.setState({ loading: true, errorMsg: '', showLoadMoreButton: true });
 
         const { sortOption, includeItems } = this.state;
         const text = this.props.query || '';
@@ -130,7 +127,11 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
     }
 
     sortChange = (v: string): void => {
-        this.setState({ sortOption: v });
+        this.setState({ sortOption: v }, () => {
+            const { mode, match } = this.props;
+            const { feedID, folderID } = match?.params;
+            this.fetchData(mode, feedID, folderID);
+        });
     }
 
     includeChange = (v: string): void => {
