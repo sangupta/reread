@@ -1,6 +1,6 @@
 package com.sangupta.reread.service.impl;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,16 +77,18 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 			return feedList;
 		}
 		
+		// find folder in which this feed is present
+		UserFeedFolder folder = feedList.getFolderForFeed(feedID);
+		
 		// remove feed from list
 		feedList.removeFeed(feedID);
 		this.feedListService.update(feedList);
 		
 		// get all feed posts
-		List<String> ids = this.feedTimelineService.getTimeLine(feedID);
+		Collection<String> ids = this.feedTimelineService.getTimeLine(feedID);
 		if(AssertUtils.isNotEmpty(ids)) {
-			for(String id : ids) {
-				this.feedTimelineService.removeFromSpecialTimeline(FeedTimelineService.ALL_TIMELINE_ID, id);
-				this.feedTimelineService.removePost(FeedTimelineService.ALL_TIMELINE_ID, id);
+			if(folder != null) {
+				this.feedTimelineService.removePosts(FeedTimelineService.getTimeLineForFolder(folder.folderID), ids);
 			}
 		}
 		

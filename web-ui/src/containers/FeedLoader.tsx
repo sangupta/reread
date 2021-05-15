@@ -25,6 +25,7 @@ interface FeedLoaderState {
     includeItems: string;
     layout: string;
     feedDetails: any;
+    showLoadMoreButton: boolean;
 }
 
 class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
@@ -36,7 +37,8 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         sortOption: 'newest',
         includeItems: 'all',
         layout: 'list',
-        feedDetails: null
+        feedDetails: null,
+        showLoadMoreButton:true
     }
 
     componentDidMount() {
@@ -64,93 +66,67 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         }
     }
 
-    handleRefresh = async (e: React.MouseEvent): void => {
+    handleRefresh = async (e: React.MouseEvent): Promise<void> => {
         e.preventDefault();
 
         const { mode, match } = this.props;
         const { feedID, folderID } = match?.params;
 
-        if(mode === 'feed') {
-            await FeedApi.refreshFeed(feedID);
-        }
-        if(mode === 'folder') {
-            await FeedApi.refreshFolder(folderID);
-        }
+        switch (mode) {
+            case 'feed':
+                await FeedApi.refreshFeed(feedID);
+                break;
 
-        if(mode === 'all') {
-            await FeedApi.refreshAll();
+            case 'folder':
+                await FeedApi.refreshFolder(folderID);
+                break;
+
+            case 'all':
+                await FeedApi.refreshAll();
+                break;
         }
 
         // reload data from server
         this.fetchData(mode, feedID, folderID);
     }
 
-    fetchData = async (mode: string, feedID: string, folderID: string) => {
+    loadMore = async () => {
+        const { mode, query: text, match } = this.props;
+        const { feedID, folderID } = match?.params;
+        const { posts, sortOption, includeItems } = this.state;
+        const afterPostID = (posts[posts.length - 1] as Post).feedPostID;
+
+        console.log('posts: ', posts);
+        console.log('getting posts after postID: ' + afterPostID);
+
+        const newPosts = await PostApi.getPosts(mode, (text || ''), feedID, folderID, sortOption, includeItems, afterPostID);
+        if (newPosts) {
+            if (newPosts.length === 0) {
+                this.setState({ showLoadMoreButton: false });
+                return;
+
+            }
+            this.setState({ posts: [...posts, ...newPosts] });
+        }
+    }
+
+    fetchData = async (mode: string, feedID: string, folderID: string, afterPostID: string = '') => {
         let data;
 
         this.setState({ loading: true, errorMsg: '' });
 
-        if (mode === 'search') {
-            const text = this.props.query;
-            if (!text) {
-                this.setState({ loading: false, errorMsg: 'Query text to search not found' });
-                return;
-            }
+        const { sortOption, includeItems } = this.state;
+        const text = this.props.query || '';
 
-            data = await PostApi.search(text);
-        }
-
-        if (mode === 'all') {
-            data = await TimeLineApi.getTimeLine();
-        }
-
-        if (mode === 'stars') {
-            data = await TimeLineApi.getStarsTimeLine();
-        }
-
-        if (mode === 'bookmarks') {
-            data = await TimeLineApi.getBookmarksTimeLine();
-        }
-
-        if (mode === 'feed') {
-            if (!feedID) {
-                this.setState({ loading: false, errorMsg: 'No such feed found' });
-                return;
-            }
-
-            data = await TimeLineApi.getFeedTimeLine(feedID);
-        }
-        if (mode === 'folder') {
-            if (!folderID) {
-                this.setState({ loading: false, errorMsg: 'No such folder found' });
-                return;
-            }
-
-            data = await TimeLineApi.getFolderTimeLine(folderID);
-        }
-
-        this.setState({ posts: data, loading: false });
+        const posts = await PostApi.getPosts(mode, text, feedID, folderID, sortOption, includeItems, afterPostID);
+        this.setState({ posts: posts, loading: false });
     }
 
     markAllAsHandler = async (value: string) => {
         const { posts } = this.state;
 
-        const ids: Array<string> = [];
-        posts.forEach(post => {
-            ids.push((post as Post).feedPostID);
-        });
-
-        if ('markRead' === value) {
-            const posts = await PostApi.markAllRead(ids);
-            this.setState({ posts: posts });
-            return;
-        }
-
-        if ('markUnread' === value) {
-            const posts = await PostApi.markAllUnread(ids);
-            this.setState({ posts: posts });
-            return;
-        }
+        const updatedPosts = await PostApi.toggleMarking(posts, value);
+        this.setState({ posts: updatedPosts });
     }
 
     sortChange = (v: string): void => {
@@ -209,7 +185,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
 
     renderContent() {
         const { query, mode } = this.props;
-        const { loading, errorMsg, posts, sortOption, includeItems, layout } = this.state;
+        const { loading, errorMsg, posts, layout, showLoadMoreButton } = this.state;
 
         if (loading) {
             return <Loading />
@@ -227,7 +203,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
             return <Alert className='mx-3'>Feed has no posts.</Alert>
         }
 
-        return <ContentPane posts={posts} sort={sortOption} include={includeItems} layout={layout} />
+        return <ContentPane posts={posts} layout={layout} onLoadMore={this.loadMore} showLoadMoreButton={showLoadMoreButton} />
     }
 
 }

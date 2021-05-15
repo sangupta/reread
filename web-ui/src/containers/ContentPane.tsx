@@ -11,13 +11,13 @@ import PostApi from '../api/PostApi';
 
 interface ContentPaneProps {
     posts: Array<Post>;
-    sort: string;
-    include: string;
     layout: string;
+    onLoadMore: () => void;
+    showLoadMoreButton: boolean;
 }
 
 interface ContentPaneState {
-    post: Post;
+    post: Post | null;
 }
 
 class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
@@ -28,7 +28,7 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         super(props);
 
         this.state = {
-            post: undefined
+            post: null
         }
     }
 
@@ -37,13 +37,17 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
     }
 
     hidePost = () => {
-        this.setState({ post: undefined });
+        this.setState({ post: null });
     }
 
     starPost = async (e: React.MouseEvent) => {
         e.preventDefault();
 
         const { post } = this.state;
+        if (post == null) {
+            return;
+        }
+
         const updatedPost: Post = await PostApi.toggleStarPost(post.feedPostID, post.starredOn > 0);
 
         const { posts } = this.props;
@@ -57,6 +61,10 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         e.preventDefault();
 
         const { post } = this.state;
+        if (post == null) {
+            return;
+        }
+
         const updatedPost: Post = await PostApi.toggleBookmarkPost(post.feedPostID, post.bookmarkedOn > 0);
 
         const { posts } = this.props;
@@ -70,6 +78,9 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         e.preventDefault();
 
         const { post } = this.state;
+        if (post == null) {
+            return;
+        }
 
         let index = this.filtered.indexOf(post);
         index = index + 1;
@@ -84,7 +95,10 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         e.preventDefault();
 
         const { post } = this.state;
-
+        if (post == null) {
+            return;
+        }
+        
         let index = this.filtered.indexOf(post);
         index = index - 1;
         if (index < 0) {
@@ -107,35 +121,18 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         }
     }
 
+    showLoadMoreButton = () => {
+        if (!this.props.showLoadMoreButton) {
+            return null;
+        }
+
+        return <div className='content-pane-more'>
+            <button type='button' className='btn btn-sm btn-primary' onClick={this.props.onLoadMore}>Load More</button>
+        </div>
+    }
+
     render() {
-        const { posts, layout, sort, include } = this.props;
-
-        let filtered = [...posts];
-        if (sort === 'newest') {
-            filtered.sort((a: Post, b: Post) => {
-                if (a.updated > b.updated) {
-                    return -1;
-                }
-
-                return 1;
-            });
-        } else {
-            filtered.sort((a: Post, b: Post) => {
-                if (a.updated > b.updated) {
-                    return 1;
-                }
-
-                return -1;
-            });
-        }
-
-        if (include === 'read') {
-            filtered = filtered.filter(post => post.readOn > 0);
-        } else if (include === 'unread') {
-            filtered = filtered.filter(post => post.readOn === 0);
-        }
-
-        this.filtered = filtered;
+        const { posts, layout } = this.props;
 
         let Element;
         switch (layout) {
@@ -156,12 +153,12 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
             default:
                 Element = ListLayout;
                 break;
-
-
         }
 
         return <div className='content-pane'>
-            <Element posts={filtered} onShowPost={this.showPost} />
+            <Element posts={posts} onShowPost={this.showPost} />
+            {this.showLoadMoreButton()}
+
             {this.renderPost()}
         </div>
     }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +20,8 @@ import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.entity.Post;
+import com.sangupta.reread.entity.PostIncludeOption;
+import com.sangupta.reread.entity.TimelineSortOption;
 import com.sangupta.reread.entity.UserActivity;
 import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
@@ -73,9 +74,9 @@ public class PostsController {
 	 * @return
 	 */
 	@GetMapping("/stars")
-	public List<Post> getStarredPosts() {
+	public List<Post> getStarredPosts(@RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String afterPostID) {
 		List<Post> posts = new ArrayList<>();
-		Set<String> ids = this.feedTimelineService.getSpecialTimeline(FeedTimelineService.STARRED_TIMELINE_ID);
+		Collection<String> ids = this.feedTimelineService.getTimeLine(FeedTimelineService.STARRED_TIMELINE_ID, sort, afterPostID);
 		this.addPostsForIDs(posts, ids);
 		return posts;
 	}
@@ -86,9 +87,9 @@ public class PostsController {
 	 * @return
 	 */
 	@GetMapping("/bookmarks")
-	public List<Post> getBookmarkedPosts() {
+	public List<Post> getBookmarkedPosts(@RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String afterPostID) {
 		List<Post> posts = new ArrayList<>();
-		Set<String> ids = this.feedTimelineService.getSpecialTimeline(FeedTimelineService.BOOKMARK_TIMELINE_ID);
+		Collection<String> ids = this.feedTimelineService.getTimeLine(FeedTimelineService.BOOKMARK_TIMELINE_ID, sort, afterPostID);
 		this.addPostsForIDs(posts, ids);
 		return posts;
 	}
@@ -100,11 +101,10 @@ public class PostsController {
 	 * @return
 	 */
 	@GetMapping("/feed/{feedID}")
-	public List<Post> getFeedPosts(@PathVariable String feedID) {
+	public List<Post> getFeedPosts(@PathVariable String feedID, @RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String afterPostID) {
 		List<Post> posts = new ArrayList<>();
-
-		this.addPostsForTimeline(posts, feedID);
-
+		Collection<String> ids = this.feedTimelineService.getTimeLine(feedID, sort, afterPostID);
+		this.addPostsForIDs(posts, ids);
 		return posts;
 	}
 
@@ -274,7 +274,7 @@ public class PostsController {
 	 * @param timelineID the timeline ID to fetch posts from
 	 */
 	protected void addPostsForTimeline(List<Post> posts, String timelineID) {
-		List<String> timeline = this.feedTimelineService.getTimeLine(timelineID);
+		Collection<String> timeline = this.feedTimelineService.getTimeLine(timelineID);
 		this.addPostsForIDs(posts, timeline);
 	}
 
