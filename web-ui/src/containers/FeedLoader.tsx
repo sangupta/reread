@@ -1,9 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { RouteComponentProps } from "react-router";
 
 import Loading from '../components/Loading';
 import Alert from '../components/Alert';
-import TimeLineApi from '../api/TimeLineApi';
 import ContentPane from './ContentPane';
 import { Post } from '../api/Model';
 import PostApi from '../api/PostApi';
@@ -11,10 +11,12 @@ import Toolbar from './Toolbar';
 import FeedApi from '../api/FeedApi';
 import FeedDetailsContainer from './FeedDetailsContainer';
 
-interface FeedLoaderProps {
-    mode: 'feed' | 'folder' | 'all' | 'search' | 'stars' | 'bookmarks';
-    match: any;
+export type FeedLoaderMode = 'feed' | 'folder' | 'all' | 'search' | 'stars' | 'bookmarks';
+
+interface FeedLoaderProps extends RouteComponentProps {
+    mode: FeedLoaderMode;
     query?: string;
+    match: any;
 }
 
 interface FeedLoaderState {
@@ -171,7 +173,7 @@ class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
         </div>
     }
 
-    closeDetailsModal = (e: React.MouseEvent): void => {
+    closeDetailsModal = (): void => {
         this.setState({ feedDetails: null });
     }
 

@@ -2,16 +2,16 @@ import React from 'react';
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries } from 'react-vis';
 
 import { withRouter } from 'react-router-dom';
+import { RouteComponentProps } from "react-router";
 
 import Modal from '../components/Modal';
 import DisplayDate from '../components/DisplayDate';
 import FeedApi from '../api/FeedApi';
 import { ChartData } from '../api/Model';
 
-interface FeedDetailsContainerProps {
+interface FeedDetailsContainerProps extends RouteComponentProps {
     details: any;
     onModalClose: () => void;
-    history: any;
 }
 
 interface FeedDetailsContainerState {

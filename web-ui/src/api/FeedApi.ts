@@ -3,7 +3,7 @@ import { DiscoveredFeed, FeedList } from './Model';
 
 export default class FeedApi {
 
-    private static FEED_LIST: FeedList = [];
+    private static FEED_LIST: FeedList;
 
     static async getFeedList(): Promise<FeedList> {
         const response = await Axios.get('/feeds/me');

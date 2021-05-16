@@ -2,10 +2,10 @@ import React from 'react';
 import { collect, WithStoreProp } from 'react-recollect';
 
 import FeedList from '../containers/FeedList';
-import FeedLoader from '../containers/FeedLoader';
+import FeedLoader, { FeedLoaderMode } from '../containers/FeedLoader';
 
 interface HomeViewProps extends WithStoreProp {
-    mode: string;
+    mode: FeedLoaderMode;
     query?: string;
 }
 

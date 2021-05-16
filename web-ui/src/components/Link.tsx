@@ -1,18 +1,18 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
+import { RouteComponentProps } from "react-router";
 
-interface LinkProps {
+interface LinkProps extends RouteComponentProps {
     route: string;
     className?: string;
     as?: string;
     onClick?: Function;
-    history: any;
     href?: string;
 }
 
 class Link extends React.Component<LinkProps> {
 
-    clickHandler = (e) => {
+    clickHandler = (e: React.MouseEvent) => {
         e.preventDefault();
 
         const { onClick, route, history } = this.props;

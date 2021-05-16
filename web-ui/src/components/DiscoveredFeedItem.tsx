@@ -1,13 +1,13 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { RouteComponentProps } from "react-router";
 
 import { DiscoveredFeed } from '../api/Model';
 import FeedApi from '../api/FeedApi';
 import Icon from './Icon';
 
-interface DiscoveredFeedProps {
+interface DiscoveredFeedProps extends RouteComponentProps {
     feed: DiscoveredFeed;
-    history: any;
     folder: string;
 }
 

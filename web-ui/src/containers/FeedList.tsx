@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { RouteComponentProps } from "react-router";
 
 import FolderItems from './../components/FolderItems';
 import FeedItem from '../components/FeedItem';
@@ -8,8 +9,7 @@ import Loading from '../components/Loading';
 import FeedApi from '../api/FeedApi';
 import Icon from '../components/Icon';
 
-interface FeedListProps {
-    history: any;
+interface FeedListProps extends RouteComponentProps {
 }
 
 interface FeedListState {

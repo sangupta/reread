@@ -1,9 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { RouteComponentProps } from "react-router";
+
 import { collect, WithStoreProp } from 'react-recollect';
 
-interface SearchBoxProps extends WithStoreProp {
-    history: any;
+interface SearchBoxProps extends WithStoreProp, RouteComponentProps {
 }
 
 interface SearchBoxState {
