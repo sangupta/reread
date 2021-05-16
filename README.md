@@ -218,8 +218,57 @@ JSON.PUT me {feedList}
 JSON.SET me . {feedList}
 ```
 
+### Adding a feed in a folder
+
+The commands used in this feature are a union of all the commands used
+in [Adding a feed](#adding-a-new-feed) as described above. The extra commands 
+used here are:
+
+```
+// get a list of all feeds in the folder
+JSON.GET feedList:me
+
+// now create a merged union store of all timelines
+ZUNIONSTORE timeline:{folderID} {feedID1} {feedID2} {feedID3} {feedID4}
+```
+
+### Unsubscribing a feed
+
+I had designed this to use `ZDIFFSTORE` to remove entries efficiently,
+but the command is available starting Redis 6.2.0. However, the `redismod`
+Docker image available on `latest` head contains Redis 6.0.1.
+
+```
+// get feed list
+JSON.GET feedList:me
+
+// read all entries from this timeline
+ZRANGE timeline:{feedID} 0 -1
+
+// remove the feed from folder timeline
+ZREM timeline:{folderID} {...entries}
+
+// remove the feed entries from all timeline
+ZREM timeline:$all {...entries}
+
+// update the feed list
+JSON.SET feedList:me . {feedList}
+```
+
 ### Importing an OPML file
 
+```
+// get feed list
+JSON.GET feedList:me
+
+// read all master feeds - this is more of performance improvement
+KEYS masterFeed*
+GET masterFeed:{masterFeedID}
+
+// check if master feed already exists
+// if not create a new master feed
+JSON.SET masterFeed:{masterFeedID} . {masterFeed}
+```
 
 ### Exporting an OPML file
 
@@ -229,7 +278,52 @@ JSON.GET feedList:me
 
 ### Crawling a feed
 
+This is one of the most complex pieces, which touches all modules
+of Redis that we use.
+
 ```
+// get the master feed
+JSON.GET masterFeed:{masterFeedID}
+
+// get previously crawled details
+JSON.GET feedCrawlDetails:{feedID}
+
+// crawl the feed here
+
+// once crawled, update details like etag/last modified time
+JSON.SET feedCrawlDetails:{feedID} .lastCrawled {currentSystemTime}
+
+JSON.SET masterFeed:{feedID} .title {parsedFeed.title}
+JSON.SET masterFeed:{feedID} .siteUrl {parsedFeed.siteUrl}
+
+JSON.SET feedCrawlDetails:{feedID} .lastCrawled {parsedFeed.lastCrawled}
+JSON.SET feedCrawlDetails:{feedID} .lastModifiedHeader {parsedFeed.lastModifiedHeader}
+JSON.SET feedCrawlDetails:{feedID} .lastModifiedTime {parsedFeed.lastModifiedTime}
+JSON.SET feedCrawlDetails:{feedID} .etag {parsedFeed.eTagHeader}
+
+// filter already existing posts
+BF.EXISTS bloom:hash {post.hash}
+BF.EXISTS bloom:text {post.text}
+BF.EXISTS bloom:uniqueID {post.uniqueID}
+
+// now start saving all filtered posts
+BF.ADD bloom:hash {post.hash}
+BF.ADD bloom:text {post.text}
+BF.ADD bloom:uniqueID {post.uniqueID}
+
+// save each post
+SET {postID} {post}
+
+// index each post
+FT.ADD postSearch {postID} 1 FIELDS {...fields}
+
+// send for analytics
+TS.MADD timeseries-feed:{feedID} {post.updated} 1
+
+// update timelines as needed
+ZADD timeline:{feedID} {postID} {post.updated}
+ZADD timeline:{folderID} {postID} {post.updated}
+ZADD timeline:$all {postID} {post.updated}
 ```
 
 ### Marking a post read/unread
@@ -267,36 +361,20 @@ ZRANGE timeline:{feedID} {rank + 1} {rank + pageSize}
 ### Viewing a folder timeline
 
 ```
+// when viewing by newest, first page
+ZREVRANGE timeline:{folderID} 0 {pageSize}
 
-```
-### Subscribing a feed
+// when viewing by newest, second page
+ZRANK timeline:{folderID} {lastPostID}
+ZCARD timeline:{folderID}
+ZREVRANGE timeline:{folderID} {card - rank + 1} {card - rank + pageSize}
 
-```
-```
+// when viewing by oldest, first page
+ZRANGE timeline:{folderID} 0 {pageSize}
 
-### Subscribing a feed in a folder
-
-```
-```
-
-### Unsubscribing a feed
-
-I had designed this to use `ZDIFFSTORE` to remove entries efficiently,
-but the command is available starting Redis 6.2.0. However, the `redismod`
-Docker image available on `latest` head contains Redis 6.0.1.
-
-```
-// get feed list
-JSON.GET feedList:me
-
-// read all entries from this timeline
-ZRANGE timeline:{feedID} 0 -1
-
-// remove the feed from folder timeline
-ZREM timeline:{folderID} {...entries}
-
-// remove the feed entries from all timeline
-ZREM timeline:$all {...entries}
+// when viewing by oldest, second page
+ZRANK timeline:{folderID} {lastPostID}
+ZRANGE timeline:{folderID} {rank + 1} {rank + pageSize}
 ```
 
 ### Viewing feed details
