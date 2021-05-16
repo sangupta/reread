@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.reread.entity.FeedList;
-import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
+import com.sangupta.reread.redis.RedisJsonDataStoreServiceImpl;
 import com.sangupta.reread.service.FeedListService;
 
 /**
@@ -14,7 +14,7 @@ import com.sangupta.reread.service.FeedListService;
  *
  */
 @Service
-public class RedisFeedListServiceImpl extends RedisDataStoreServiceImpl<FeedList> implements FeedListService {
+public class RedisFeedListServiceImpl extends RedisJsonDataStoreServiceImpl<FeedList> implements FeedListService {
 
 	@Override
 	public FeedList getOrCreate(String userID) {

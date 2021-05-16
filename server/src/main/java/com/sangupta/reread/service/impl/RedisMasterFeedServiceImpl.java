@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.MasterFeed;
-import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
+import com.sangupta.reread.redis.RedisJsonDataStoreServiceImpl;
 import com.sangupta.reread.service.MasterFeedService;
 
 /**
@@ -17,7 +17,7 @@ import com.sangupta.reread.service.MasterFeedService;
  *
  */
 @Service
-public class RedisMasterFeedServiceImpl extends RedisDataStoreServiceImpl<MasterFeed> implements MasterFeedService {
+public class RedisMasterFeedServiceImpl extends RedisJsonDataStoreServiceImpl<MasterFeed> implements MasterFeedService {
 
 	@Override
 	public MasterFeed getOrCreateFeed(MasterFeed mf) {

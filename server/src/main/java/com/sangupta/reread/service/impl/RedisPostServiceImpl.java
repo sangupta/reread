@@ -4,14 +4,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.SpringBeans;
 import com.sangupta.reread.entity.Post;
-import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
+import com.sangupta.reread.redis.RedisTemplateDataStoreServiceImpl;
 import com.sangupta.reread.service.AnalyticsService;
 import com.sangupta.reread.service.FeedTimelineService;
 import com.sangupta.reread.service.PostSearchService;
@@ -26,13 +25,10 @@ import io.rebloom.client.Client;
  *
  */
 @Service
-public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implements PostService {
+public class RedisPostServiceImpl extends RedisTemplateDataStoreServiceImpl<Post> implements PostService {
 
 	@Autowired
 	protected PostSearchService postSearchService;
-
-	@Autowired
-	protected RedisTemplate<String, String> redisTemplate;
 
 	@Autowired
 	protected FeedTimelineService feedTimelineService;
@@ -41,7 +37,7 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 	protected AnalyticsService analyticsService;
 	
 	protected Client bloomFilter = new Client(SpringBeans.REDIS_HOST, SpringBeans.REDIS_PORT);
-
+	
 	@Override
 	public void filterAlreadyExistingPosts(List<Post> posts) {
 		if (AssertUtils.isEmpty(posts)) {

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.reread.entity.UserSettings;
-import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
+import com.sangupta.reread.redis.RedisJsonDataStoreServiceImpl;
 import com.sangupta.reread.service.UserSettingsService;
 
 /**
@@ -14,6 +14,6 @@ import com.sangupta.reread.service.UserSettingsService;
  *
  */
 @Service
-public class RedisUserSettingsServiceImpl extends RedisDataStoreServiceImpl<UserSettings> implements UserSettingsService {
+public class RedisUserSettingsServiceImpl extends RedisJsonDataStoreServiceImpl<UserSettings> implements UserSettingsService {
 
 }

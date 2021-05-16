@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.redislabs.modules.rejson.JReJSON;
 import com.sangupta.reread.entity.FeedCrawlDetails;
-import com.sangupta.reread.redis.RedisDataStoreServiceImpl;
+import com.sangupta.reread.redis.RedisJsonDataStoreServiceImpl;
 import com.sangupta.reread.service.FeedCrawlDetailsService;
 
 /**
@@ -14,6 +14,6 @@ import com.sangupta.reread.service.FeedCrawlDetailsService;
  *
  */
 @Service
-public class RedisFeedCrawlDetailsServiceImpl extends RedisDataStoreServiceImpl<FeedCrawlDetails> implements FeedCrawlDetailsService {
+public class RedisFeedCrawlDetailsServiceImpl extends RedisJsonDataStoreServiceImpl<FeedCrawlDetails> implements FeedCrawlDetailsService {
 
 }

@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.sangupta.jerry.constants.HttpHeaderName;
 import com.sangupta.jerry.http.WebResponse;
 import com.sangupta.jerry.http.service.HttpService;
+import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.ParsedFeed;
+import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.service.FeedParsingService;
 import com.sangupta.reread.utils.FeedParser;
 import com.sangupta.reread.utils.WebResponseParser;
@@ -51,6 +53,12 @@ public class DefaultFeedParsingServiceImpl implements FeedParsingService {
 		if(feed == null) {
 			LOGGER.warn("Feed returned is null for url: {}", url);
 			return null;
+		}
+		
+		if(AssertUtils.isNotEmpty(feed.posts)) {
+			for(Post post : feed.posts) {
+				System.out.println(post.title);
+			}
 		}
 		
 		feed.crawlTime = crawlTime;
