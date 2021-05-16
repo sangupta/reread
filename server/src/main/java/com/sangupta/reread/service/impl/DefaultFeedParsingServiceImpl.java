@@ -55,11 +55,11 @@ public class DefaultFeedParsingServiceImpl implements FeedParsingService {
 			return null;
 		}
 		
-		if(AssertUtils.isNotEmpty(feed.posts)) {
-			for(Post post : feed.posts) {
-				System.out.println(post.title);
-			}
-		}
+//		if(AssertUtils.isNotEmpty(feed.posts)) {
+//			for(Post post : feed.posts) {
+//				System.out.println(post.title);
+//			}
+//		}
 		
 		feed.crawlTime = crawlTime;
 		feed.lastModifiedTimestamp = response.getLastModified();
