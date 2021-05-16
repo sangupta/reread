@@ -16,15 +16,21 @@ The project is a submission entry to [Build on Redis Hackathon](https://hackatho
 * [Redis modules used](#redis-modules-used)
 * [Issues encountered with Redis](#issues-encountered-with-redis)
 * [Redis commands usage](#redis-commands-usage)
-  * [Loading the home page]
-  * [Adding a new feed]
-  * [Crawling a feed]
-  * [Marking a post read/unread]
-  * [Viewing a feed timeline]
-  * [Viewing a folder timeline]
-  * [Unsubscribing a feed]
-  * [Viewing feed details]
-  * [Viewing activity]
+  * [When server starts up](#when-server-starts-up)
+  * [Loading the home page](#loading-the-home-page)
+  * [Adding a new feed](#adding-a-new-feed)
+  * [Importing an OPML file](#importing-an-opml-file)
+  * [Exporting an OPML file](#exporting-an-opml-file)
+  * [Crawling a feed](#crawling-a-feed)
+  * [Marking a post read/unread](#marking-a-post-readunread)
+  * [Viewing a feed timeline](#viewing-a-feed-timeline)
+  * [Viewing a folder timeline](#viewing-a-folder-timeline)
+  * [Subscribing a feed](#subscribing-a-feed)
+  * [Subscribing a feed in a folder](#subscribing-a-feed-in-a-folder)
+  * [Unsubscribing a feed](#unsubscribing-a-feed)
+  * [Viewing feed details](#viewing-feed-details)
+  * [Viewing activity](#viewing-activity)
+  * [Searching for posts](#searching-for-posts)
 * [Tech Stack](#tech-stack)
 * [Deployment](#deployment)
 * [Hacking](#hacking)
@@ -247,6 +253,15 @@ ZRANGE timeline:{feedID} {rank + 1} {rank + pageSize}
 
 ```
 
+```
+### Subscribing a feed
+
+```
+```
+
+### Subscribing a feed in a folder
+
+```
 ```
 
 ### Unsubscribing a feed
