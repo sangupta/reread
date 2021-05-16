@@ -81,7 +81,7 @@ ReRead comes with the following features:
 * Add RSS/Atom feeds
 * Import feeds and folders from an OPML file
 * De-dupe posts (with same content) across multiple feeds
-* Multiple layouts: cards, masonary, list, magazine
+* Multiple layouts: cards, masonary, list, magazine, title only
 * Sort by oldest/newest posts
 * Filter to show only read/unread posts
 * Star a post as favorite
