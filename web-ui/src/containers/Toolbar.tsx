@@ -23,6 +23,7 @@ const layoutOptions: Array<DropDownOption> = [
     { label: 'Cards View', value: 'cards' },
     { label: 'Masonry View', value: 'masonry' },
     { label: 'List View', value: 'list' },
+    { label: 'Title Only View', value: 'title' },
     { label: 'Magazine View', value: 'magazine' }
 ];
 

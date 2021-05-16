@@ -30,7 +30,7 @@ class BrickRenderer extends React.Component<any, any> {
         if (!post.image || !post.image.url) {
             return null;
         }
-        
+
         const width = post.image.width;
         const height = post.image.height;
         const podWidth = 278;
@@ -44,8 +44,8 @@ class BrickRenderer extends React.Component<any, any> {
 
 export default class MasonryLayout extends React.Component<any, any> {
 
-    getContentPane() {
-        return document.querySelector('.content-pane');
+    getContentPane(): HTMLElement {
+        return document.querySelector('.content-pane') as HTMLElement;
     }
 
     render() {
@@ -53,7 +53,7 @@ export default class MasonryLayout extends React.Component<any, any> {
 
         return <Masonry comp={BrickRenderer}
             items={posts}
-            virtualize={true} 
+            virtualize={true}
             scrollContainer={this.getContentPane}
             virtualBoundsBottom={1000}
             virtualBoundsTop={200}

@@ -8,6 +8,7 @@ import CardLayout from '../layout/CardLayout';
 import { Post } from '../api/Model';
 import PostView from './PostView';
 import PostApi from '../api/PostApi';
+import TitleOnlyLayout from '../layout/TitleOnly';
 
 interface ContentPaneProps {
     posts: Array<Post>;
@@ -149,7 +150,11 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
                 Element = MagazineLayout;
                 break;
 
-            case 'list':
+            case 'title':
+                Element = TitleOnlyLayout;
+                break;
+
+                case 'list':
             default:
                 Element = ListLayout;
                 break;
