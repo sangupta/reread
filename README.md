@@ -14,6 +14,11 @@ The project is a submission entry to [Build on Redis Hackathon](https://hackatho
 * [Architecture](#architecture)
   * [Notes on Security](#notes-on-security)
 * [Redis modules used](#redis-modules-used)
+  * [Redis Core](#redis-core)
+  * [RedisJSON](#redisjson)
+  * [RediSearch](#redisearch)
+  * [Redis Timeseries](#redistimeseries)
+  * [Redis Bloom](#redisbloom)
 * [Issues encountered with Redis](#issues-encountered-with-redis)
 * [Redis commands usage](#redis-commands-usage)
   * [When server starts up](#when-server-starts-up)
@@ -129,22 +134,32 @@ based SSL certificate.
 
 The project uses the following Redis modules for its functionality:
 
-* [Redis Core](https://redis.io) - used to check existence of keys and for other minor 
-operations based on keys.
+### Redis Core
 
-* [RedisJSON](https://redislabs.com/redis-enterprise/redis-json/) - this serves as the document
+[Redis Core](https://redis.io) used to check existence of keys and for other minor 
+operations based on keys. This is also
+
+### RedisJSON
+
+[RedisJSON](https://redislabs.com/redis-enterprise/redis-json/) - this serves as the document
 store for us. All post data, details on feeds, when they were crawled etc is stored as JSON documents.
 This allows us fine grained atomic operations such as updating a single field within the document
 than read/writing the entire document again.
 
-* [RediSearch](https://redislabs.com/redis-enterprise/redis-search/) - this is used to index
+### RediSearch
+
+[RediSearch](https://redislabs.com/redis-enterprise/redis-search/) - this is used to index
 and search across all posts. The full-text search built into the UI is powered by it.
 
-* [RedisTimeSeries](https://redislabs.com/modules/redis-timeseries/) - this is used to store the
+### RedisTimeSeries
+
+[RedisTimeSeries](https://redislabs.com/modules/redis-timeseries/) - this is used to store the
 activity behavior of user as well as the publishing behavior of the feeds. Dashboards such as number
 of posts read per day, per week etc are powered using this module.
 
-* [RedisBloom](https://redislabs.com/modules/redis-bloom/) - the most useful module of all. This helps
+### RedisBloom
+
+[RedisBloom](https://redislabs.com/modules/redis-bloom/) - the most useful module of all. This helps
 us de-duplicate entries not just in the same feed, but also across the board. Thus if you have read the
 post once, why read it again?
 
