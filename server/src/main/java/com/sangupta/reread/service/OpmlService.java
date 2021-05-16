@@ -29,4 +29,6 @@ public interface OpmlService {
 	 */
 	public List<MasterFeed> importFeeds(List<OpmlFeed> feeds);
 
+	public String exportOpml();
+
 }

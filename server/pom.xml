@@ -168,6 +168,12 @@
 			<version>2.1.0</version>
 		</dependency>
 
+		<!-- for string escaping -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
+		</dependency>
 	</dependencies>
 
 	<build>

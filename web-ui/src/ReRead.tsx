@@ -4,9 +4,8 @@ import { store } from 'react-recollect';
 import Axios from 'axios';
 
 import App from './App';
-import { Feed, Folder } from './api/Model';
 
-const SERVER_URL = 'http://localhost:1309';
+export const SERVER_URL = 'http://localhost:1309';
 
 declare module 'react-recollect' {
     interface Store {

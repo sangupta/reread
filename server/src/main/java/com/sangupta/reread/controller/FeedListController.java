@@ -101,7 +101,7 @@ public class FeedListController {
 		this.feedListService.update(list);
 		return folder;
 	}
-
+	
 	/**
 	 * Request/Response payload class.
 	 * 

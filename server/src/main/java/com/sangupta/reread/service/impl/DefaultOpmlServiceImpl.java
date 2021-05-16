@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.sangupta.jerry.security.SecurityContext;
 import com.sangupta.jerry.util.AssertUtils;
+import com.sangupta.jerry.util.StringUtils;
 import com.sangupta.reread.entity.DiscoveredFeed;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.entity.MasterFeed;
 import com.sangupta.reread.entity.OpmlFeed;
+import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedDiscoveryService;
 import com.sangupta.reread.service.FeedListService;
@@ -68,8 +70,66 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 		return imported;
 	}
 
-	private void importFeed(List<MasterFeed> masterFeeds, List<MasterFeed> feedsImported, FeedList feedList,
-			OpmlFeed opmlFeed) {
+	@Override
+	public String exportOpml() {
+		List<OpmlFeed> feeds = this.getOpmlForExport();
+		String newLine = StringUtils.SYSTEM_NEW_LINE;
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		builder.append(newLine);
+		builder.append("<opml version=\"1.0\">");
+		builder.append(newLine);
+		builder.append("<head>");
+		builder.append(newLine);
+		builder.append("<title>ReRead OPML Export</title>");
+		builder.append(newLine);
+		builder.append("</head>");
+		builder.append(newLine);
+		builder.append("<body>");
+		builder.append(newLine);
+		
+		for(OpmlFeed feed : feeds) {
+			feed.writeXml(builder, newLine);
+		}
+		
+		builder.append("</body>");
+		builder.append(newLine);
+		builder.append("</opml>");
+		builder.append(newLine);
+		
+		return builder.toString();
+	}
+	
+	protected List<OpmlFeed> getOpmlForExport() {
+		FeedList feedList = this.feedListService.get(SecurityContext.getUserID());
+		
+		final List<OpmlFeed> feeds = new ArrayList<>();
+		
+		// first feeds
+		for(UserFeed feed : feedList.feeds) {
+			MasterFeed mf = this.masterFeedService.get(feed.masterFeedID);
+			feeds.add(new OpmlFeed(feed, mf));
+		}
+		
+		// now folders
+		for(UserFeedFolder folder : feedList.folders) {
+			OpmlFeed folderFeed = new OpmlFeed();
+			folderFeed.text = folder.title;
+			folderFeed.title = folder.title;
+			
+			for(UserFeed feed : folder.childFeeds) {
+				MasterFeed mf = this.masterFeedService.get(feed.masterFeedID);
+				folderFeed.children.add(new OpmlFeed(feed, mf));
+			}
+			
+			feeds.add(folderFeed);
+		}
+		
+		return feeds;
+	}
+
+	private void importFeed(List<MasterFeed> masterFeeds, List<MasterFeed> feedsImported, FeedList feedList, OpmlFeed opmlFeed) {
 		final boolean isFolder = AssertUtils.isNotEmpty(opmlFeed.children);
 
 		if (isFolder) {

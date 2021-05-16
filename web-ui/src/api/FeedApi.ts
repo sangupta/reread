@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import { DiscoveredFeed, FeedList } from './Model';
+import {SERVER_URL} from './../ReRead';
 
 export default class FeedApi {
 
@@ -85,6 +86,7 @@ export default class FeedApi {
     }
 
     static async exportOpml() {
-        
+        window.open(SERVER_URL + '/opml/export', '_blank');
     }
+
 }
