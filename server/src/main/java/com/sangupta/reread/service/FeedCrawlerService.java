@@ -16,6 +16,6 @@ public interface FeedCrawlerService {
 	 * 
 	 * @param masterFeedID
 	 */
-	public void crawlFeed(String masterFeedID);
+	public void crawlFeed(String masterFeedID, boolean updateAllTimeline);
 
 }

@@ -118,6 +118,10 @@ public class RedisDataStoreServiceImpl<T> implements DataStoreService<T> {
 
 	@Override
 	public T get(String primaryID) {
+		if(primaryID == null) {
+			return null;
+		}
+		
 		String prefix = this.getKeyPrefix();
 		if(!primaryID.startsWith(prefix)) {
 			primaryID = prefix + primaryID;

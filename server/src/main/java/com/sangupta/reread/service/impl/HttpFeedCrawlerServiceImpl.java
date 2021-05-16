@@ -50,9 +50,9 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 	
 	@Autowired
 	protected PostService postService;
-
+	
 	@Override
-	public void crawlFeed(String masterFeedID) {
+	public void crawlFeed(String masterFeedID, boolean forceUpdateAllTimeline) {
 		MasterFeed masterFeed = this.masterFeedService.get(masterFeedID);
 		if(masterFeed == null) {
 			LOGGER.warn("Master feed not found for id: {}", masterFeed);
@@ -115,10 +115,7 @@ public class HttpFeedCrawlerServiceImpl implements FeedCrawlerService {
 		this.postService.savePosts(posts);
 		
 		// update the feed timeline
-		this.feedTimelineService.updateTimeline(masterFeedID, posts);
-		
-		// update the combined all timeline
-		this.feedTimelineService.updateTimeline(FeedTimelineService.ALL_TIMELINE_ID, posts);
+		this.feedTimelineService.addToTimeline(masterFeedID, posts, forceUpdateAllTimeline);
 	}
 
 	protected void updateEntities(MasterFeed feed, FeedCrawlDetails details, ParsedFeed parsedFeed, List<Post> posts) {

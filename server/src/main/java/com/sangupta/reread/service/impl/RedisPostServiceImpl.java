@@ -133,7 +133,7 @@ public class RedisPostServiceImpl extends RedisDataStoreServiceImpl<Post> implem
 		if (post != null) {
 			long time = System.currentTimeMillis();
 			this.updateField(post, fieldName, time);
-			this.feedTimelineService.updateTimeline(timelineID, post);
+			this.feedTimelineService.addToTimeline(timelineID, List.of(post), false);
 			
 			post = this.get(postID);
 		}

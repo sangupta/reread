@@ -2,7 +2,6 @@ package com.sangupta.reread.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.entity.PostIncludeOption;
 import com.sangupta.reread.entity.TimelineSortOption;
 import com.sangupta.reread.entity.UserActivity;
-import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.AnalyticsService;
 import com.sangupta.reread.service.FeedListService;
@@ -62,9 +60,10 @@ public class PostsController {
 	 * @return
 	 */
 	@GetMapping("/all")
-	public List<Post> getAllPosts() {
+	public List<Post> getAllPosts(@RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String afterPostID) {
 		List<Post> posts = new ArrayList<>();
-		this.addPostsForTimeline(posts, FeedTimelineService.ALL_TIMELINE_ID);
+		Collection<String> ids = this.feedTimelineService.getTimeLine(FeedTimelineService.ALL_TIMELINE_ID, sort, afterPostID);
+		this.addPostsForIDs(posts, ids);
 		return posts;
 	}
 
@@ -187,7 +186,7 @@ public class PostsController {
 	 * @return
 	 */
 	@GetMapping("/folder/{folderID}")
-	public List<Post> getFolderPosts(@PathVariable String folderID) {
+	public List<Post> getFolderPosts(@PathVariable String folderID, @RequestParam(required = false) TimelineSortOption sort, @RequestParam(required = false) PostIncludeOption include, @RequestParam(required = false) String afterPostID) {
 		FeedList feedList = this.feedListService.get(SecurityContext.getUserID());
 		if (feedList == null) {
 			return null;
@@ -199,11 +198,8 @@ public class PostsController {
 		}
 
 		List<Post> posts = new ArrayList<>();
-		for (UserFeed feed : folder.childFeeds) {
-			this.addPostsForTimeline(posts, feed.masterFeedID);
-		}
-
-		Collections.sort(posts);
+		Collection<String> ids = this.feedTimelineService.getTimeLine(folderID, sort, afterPostID);
+		this.addPostsForIDs(posts, ids);
 		return posts;
 	}
 
@@ -266,17 +262,17 @@ public class PostsController {
 		return this.postSearchService.search(query);
 	}
 
-	/**
-	 * Add posts to the list from given timeline ID.
-	 * 
-	 * @param posts list to add posts to
-	 * 
-	 * @param timelineID the timeline ID to fetch posts from
-	 */
-	protected void addPostsForTimeline(List<Post> posts, String timelineID) {
-		Collection<String> timeline = this.feedTimelineService.getTimeLine(timelineID);
-		this.addPostsForIDs(posts, timeline);
-	}
+//	/**
+//	 * Add posts to the list from given timeline ID.
+//	 * 
+//	 * @param posts list to add posts to
+//	 * 
+//	 * @param timelineID the timeline ID to fetch posts from
+//	 */
+//	protected void addPostsForTimeline(List<Post> posts, String timelineID) {
+//		Collection<String> timeline = this.feedTimelineService.getTimeLine(timelineID);
+//		this.addPostsForIDs(posts, timeline);
+//	}
 
 	/**
 	 * Add posts to the list for given post IDs.

@@ -61,7 +61,7 @@ public class AsyncFeedRefreshServiceImpl implements FeedRefreshService {
 				}
 				
 				try {
-					feedCrawlerService.crawlFeed(masterFeedID);
+					feedCrawlerService.crawlFeed(masterFeedID, false);
 				} finally {
 					EXECUTING.remove(masterFeedID);
 				}

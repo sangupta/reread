@@ -1,7 +1,5 @@
 package com.sangupta.reread.service.impl;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +49,7 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 		}
 		
 		// crawl this feed now
-		this.feedCrawlerService.crawlFeed(masterFeed.feedID);
+		this.feedCrawlerService.crawlFeed(masterFeed.feedID, true);
 		
 		// re-read master feed as title may have changed
 		masterFeed = this.masterFeedService.get(masterFeed.feedID);
@@ -79,18 +77,13 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 		
 		// find folder in which this feed is present
 		UserFeedFolder folder = feedList.getFolderForFeed(feedID);
-		
+
+		// remove the timelines
+		this.feedTimelineService.removeTimeline(feedID, folder);
+
 		// remove feed from list
 		feedList.removeFeed(feedID);
 		this.feedListService.update(feedList);
-		
-		// get all feed posts
-		Collection<String> ids = this.feedTimelineService.getTimeLine(feedID);
-		if(AssertUtils.isNotEmpty(ids)) {
-			if(folder != null) {
-				this.feedTimelineService.removePosts(FeedTimelineService.getTimeLineForFolder(folder.folderID), ids);
-			}
-		}
 		
 		// all done
 		return feedList;

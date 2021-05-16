@@ -44,7 +44,7 @@ public class RefreshController {
 	 */
 	@GetMapping("/feed/{feedID}")
 	public String refreshFeed(@PathVariable String feedID) {
-		this.feedCrawlerService.crawlFeed(feedID);
+		this.feedCrawlerService.crawlFeed(feedID, false);
 		return "done";
 	}
 	
