@@ -6,14 +6,25 @@ import TimeAgo from '../components/TimeAgo';
 
 class BrickRenderer extends React.Component<any, any> {
 
+    showPost = () => {
+        const { data: post } = this.props;
+
+        const event = new CustomEvent('reread-show-post', {
+            detail: {
+                post: post
+            }
+        });
+        document.dispatchEvent(event);
+    }
+
     render() {
-        const { data: post, itemIdx, isMeasuring } = this.props;
+        const { data: post } = this.props;
         let hasImage = false;
         if (post.image && post.image.url) {
             hasImage = true;
         }
 
-        return <div className="card post-card">
+        return <div className="card post-card pointer" onClick={this.showPost}>
             {this.renderImage(post)}
             {!hasImage && <h5 className="card-header">{post.title}</h5>}
             <div className="card-body">

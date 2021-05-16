@@ -96,7 +96,6 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
     }
 
     setCurrentFeed = (feedID: string) => {
-        console.log('current: ', feedID);
         this.setState({ currentFeed: feedID });
     }
 

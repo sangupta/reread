@@ -33,6 +33,23 @@ class ContentPane extends React.Component<ContentPaneProps, ContentPaneState> {
         }
     }
 
+    componentDidMount() {
+        document.addEventListener('reread-show-post', this.showPostViaEvent);
+    }
+
+    componentWillMount() {
+        document.removeEventListener('reread-show-post', this.showPostViaEvent);
+    }
+
+    showPostViaEvent = (e) => {
+        const post = (e as CustomEvent).detail.post;
+        if(!post) {
+            return;
+        }
+
+        this.showPost(post);
+    }
+
     showPost = (post: Post) => {
         this.setState({ post: post });
     }
