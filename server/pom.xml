@@ -81,9 +81,9 @@
 
 		<!-- basic utility classes -->
 		<dependency>
-			<groupId>com.sangupta</groupId>
+			<groupId>com.github.sangupta</groupId>
 			<artifactId>jerry-core</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
+			<version>-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Redis driver/connection manager -->
