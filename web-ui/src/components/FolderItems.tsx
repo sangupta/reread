@@ -5,6 +5,8 @@ import FeedItem from './FeedItem';
 
 interface FolderItemsProps {
     folder: Folder;
+    onFeedSelect: (feedID: string) => void;
+    highlight: string;
 }
 
 interface FolderItemsState {
@@ -37,11 +39,11 @@ export default class FolderItems extends React.Component<FolderItemsProps, Folde
                 masterFeedID: folder.folderID,
                 title: 'All'
             };
-            items.push(<FeedItem key={'all-' + folder.folderID} feed={folderAsFeed} mode='folder' />);
+            items.push(<FeedItem key={'all-' + folder.folderID} feed={folderAsFeed} mode='folder' onFeedSelect={this.props.onFeedSelect} highlight={this.props.highlight} />);
         }
 
         folder.childFeeds.forEach(item => {
-            items.push(<FeedItem key={item.masterFeedID} feed={item} />);
+            items.push(<FeedItem key={item.masterFeedID} feed={item} onFeedSelect={this.props.onFeedSelect} highlight={this.props.highlight} />);
         });
         return items;
     }
@@ -51,7 +53,6 @@ export default class FolderItems extends React.Component<FolderItemsProps, Folde
         const { open } = this.state;
 
         return <li className="mb-1">
-
             <a href="#" className="folder-toggle link-dark rounded" onClick={this.toggleFolder}>
                 <Icon name={open ? 'chevron-down' : 'chevron-right'} label={folder.title} />
             </a>

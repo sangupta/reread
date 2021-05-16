@@ -60,7 +60,6 @@ export default class ActivityView extends React.Component<{}, ActivityViewState>
     }
 
     componentDidMount() {
-        const { activity } = this.state;
         this.fetchData();
     }
 

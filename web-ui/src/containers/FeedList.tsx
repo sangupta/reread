@@ -16,6 +16,7 @@ interface FeedListState {
     feeds: Array<Feed>;
     folders: Array<Folder>;
     loading: boolean;
+    currentFeed: string;
 }
 
 class FeedList extends React.Component<FeedListProps, FeedListState> {
@@ -23,7 +24,8 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
     state: FeedListState = {
         feeds: [],
         folders: [],
-        loading: true
+        loading: true,
+        currentFeed: '$all'
     }
 
     componentDidMount = () => {
@@ -44,7 +46,7 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         }
 
         return <>
-            {folders.map(folder => <FolderItems key={folder.folderID} folder={folder} />)}
+            {folders.map(folder => <FolderItems key={folder.folderID} folder={folder} onFeedSelect={this.setCurrentFeed} highlight={this.state.currentFeed} />)}
             <li className="border-top my-3"></li>
         </>
     }
@@ -56,29 +58,32 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         }
 
         return <>
-            {feeds.map(feed => <FeedItem key={feed.masterFeedID} feed={feed} />)}
+            {feeds.map(feed => <FeedItem key={feed.masterFeedID} feed={feed} onFeedSelect={this.setCurrentFeed} highlight={this.state.currentFeed} />)}
         </>
     }
 
     showAllFeeds = () => {
-        this.props.history.push('/feeds/all')
+        this.props.history.push('/feeds/all');
+        this.setState({ currentFeed: '$all' });
     }
 
     showStars = () => {
         this.props.history.push('/feeds/stars')
+        this.setState({ currentFeed: '$stars' });
     }
 
     showBookmarks = () => {
         this.props.history.push('/feeds/bookmarks')
+        this.setState({ currentFeed: '$bookmarks' });
     }
 
-    exportOpml = async (e:React.MouseEvent) => {
+    exportOpml = async (e: React.MouseEvent) => {
         e.preventDefault();
-        
+
         await FeedApi.exportOpml();
     }
 
-    createFolder = async (e:React.MouseEvent) => {
+    createFolder = async (e: React.MouseEvent) => {
         e.preventDefault();
 
         const folderName = window.prompt('Enter the name of the folder: ', '');
@@ -90,8 +95,13 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         this.fetchList();
     }
 
+    setCurrentFeed = (feedID: string) => {
+        console.log('current: ', feedID);
+        this.setState({ currentFeed: feedID });
+    }
+
     render() {
-        const { loading } = this.state;
+        const { loading, currentFeed } = this.state;
         if (loading) {
             return <Loading />
         }
@@ -101,17 +111,17 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
                 <ul className="list-unstyled ps-0">
                     <li className="mb-1">
                         <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li>
+                            <li className={(currentFeed === '$all' ? 'feed-active' : '')}>
                                 <a href='#' className='link-dark rounded' onClick={this.showAllFeeds}>
                                     <Icon name='basket' label='All' />
                                 </a>
                             </li>
-                            <li>
+                            <li className={(currentFeed === '$stars' ? 'feed-active' : '')}>
                                 <a href='#' className='link-dark rounded' onClick={this.showStars}>
                                     <Icon name='star' label='Stars' />
                                 </a>
                             </li>
-                            <li>
+                            <li className={(currentFeed === '$bookmarks' ? 'feed-active' : '')}>
                                 <a href='#' className='link-dark rounded' onClick={this.showBookmarks}>
                                     <Icon name='bookmark' label='Bookmarks' />
                                 </a>

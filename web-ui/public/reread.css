@@ -277,3 +277,11 @@ a.folder-toggle {
     margin-bottom: 20px;
     justify-content: center;
 }
+
+.modal-toolbar a {
+    text-decoration: none;
+}
+
+.feed-active {
+    background-color: #dee2e6;
+}
