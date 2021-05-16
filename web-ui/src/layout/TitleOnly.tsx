@@ -43,7 +43,7 @@ class TitleOnlyLayoutItem extends React.Component<TitleOnlyLayoutItemProps, Titl
         const { postRead } = this.state;
         const css: string = postRead ? ' list-group-item-secondary' : '';
 
-        return <a key={post.feedPostID} href='#' className={'list-group-item list-group-item-action py-3 lh-tight ' + css} onClick={this.showPost}>
+        return <a key={post.feedPostID} href='#' className={'list-group-item list-group-item-action lh-tight ' + css} onClick={this.showPost}>
             <div className='d-flex w-100 align-items-center justify-content-between'>
                 <strong className='mb-1'>{post.title}</strong>
                 <small>
