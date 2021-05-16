@@ -59,10 +59,10 @@ class ListLayoutItem extends React.Component<ListLayoutItemProps, ListLayoutItem
 
 interface ListLayoutProps {
     posts: Array<Post>;
-    onShowPost: Function;
+    onShowPost: () => void;
 }
 
-export default class ListLayout extends React.Component<ListLayoutProps, any> {
+export default class ListLayout extends React.Component<ListLayoutProps> {
 
     render() {
         const { posts } = this.props;

@@ -53,7 +53,12 @@ class CardItemRenderer extends React.Component<CardItemRendererProps, CardItemRe
     }
 }
 
-export default class CardLayout extends React.Component<any, any> {
+interface CardLayoutProps {
+    posts: Array<Post>;
+    onShowPost: () => void;
+}
+
+export default class CardLayout extends React.Component<CardLayoutProps> {
 
     render() {
         const { posts } = this.props;

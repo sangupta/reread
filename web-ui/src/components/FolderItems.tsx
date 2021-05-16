@@ -13,7 +13,7 @@ interface FolderItemsState {
 
 export default class FolderItems extends React.Component<FolderItemsProps, FolderItemsState> {
 
-    state = {
+    state: FolderItemsState = {
         open: false
     }
 
@@ -32,7 +32,7 @@ export default class FolderItems extends React.Component<FolderItemsProps, Folde
 
         const items = [];
 
-        if(folder.childFeeds.length > 1) {
+        if (folder.childFeeds.length > 1) {
             const folderAsFeed: Feed = {
                 masterFeedID: folder.folderID,
                 title: 'All'

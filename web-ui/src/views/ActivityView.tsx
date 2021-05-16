@@ -6,6 +6,7 @@ import Dropdown, { DropDownOption } from '../components/Dropdown';
 import FeedApi from '../api/FeedApi';
 import Loading from '../components/Loading';
 import Alert from '../components/Alert';
+import { ChartData } from '../api/Model';
 
 const activityDropdown: Array<DropDownOption> = [
     { label: 'Posts read', value: 'read' },
@@ -28,14 +29,14 @@ const intervalOptions: Array<DropDownOption> = [
 ];
 
 interface ActivityViewState {
-    chart: Array<any>;
+    chart: Array<ChartData>;
     activity: string;
     loading: boolean;
     type: string;
     interval: string;
 }
 
-const normalizeMaxY = function (y) {
+const normalizeMaxY = function (y: number): number {
     if (y < 5) { return 5; }
     if (y < 10) { return 10; }
     if (y < 50) { return 50; }
@@ -50,7 +51,7 @@ const normalizeMaxY = function (y) {
 
 export default class ActivityView extends React.Component<{}, ActivityViewState> {
 
-    state = {
+    state: ActivityViewState = {
         chart: [],
         activity: 'read',
         loading: true,

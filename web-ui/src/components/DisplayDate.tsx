@@ -7,12 +7,12 @@ interface DisplayDateProps {
     showTime?: boolean;
 }
 
-const twoDigits = function(x) {
+const twoDigits = function (x: number): string {
     if (x < 10) {
         return '0' + x;
     }
 
-    return x;
+    return '' + x;
 }
 
 export default class DisplayDate extends React.Component<DisplayDateProps, {}> {

@@ -12,12 +12,12 @@ export default class ImportOpmlContainer extends React.Component<{}, ImportOpmlC
     /**
      * Default state
      */
-    state = {
+    state: ImportOpmlContainerState = {
         opmlFile: null,
         opmlFeeds: []
     };
 
-    setOpmlFile = (e) => {
+    setOpmlFile = (e: any) => {
         this.setState({ opmlFile: e.target.files[0] });
     }
 

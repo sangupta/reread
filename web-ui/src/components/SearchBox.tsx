@@ -12,12 +12,12 @@ interface SearchBoxState {
 
 class SearchBox extends React.Component<SearchBoxProps, SearchBoxState> {
 
-    state = {
+    state: SearchBoxState = {
         text: ''
     }
 
-    setText = (e) => {
-        this.setState({ text: e.target.value });
+    setText = (e: React.FormEvent<HTMLInputElement>) => {
+        this.setState({ text: e.currentTarget.value });
     }
 
     runSearch = (e: React.FormEvent) => {

@@ -5,7 +5,6 @@ import DiscoveredFeedItem from './../components/DiscoveredFeedItem';
 import FeedApi from '../api/FeedApi';
 import { DiscoveredFeed, Folder } from '../api/Model';
 import Dropdown, { DropDownOption } from '../components/Dropdown';
-import { DropdownOption } from 'gestalt';
 
 interface AddFeedContainerState {
     url: string;
@@ -17,7 +16,7 @@ interface AddFeedContainerState {
 
 export default class AddFeedContainer extends React.Component<{}, AddFeedContainerState> {
 
-    state = {
+    state: AddFeedContainerState = {
         url: 'https://news.ycombinator.com/rss',
         feeds: new Array<DiscoveredFeed>(),
         discovered: false,
@@ -35,8 +34,8 @@ export default class AddFeedContainer extends React.Component<{}, AddFeedContain
     /**
      * Set the URL when text box is edited
      */
-    setUrl = (e) => {
-        this.setState({ url: e.target.value });
+    setUrl = (e: React.FormEvent<HTMLInputElement>) => {
+        this.setState({ url: e.currentTarget.value });
     }
 
     /**
@@ -56,7 +55,7 @@ export default class AddFeedContainer extends React.Component<{}, AddFeedContain
 
     showFolders = () => {
         const { folders, folder } = this.state;
-        const options: Array<DropdownOption> = [
+        const options: Array<DropDownOption> = [
             { label: '<No folder>', value: '' }
         ];
 

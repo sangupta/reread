@@ -10,8 +10,8 @@ export interface DiscoveredFeed {
 export interface Feed {
     masterFeedID: string;
     title: string;
-    website: string;
-    iconUrl: string;
+    website?: string;
+    iconUrl?: string;
 }
 
 export interface Folder {
@@ -60,4 +60,9 @@ export interface OpmlFeed {
     xmlUrl: string;
     htmlUrl: string;
     children: Array<OpmlFeed>
+}
+
+export interface ChartData {
+    time: number;
+    value: number;
 }

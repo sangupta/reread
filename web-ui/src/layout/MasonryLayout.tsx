@@ -53,7 +53,8 @@ export default class MasonryLayout extends React.Component<any, any> {
 
         return <Masonry comp={BrickRenderer}
             items={posts}
-            virtualize={true} scrollContainer={this.getContentPane}
+            virtualize={true} 
+            scrollContainer={this.getContentPane}
             virtualBoundsBottom={1000}
             virtualBoundsTop={200}
             columnWidth={280}

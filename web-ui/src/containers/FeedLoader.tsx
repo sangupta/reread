@@ -30,7 +30,7 @@ interface FeedLoaderState {
 
 class FeedLoader extends React.Component<FeedLoaderProps, FeedLoaderState> {
 
-    state = {
+    state: FeedLoaderState = {
         loading: true,
         errorMsg: '',
         posts: [],

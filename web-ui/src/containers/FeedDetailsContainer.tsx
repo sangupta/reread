@@ -6,16 +6,19 @@ import { withRouter } from 'react-router-dom';
 import Modal from '../components/Modal';
 import DisplayDate from '../components/DisplayDate';
 import FeedApi from '../api/FeedApi';
+import { ChartData } from '../api/Model';
 
 interface FeedDetailsContainerProps {
     details: any;
+    onModalClose: () => void;
+    history: any;
 }
 
 interface FeedDetailsContainerState {
-    chart: Array<any>;
+    chart: Array<ChartData>;
 }
 
-const normalizeMaxY = function (y) {
+const normalizeMaxY = function (y: number) {
     if (y < 5) { return 5; }
     if (y < 10) { return 10; }
     if (y < 50) { return 50; }
@@ -30,7 +33,7 @@ const normalizeMaxY = function (y) {
 
 class FeedDetailsContainer extends React.Component<FeedDetailsContainerProps, FeedDetailsContainerState> {
 
-    state = {
+    state: FeedDetailsContainerState = {
         chart: []
     };
 

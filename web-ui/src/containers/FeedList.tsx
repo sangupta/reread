@@ -20,7 +20,7 @@ interface FeedListState {
 
 class FeedList extends React.Component<FeedListProps, FeedListState> {
 
-    state = {
+    state: FeedListState = {
         feeds: [],
         folders: [],
         loading: true
@@ -74,7 +74,7 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
 
     createFolder = async () => {
         const folderName = window.prompt('Enter the name of the folder: ', '');
-        if(!folderName) {
+        if (!folderName) {
             return;
         }
 

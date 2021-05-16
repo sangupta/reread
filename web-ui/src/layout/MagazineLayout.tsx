@@ -2,9 +2,18 @@ import React from 'react';
 import { Post } from '../api/Model';
 import TimeAgo from '../components/TimeAgo';
 
-class MagazineItem extends React.Component {
+interface MagazineItemProps {
+    post: Post;
+    onShowPost: (post: Post) => void;
+}
 
-    constructor(props) {
+interface MagazineItemState {
+    postRead: boolean;
+}
+
+class MagazineItem extends React.Component<MagazineItemProps, MagazineItemState> {
+
+    constructor(props: MagazineItemProps) {
         super(props);
         this.state = {
             postRead: props.post ? props.post.readOn > 0 : false
@@ -60,7 +69,12 @@ class MagazineItem extends React.Component {
     }
 }
 
-export default class MagazineLayout extends React.Component {
+interface MagazineLayoutProps {
+    posts: Array<Post>;
+    onShowPost: (post: Post) => void;
+}
+
+export default class MagazineLayout extends React.Component<MagazineLayoutProps> {
 
     render() {
         const { posts } = this.props;
