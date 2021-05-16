@@ -174,7 +174,11 @@ This is used to show activity graph and serves as the start
 of universe.
 
 ```
+// create startup time
 SETNX $reread-start-time {currentSystemTime}
+
+// create search index
+FT.CREATE post-search SCHEMA {...fields with weights}
 ```
 
 ### Loading the home page
