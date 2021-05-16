@@ -144,6 +144,26 @@ public class HtmlFeedDiscoveryHandler implements FeedDiscoveryHandler {
 
 		// find links in header code
 		findHTMLAlternateLinks(url, doc, feeds);
+		
+		if(AssertUtils.isNotEmpty(feeds)) {
+			// let's populate the favicon if available
+			String iconUrl = null;
+			
+			// parse
+			Elements elements = doc.select("link[rel='icon']");
+			if(elements != null) {
+				if(elements.size() >= 1) {
+					iconUrl = elements.get(0).absUrl("href");
+				}
+			}
+			
+			// put this in feeds
+			if(iconUrl != null) {
+				for(DiscoveredFeed feed: feeds) {
+					feed.iconUrl = iconUrl;
+				}
+			}
+		}
 
 		return feeds;
 	}

@@ -27,7 +27,7 @@ class DiscoveredFeedItem extends React.Component<DiscoveredFeedProps, {}> {
             <div className='col-auto'>
                 {hasImage && <img src={feed.iconUrl} width={16} />}
                 {!hasImage && <Icon name='rss' />}
-                {feed.title}
+                <span className='px-2'>{feed.title}</span>
             </div>
             <div className='col-auto'>
                 <button className='btn btn-sm btn-outline-primary' onClick={this.addFeed}>Add</button>

@@ -37,9 +37,9 @@ class Header extends React.Component {
                     <SearchBox />
 
                     <div className="text-end">
-                        <Link className="btn btn-primary me-2" route='/addFeed'>+ Add</Link>
+                        <Link className="btn btn-primary me-2" route='/addFeed'>+ Add Site</Link>
                         <Link className="btn btn-info me-2" route='/activity'>
-                            <Icon name='graph-up' />
+                            <Icon name='graph-up' label='View Activity' />
                         </Link>
                     </div>
                 </div>
