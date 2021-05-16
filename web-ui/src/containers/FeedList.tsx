@@ -72,7 +72,15 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
         this.props.history.push('/feeds/bookmarks')
     }
 
-    createFolder = async () => {
+    exportOpml = async (e:React.MouseEvent) => {
+        e.preventDefault();
+        
+        await FeedApi.exportOpml();
+    }
+
+    createFolder = async (e:React.MouseEvent) => {
+        e.preventDefault();
+
         const folderName = window.prompt('Enter the name of the folder: ', '');
         if (!folderName) {
             return;
@@ -118,6 +126,9 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
                             <li>
                                 <a href='#' className='link-dark rounded' onClick={this.createFolder}>
                                     <Icon name='folder-plus' label='Create Folder' />
+                                </a>
+                                <a href='#' className='link-dark rounded' onClick={this.exportOpml}>
+                                    <Icon name='download' label='Export OPML' />
                                 </a>
                             </li>
                         </ul>

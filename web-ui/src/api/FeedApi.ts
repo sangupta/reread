@@ -83,4 +83,8 @@ export default class FeedApi {
         const response = await Axios.post('/feeds/folder?name=' + encodeURIComponent(name));
         return response.data;
     }
+
+    static async exportOpml() {
+        
+    }
 }
