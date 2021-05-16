@@ -82,6 +82,16 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 	}
 
 	@Override
+	public String getOldestPostID(String feedID) {
+		Set<String> set = this.redisTemplate.opsForZSet().range(TIMELINE + feedID, 0, 0);
+		if (AssertUtils.isNotEmpty(set)) {
+			return set.iterator().next();
+		}
+
+		return null;
+	}
+
+	@Override
 	public String getLatestID(String feedID) {
 		Set<String> set = this.redisTemplate.opsForZSet().range(TIMELINE + feedID, -1, -1);
 		if (AssertUtils.isNotEmpty(set)) {

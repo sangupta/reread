@@ -67,4 +67,6 @@ public interface FeedTimelineService {
 		return "timeline-folder:" + folderID;
 	}
 
+	public String getOldestPostID(String feedID);
+
 }

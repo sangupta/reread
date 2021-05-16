@@ -12,11 +12,13 @@ import com.sangupta.jerry.exceptions.HttpException;
 import com.sangupta.jerry.util.DateUtils;
 import com.sangupta.reread.entity.FeedCrawlDetails;
 import com.sangupta.reread.entity.MasterFeed;
+import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.entity.UserActivity;
 import com.sangupta.reread.service.AnalyticsService;
 import com.sangupta.reread.service.FeedCrawlDetailsService;
 import com.sangupta.reread.service.FeedTimelineService;
 import com.sangupta.reread.service.MasterFeedService;
+import com.sangupta.reread.service.PostService;
 
 /**
  * REST controller which serves details to client about a single feed.
@@ -36,6 +38,9 @@ public class DetailsController {
 
 	@Autowired
 	protected FeedTimelineService feedTimelineService;
+	
+	@Autowired
+	protected PostService postService;
 
 	@Autowired
 	protected AnalyticsService analyticsService;
@@ -64,13 +69,16 @@ public class DetailsController {
 	
 	@GetMapping("/chart/feed/{feedID}")
 	public Object getFeedData(@PathVariable String feedID, @RequestParam(required = false, defaultValue = "1") String interval, @RequestParam(required = false) String metrics) {
-		MasterFeed mf = this.masterFeedService.get(feedID);
-		if(mf == null) {
-			throw new HttpException(HttpStatusCode.BAD_REQUEST);
-		}
+//		MasterFeed mf = this.masterFeedService.get(feedID);
+//		if(mf == null) {
+//			throw new HttpException(HttpStatusCode.BAD_REQUEST);
+//		}
+		
+		String id = this.feedTimelineService.getOldestPostID(feedID);
+		Post post = this.postService.get(id);
 		
 		long duration = Long.parseLong(interval) * 60l * 1000l;
-		return this.analyticsService.getFeedChart(feedID, mf.added, System.currentTimeMillis(), duration, metrics);
+		return this.analyticsService.getFeedChart(feedID, post.updated, System.currentTimeMillis(), duration, metrics);
 	}
 	
 	@GetMapping("/chart/activity/{activity}")
