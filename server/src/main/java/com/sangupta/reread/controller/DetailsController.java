@@ -1,14 +1,15 @@
 package com.sangupta.reread.controller;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sangupta.jerry.constants.HttpStatusCode;
-import com.sangupta.jerry.exceptions.HttpException;
 import com.sangupta.jerry.util.DateUtils;
 import com.sangupta.reread.entity.FeedCrawlDetails;
 import com.sangupta.reread.entity.MasterFeed;
@@ -29,6 +30,8 @@ import com.sangupta.reread.service.PostService;
 @RestController
 @RequestMapping("/details")
 public class DetailsController {
+	
+	public static final String REREAD_SERVER_START = "$reread-start-time";
 
 	@Autowired
 	protected FeedCrawlDetailsService feedCrawlDetailsService;
@@ -44,12 +47,19 @@ public class DetailsController {
 
 	@Autowired
 	protected AnalyticsService analyticsService;
+	
+	@Autowired
+	protected RedisTemplate<String, String> redisTemplate;
+	
+	@PostConstruct
+	public void init() {
+		this.redisTemplate.opsForValue().setIfAbsent(REREAD_SERVER_START, String.valueOf(System.currentTimeMillis()));
+	}
 
 	@GetMapping("/feed/{feedID}")
 	public CrawlDetailsPayload getFeedDetails(@PathVariable String feedID) {
 		MasterFeed mf = this.masterFeedService.get(feedID);
 		FeedCrawlDetails crawlDetails = this.feedCrawlDetailsService.get(feedID);
-		String latestID = this.feedTimelineService.getLatestID(feedID);
 		long numPosts = this.feedTimelineService.size(feedID);
 
 		CrawlDetailsPayload payload = new CrawlDetailsPayload();
@@ -69,11 +79,6 @@ public class DetailsController {
 	
 	@GetMapping("/chart/feed/{feedID}")
 	public Object getFeedData(@PathVariable String feedID, @RequestParam(required = false, defaultValue = "1") String interval, @RequestParam(required = false) String metrics) {
-//		MasterFeed mf = this.masterFeedService.get(feedID);
-//		if(mf == null) {
-//			throw new HttpException(HttpStatusCode.BAD_REQUEST);
-//		}
-		
 		String id = this.feedTimelineService.getOldestPostID(feedID);
 		Post post = this.postService.get(id);
 		
@@ -83,9 +88,12 @@ public class DetailsController {
 	
 	@GetMapping("/chart/activity/{activity}")
 	public Object getActivityData(@PathVariable UserActivity activity, @RequestParam(required = false, defaultValue = "1") String interval, @RequestParam(required = false) String metrics) {
-		long duration = Long.parseLong(interval) * 60l * 1000l;
+		Long startTime = Long.parseLong(this.redisTemplate.opsForValue().get(REREAD_SERVER_START));
+		
+		long start = startTime != null ? (startTime.longValue() - DateUtils.ONE_DAY) : 0;
 		long end = System.currentTimeMillis() + DateUtils.ONE_DAY;
-		long start = end - DateUtils.ONE_YEAR;
+		long duration = Long.parseLong(interval) * 60l * 1000l;
+		
 		return this.analyticsService.getActivityChart(activity, start, end, duration, metrics);
 	}
 

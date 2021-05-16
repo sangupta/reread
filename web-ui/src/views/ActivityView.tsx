@@ -56,7 +56,7 @@ export default class ActivityView extends React.Component<{}, ActivityViewState>
         activity: 'read',
         loading: true,
         type: 'count',
-        interval: '60'
+        interval: '1'
     }
 
     componentDidMount() {
