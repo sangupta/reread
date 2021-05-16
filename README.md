@@ -16,6 +16,15 @@ The project is a submission entry to [Build on Redis Hackathon](https://hackatho
 * [Redis modules used](#redis-modules-used)
 * [Issues encountered with Redis](#issues-encountered-with-redis)
 * [Redis commands usage](#redis-commands-usage)
+  * [Loading the home page]
+  * [Adding a new feed]
+  * [Crawling a feed]
+  * [Marking a post read/unread]
+  * [Viewing a feed timeline]
+  * [Viewing a folder timeline]
+  * [Unsubscribing a feed]
+  * [Viewing feed details]
+  * [Viewing activity]
 * [Tech Stack](#tech-stack)
 * [Deployment](#deployment)
 * [Hacking](#hacking)
@@ -134,8 +143,174 @@ us de-duplicate entries not just in the same feed, but also across the board. Th
 post once, why read it again?
 
 ## Redis commands usage
+ 
+Following is a list of Redis commands used per feature/workflow. Please refer to section on
+[Notes on Security](#notes-on-security) to read why authentication is not baked in.
+
+### When server starts up
+
+This is used to show activity graph and serves as the start
+of universe.
+
+```
+SETNX $reread-start-time {currentSystemTime}
+```
+
+### Loading the home page
+
+```
+// Get the `FeedList` entity for the user
+JSON.GET me {feedList}
+
+// If it does not exist, create one
+JSON.SET me . {feedList}
+
+//Next get the first page of `all` timeline for the user
+ZREVRANGE timeline:$all 0 {pageSize}
+
+// For each ID get the actual post
+GET {postID}
+```
+
+### Adding a new feed
+
+```
+// First the feed is discovered using HTTP call to URL
+// once user chooses the feed to be added
+// convert the feed to MasterFeed entry
+JSON.GET masterFeed:{id}
+
+// if not present, create one
+JSON.SET masterFeed:{id} . {masterFeed}
+
+// get the feed list
+JSON.GET me {feedList}
+
+// If it does not exist, create one
+JSON.PUT me {feedList}
+
+// feed crawling starts
+// refer to section on "Feed Crawling" to take a look at its commands
+
+// once feed is crawled
+// update the feed list
+JSON.SET me . {feedList}
+```
+
+### Importing an OPML file
 
 
+### Exporting an OPML file
+
+```
+JSON.GET feedList:me
+```
+
+### Crawling a feed
+
+```
+```
+
+### Marking a post read/unread
+
+I was using `JSON.GET`/`JSON.SET` but due to an encoding bug in `JreJson` driver,
+I had to using simple `GET`/`SET`. Bug has been filed as https://github.com/RedisJSON/JRedisJSON/issues/37
+
+```
+// marking read
+SET {postID} {post}
+
+// marking unread
+SET {postID} {post}
+```
+
+### Viewing a feed timeline
+
+```
+// when viewing by newest, first page
+ZREVRANGE timeline:{feedID} 0 {pageSize}
+
+// when viewing by newest, second page
+ZRANK timeline:{feedID} {lastPostID}
+ZCARD timeline:{feedID}
+ZREVRANGE timeline:{feedID} {card - rank + 1} {card - rank + pageSize}
+
+// when viewing by oldest, first page
+ZRANGE timeline:{feedID} 0 {pageSize}
+
+// when viewing by oldest, second page
+ZRANK timeline:{feedID} {lastPostID}
+ZRANGE timeline:{feedID} {rank + 1} {rank + pageSize}
+```
+
+### Viewing a folder timeline
+
+```
+
+```
+
+### Unsubscribing a feed
+
+I had designed this to use `ZDIFFSTORE` to remove entries efficiently,
+but the command is available starting Redis 6.2.0. However, the `redismod`
+Docker image available on `latest` head contains Redis 6.0.1.
+
+```
+// get feed list
+JSON.GET feedList:me
+
+// read all entries from this timeline
+ZRANGE timeline:{feedID} 0 -1
+
+// remove the feed from folder timeline
+ZREM timeline:{folderID} {...entries}
+
+// remove the feed entries from all timeline
+ZREM timeline:$all {...entries}
+```
+
+### Viewing feed details
+
+```
+// get the master feed
+JSON.GET masterFeed:{feedID}
+
+// get details about feed when was last crawled
+JSON.GET feedCrawlDetails:{feedID}
+
+// get number of total posts
+ZRANK timeline:{feedID}
+
+// also get the chart data
+ZRANGE timeline:{feedID} 0 0
+
+// get the post
+GET post:{postID}
+
+// get analytics
+TS.RANGE timeseries-feed:{feedID} {post.updated} {currentSystemTime} COUNT 60000
+```
+
+### Viewing activity
+
+```
+// read start of reread universe
+GET $reread-start-time
+
+// get activity chart data
+TS.RANGE timeSeries-activity:{activityID} {rereadStartTime} {currentSystemTime} COUNT 60000
+```
+
+### Searching for posts
+
+The current Java driver for RedisSearch does not provide an API to query
+in a specific index which serves as a hindrance. Thus, filtering of posts
+in the given index is done in the JVM. Refer [here](https://github.com/RediSearch/JRediSearch/blob/master/src/main/java/io/redisearch/client/Client.java#L362) and [here](https://github.com/RediSearch/JRediSearch/blob/master/src/main/java/io/redisearch/client/Client.java#L375) to see the current driver
+limitations.
+
+```
+FT.SEARCH {query}
+```
 
 ## Tech Stack
 
