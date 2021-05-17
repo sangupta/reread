@@ -98,8 +98,9 @@ ReRead comes with the following features:
 
 ## Screenshots
 
-* Home page
-![Home](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/reread-home.png)
+### Home page
+
+![Home](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/reread-home.png | width=500)
 
 * Folder view
 ![Folder View](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/folder-view.png)
