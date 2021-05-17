@@ -17,7 +17,7 @@ interface AddFeedContainerState {
 export default class AddFeedContainer extends React.Component<{}, AddFeedContainerState> {
 
     state: AddFeedContainerState = {
-        url: 'https://news.ycombinator.com/rss',
+        url: '',
         feeds: new Array<DiscoveredFeed>(),
         discovered: false,
         folders: new Array<Folder>(),
