@@ -100,27 +100,34 @@ ReRead comes with the following features:
 
 ### Home page
 
-![Home](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/reread-home.png | width=500)
+![Home](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/reread-home.png)
 
-* Folder view
+### Folder view
+
 ![Folder View](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/folder-view.png)
 
-* Magazine view
+### Magazine view
+
 ![Magazine View](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/maagzine-view.png)
 
-* Search results
+### Search results
+
 ![Search Results](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/search-results.png)
 
-* Title only view
+### Title only view
+
 ![Title Only View](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/title-only-view.png)
 
-* Feed details
+### Feed details
+
 ![Feed Details](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/feed-details.png)
 
-* Post read activity
+### Post read activity
+
 ![Post Read](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/posts-read.png)
 
-* Post bookmarked activity
+### Post bookmarked activity
+
 ![Post Bookmarked](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/posts-bookmarked.png)
 
 ## Architecture
