@@ -1,6 +1,7 @@
 package com.sangupta.reread.service.impl;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.reread.entity.FeedList;
 import com.sangupta.reread.entity.Post;
 import com.sangupta.reread.entity.TimelineSortOption;
+import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedListService;
 import com.sangupta.reread.service.FeedTimelineService;
@@ -127,6 +129,19 @@ public class RedisFeedTimelineServiceImpl implements FeedTimelineService {
 
 		// remove from all timeline
 		this.redisTemplate.opsForZSet().remove(TIMELINE + ALL_TIMELINE_ID, set.toArray());
+	}
+
+	@Override
+	public void recreateFolderTimeline(UserFeedFolder folder) {
+		String timeline = TIMELINE + folder.folderID;
+		
+		Set<String> childIds = new HashSet<>();
+		for(UserFeed child : folder.childFeeds) {
+			childIds.add(TIMELINE + child.masterFeedID);
+		}
+		
+		this.redisTemplate.delete(timeline);
+		this.redisTemplate.opsForZSet().unionAndStore(timeline, childIds, timeline);
 	}
 
 //	protected Long diffAndStore(String destinationKey, List<String> keys) {

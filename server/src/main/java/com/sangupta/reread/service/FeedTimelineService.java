@@ -69,4 +69,6 @@ public interface FeedTimelineService {
 
 	public String getOldestPostID(String feedID);
 
+	public void recreateFolderTimeline(UserFeedFolder folder);
+
 }

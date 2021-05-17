@@ -60,6 +60,9 @@ public class DefaultFeedSubscriptionServiceImpl implements FeedSubscriptionServi
 		} else {
 			UserFeedFolder feedFolder = feedList.getFolder(folder);
 			feedFolder.addFeed(masterFeed);
+			
+			// also create the all folder timeline
+			this.feedTimelineService.recreateFolderTimeline(feedFolder);
 		}
 		
 		this.feedListService.update(feedList);

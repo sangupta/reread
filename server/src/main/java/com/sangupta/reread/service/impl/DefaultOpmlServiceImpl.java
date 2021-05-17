@@ -20,6 +20,7 @@ import com.sangupta.reread.entity.UserFeed;
 import com.sangupta.reread.entity.UserFeedFolder;
 import com.sangupta.reread.service.FeedDiscoveryService;
 import com.sangupta.reread.service.FeedListService;
+import com.sangupta.reread.service.FeedTimelineService;
 import com.sangupta.reread.service.MasterFeedService;
 import com.sangupta.reread.service.OpmlService;
 import com.sangupta.reread.utils.OpmlParser;
@@ -43,6 +44,9 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 
 	@Autowired
 	protected FeedDiscoveryService feedDiscoveryService;
+	
+	@Autowired
+	protected FeedTimelineService feedTimelineService;
 
 	@Override
 	public List<OpmlFeed> parseOpml(String opmlContents) {
@@ -135,6 +139,9 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 		if (isFolder) {
 			UserFeedFolder folder = feedList.getOrCreateFolder(opmlFeed.title);
 			this.importFeedsInFolder(masterFeeds, feedsImported, folder, opmlFeed.children);
+			
+			// now recreate the folder timeline
+			this.feedTimelineService.recreateFolderTimeline(folder);
 			return;
 		}
 
@@ -147,8 +154,7 @@ public class DefaultOpmlServiceImpl implements OpmlService {
 		feedList.addFeed(masterFeed);
 	}
 
-	private void importFeedsInFolder(List<MasterFeed> masterFeeds, List<MasterFeed> feedsImported,
-			UserFeedFolder folder, List<OpmlFeed> children) {
+	private void importFeedsInFolder(List<MasterFeed> masterFeeds, List<MasterFeed> feedsImported, UserFeedFolder folder, List<OpmlFeed> children) {
 		if (AssertUtils.isEmpty(children)) {
 			return;
 		}
