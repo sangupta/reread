@@ -11,6 +11,7 @@ The project is a submission entry to [Build on Redis Hackathon](https://hackatho
 
 * [Motivation](#motivation)
 * [Features](#features)
+* [Screenshots](#screenshots)
 * [Architecture](#architecture)
   * [Notes on Security](#notes-on-security)
 * [Redis modules used](#redis-modules-used)
@@ -91,6 +92,17 @@ ReRead comes with the following features:
 * Categorize feeds into folders
 * View statistics as a graph on how frequently a feed posts
 * View self reading habits such as how many posts you read every day
+
+## Screenshots
+
+![Home](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/reread-home.png)
+![Folder View](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/folder-view.png)
+![Magazine View](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/maagzine-view.png)
+![Search Results](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/search-results.png)
+![Title Only View](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/title-only-view.png)
+![Feed Details](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/feed-details.png)
+![Post Read](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/posts-read.png)
+![Post Bookmarked](https://raw.githubusercontent.com/sangupta/reread/main/screenshots/posts-bookmarked.png)
 
 ## Architecture
 
