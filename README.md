@@ -137,7 +137,8 @@ The project uses the following Redis modules for its functionality:
 ### Redis Core
 
 [Redis Core](https://redis.io) used to check existence of keys and for other minor 
-operations based on keys. This is also
+operations based on keys. This is also used to store the posts data due to a bug in the
+RedisJSON Java driver where it looses encoding of the text.
 
 ### RedisJSON
 
