@@ -3,12 +3,15 @@
 ReRead is a desktop based/self-hosted RSS feed reader.
 
 It is a self-contained Java JAR file which only requires a Redis instance
-with Redis Modules.
+with Redis Modules. You can download a ready-to-use binary from [Github releases](https://github.com/sangupta/reread/releases/tag/1.0.0).
 
-The project is a submission entry to [Build on Redis Hackathon](https://hackathons.redislabs.com/hackathons/build-on-redis-hackathon?tab=0). Demo video is available on [Youtube](https://www.youtube.com/watch?v=6nOSA7ihQcc)
+Use the following Docker command to have redis running:
 
-You can download a ready-to-use binary from https://github.com/sangupta/reread/releases/tag/1.0.0
+```
+docker run -p 6379:6379 redislabs/redismod:latest
+```
 
+The project is a submission entry to [Build on Redis Hackathon](https://hackathons.redislabs.com/hackathons/build-on-redis-hackathon?tab=0). Demo video is available on [Youtube](https://www.youtube.com/watch?v=6nOSA7ihQcc).
 
 ## Table of Contents
 
